@@ -5,7 +5,6 @@
 {% block body %}
     {% set columns =
         [
-            {name: 'id'},
             {name: 'headline'},
             {name: 'byline', sortable: true, browsable: true},
             {name: 'section', sortable: true, browsable: true},
@@ -17,6 +16,9 @@
         :caller="_self"
         :columns="columns"
 >
+    <twig:block name="headline">
+        <a target="_blank" href="{{ row.url }}">{{ row.headline }}</a>
+    </twig:block>
 
 </twig:api_grid>
 

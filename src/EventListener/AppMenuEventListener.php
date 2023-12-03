@@ -14,6 +14,7 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 //#[AsEventListener(event: KnpMenuEvent::SIDEBAR_MENU, method: 'appSidebarMenu')]
 #[AsEventListener(event: KnpMenuEvent::NAVBAR_MENU, method: 'navbarMenu')]
+#[AsEventListener(event: KnpMenuEvent::NAVBAR_MENU2, method: 'navbarMenu2')]
 #[AsEventListener(event: KnpMenuEvent::FOOTER_MENU, method: 'footerMenu')]
 #[AsEventListener(event: KnpMenuEvent::AUTH_MENU, method: 'ourAuthMenu')]
 #[AsEventListener(event: KnpMenuEvent::PAGE_MENU, method: 'pageMenu')]
@@ -71,7 +72,15 @@ final class AppMenuEventListener
         // it should be possible to do this in twig, not here.
         $this->add($menu, id: 'copyright',
 
-            label: 'Data Copyright &copy; <b>Kid Pan Alley</b> All rights reserved.');
+            label: 'Data Copyright &copy; <b>Foothills Forum</b> All rights reserved.');
+    }
+
+    public function navbarMenu2(KnpMenuEvent $event): void
+    {
+        if (!$this->supports($event)) {
+            return;
+        }
+        // add github
     }
 
 

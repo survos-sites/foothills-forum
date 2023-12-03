@@ -57,21 +57,40 @@ final class FfScrapeCommand extends InvokableServiceCommand
                 // the key is the path on rappnews
                 $path =  trim(parse_url($uri, PHP_URL_PATH), '/');
                 $key = str_replace('project/', '', $path);
-
+                $this->logger->warning("scraping " . $uri);
                 $stories = $this->scraperService->fetchUrlUsingCache($uri, asData: false);
                 $storyCrawler = new Crawler($stories['content']);
                 $storyCrawler->filter('.meta')
-                    ->each(function (Crawler $node) use ($key) {
+                    ->each(function (Crawler $node) use ($key, $stories) {
                         try {
                             $headline = $node->filter('a')->text();
-                            $date = $node->filter('time')->text();
+                        } catch (\Exception $exception) {
+                            $this->logger->error("No a links in node");
+                            return;
+                            dd($node->html());
+                        }
+//                            $date = $node->filter('time')->text();
+                        try {
                             $byline = $node->filter('.tnt-byline')?->text();
                             $byline = u($byline)->after('By ')->toString();
-                            $uri = $node->filter('a')->link()->getUri();
-                            preg_match('|/news/(.*?)/ar|', $uri, $m);
-                            $mm =  explode('/', $uri);
+                        } catch (\Exception $exception) {
+                            $this->logger->error("No a links in node");
+                            $byline = 'missing tnt-byline';
+                        }
+                            try {
+                                $articleUri = $node->filter('a')->link()->getUri();
+                            } catch (\Exception $exception) {
+//                            dump($node->html());
+                                $this->logger->error("No a links in node ");
+//                                dd($stories['content']);
+                                return;
+                            }
+                            $this->logger->warning("parsing " . $articleUri);
+                            preg_match('|/news/(.*?)/ar|', $articleUri, $m);
+                            $mm =  explode('/', $articleUri);
                             $slug = $mm[5];
-                            $slug = str_replace('project/', '', $uri);
+
+//                            $slug = str_replace('project/', '', $articleUri);
                             if (!$article = $this->articles[$slug]??null) {
                                 $article = (new Article())
                                     ->setSlug($slug);
@@ -79,7 +98,7 @@ final class FfScrapeCommand extends InvokableServiceCommand
                             }
                             $article
                                 ->setSection($key)
-                                ->setUrl($uri)
+                                ->setUrl($articleUri)
                                 ->setHeadline($headline)
                                 ->setByline($byline);
 
@@ -90,6 +109,7 @@ final class FfScrapeCommand extends InvokableServiceCommand
 //                                'url' => $uri,
 //                                'byline' => $byline
 //                            ];
+                        try {
                         } catch (\Exception $exception) {
                             $this->logger->error($exception->getMessage());
                         }
