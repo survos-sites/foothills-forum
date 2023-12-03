@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AppController!{% endblock %}
+
+{% block body %}
+    {% set columns =
+        [
+            {name: 'id'},
+            {name: 'headline'},
+            {name: 'byline', sortable: true, browsable: true},
+            {name: 'section', sortable: true, browsable: true},
+        ] %}
+
+
+<twig:api_grid
+        :class="class"
+        :caller="_self"
+        :columns="columns"
+>
+
+</twig:api_grid>
+
+    {% endblock %}
