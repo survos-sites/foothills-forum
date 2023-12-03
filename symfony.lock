@@ -118,6 +118,9 @@
     "survos/core-bundle": {
         "version": "1.5.101"
     },
+    "survos/deployment-bundle": {
+        "version": "1.5.103"
+    },
     "survos/inspection-bundle": {
         "version": "1.5.101"
     },
