@@ -124,6 +124,9 @@
     "survos/inspection-bundle": {
         "version": "1.5.101"
     },
+    "survos/maker-bundle": {
+        "version": "1.5.103"
+    },
     "survos/scraper-bundle": {
         "version": "1.5.101"
     },
