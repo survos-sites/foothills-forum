@@ -1,34 +1,39 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AppController!{% endblock %}
+{% block title %}{{ 'articles'|trans|title }}{% endblock %}
 
 {% block body %}
     {% set columns =
         [
             {name: 'headline'},
-            {name: 'sections'},
+            {name: 'keywords', block: 'array'},
+            {name: 'sections', block: 'array'},
             {name: 'byline'},
             {name: 'authors'},
             {name: 'section', sortable: true, browsable: true},
         ] %}
 
-<twig:api_grid
-        :class="class"
-        :caller="_self"
-        :columns="columns"
->
-    <twig:block name="authors">
-        {% for author in row.authors %}
-            {{ author.fullName }}
-        {% endfor %}
-    </twig:block>
-    <twig:block name="sections">
-        {{ row.sections|join(',') }}
-    </twig:block>
-    <twig:block name="headline">
-        <a target="_blank" href="{{ row.url }}">{{ row.headline }}</a>
-    </twig:block>
+    <twig:api_grid
+            :class="class"
+            :caller="_self"
+            :columns="columns"
+    >
+        <twig:block name="authors">
+            {% for author in row.authors %}
+                {{ author.fullName }}
+            {% endfor %}
+        </twig:block>
+        <twig:block name="array">
+            {{ row[field_name]|join(',') }}
+        </twig:block>
+        <twig:block name="headline">
+            <div class="d-inline-block text-truncate">
+            <a title="{{ row.headline }}" target="_blank" href="{{ row.url }}" style="max-width: 150px;">
+                {{ row.headline }}
+            </a>
+            </div>
+        </twig:block>
 
-</twig:api_grid>
+    </twig:api_grid>
 
-    {% endblock %}
+{% endblock %}

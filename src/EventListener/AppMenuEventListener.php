@@ -80,6 +80,10 @@ final class AppMenuEventListener
         if (!$this->supports($event)) {
             return;
         }
+        $menu = $event->getMenu();
+        $submenu = $this->addSubmenu($menu, 'Articles');
+        $this->add($submenu, 'article_browse');
+//        $this->add($submenu, 'article_index');
         // add github
     }
 

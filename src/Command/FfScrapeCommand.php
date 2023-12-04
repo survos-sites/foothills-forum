@@ -12,15 +12,18 @@ use Psr\Log\LoggerInterface;
 use Survos\Scraper\Service\ScraperService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Zenstruck\Console\Attribute\Option;
 use Zenstruck\Console\ConfigureWithAttributes;
 use Zenstruck\Console\InvokableServiceCommand;
 use Zenstruck\Console\IO;
 use Zenstruck\Console\RunsCommands;
 use Zenstruck\Console\RunsProcesses;
+use Symfony\Component\Validator\Constraints as Assert;
 use function Symfony\Component\String\u;
 
 #[AsCommand('ff:scrape', 'Scrape the foothills forum articles')]
+#[Assert\EnableAutoMapping]
 final class FfScrapeCommand extends InvokableServiceCommand
 {
     use ConfigureWithAttributes;
@@ -33,6 +36,7 @@ final class FfScrapeCommand extends InvokableServiceCommand
         private EntityManagerInterface $entityManager,
         private ArticleRepository $articleRepository,
         private AuthorRepository $authorRepository,
+        private ValidatorInterface $validator,
         private array $articles = [],
         private array $authors = [],
         string $name = null)
@@ -85,20 +89,28 @@ final class FfScrapeCommand extends InvokableServiceCommand
                     $this->entityManager->persist($article);
                     $this->articles[$uuid] = $article; // in case of dups.
                 }
+//                if (count($row['keywords'])) dd($row);
                 $article
                     ->setHeadline($row['title'])
                     ->setSubheadline($row['subheadline'])
                     ->setByline($row['byline'])
                     ->setUrl($row['url'])
                     ->setSections($row['sections'])
+                    ->setKeywords($row['keywords'])
                 ;
                 foreach ($row['authors'] as $author) {
                     $this->addAuthor($author, $article);
                 }
+//                $this->entityManager->flush();
+
             }
-            $this->entityManager->flush();
+            $errors = $this->validator->validate($article);
+            if ($errors->count()) {
+                dd($row, (string)$errors);
+            }
             $startingAt = $next;
         } while ($next);
+        $this->entityManager->flush();
 
         $io->success('ff:scrape success.');
     }

@@ -17,20 +17,24 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Survos\ApiGrid\Api\Filter\FacetsFieldSearchFilter;
 use Survos\ApiGrid\Api\Filter\MultiFieldSearchFilter;
+use Survos\ApiGrid\State\MeilliSearchStateProvider;
+use Survos\CoreBundle\Entity\RouteParametersInterface;
+use Survos\CoreBundle\Entity\RouteParametersTrait;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
 #[ApiResource(
     shortName: 'article',
     operations: [new Get(), new Put(), new Delete(), new Patch(),
         new GetCollection(
-//            provider: MeilliSearchStateProvider::class,
+            provider: MeilliSearchStateProvider::class,
         )],
     normalizationContext: [
         'groups' => ['article.read', 'rp'],
     ]
 )]
-#[ApiFilter(FacetsFieldSearchFilter::class, properties: ['section', 'byline'])]
+#[ApiFilter(FacetsFieldSearchFilter::class, properties: ['section', 'byline', 'keywords', 'sections'])] // ,'sections','keywords'])]
 #[ApiFilter(MultiFieldSearchFilter::class, properties: ['headline', 'subheadline'])]
 #[ApiFilter(OrderFilter::class, properties: ['id',
     'byline',
@@ -39,32 +43,36 @@ use Symfony\Component\Serializer\Attribute\Groups;
 
 
 #[Groups(['article.read'])]
-class Article
+#[Assert\EnableAutoMapping]
+class Article implements RouteParametersInterface
 {
+    use RouteParametersTrait;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $slug = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $headline = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: Types::TEXT)]
     private ?string $url = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $byline = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
     private ?string $section = null;
 
     #[ORM\Column(type: Types::GUID)]
-    private ?string $uuid = null;
+    private $uuid;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+//    #[Assert\Length(max: 255)]
     private ?string $subheadline = null;
 
     #[ORM\ManyToMany(targetEntity: Author::class, mappedBy: 'articles')]
@@ -75,6 +83,7 @@ class Article
     private ?array $sections = null;
 
     #[ORM\Column(type: Types::JSON, nullable: true, options: ['jsonb' => true])]
+    #[Groups(['article.read'])]
     private ?array $keywords = null;
 
     public function __construct()
@@ -142,6 +151,7 @@ class Article
 
     public function setSection(string $section): static
     {
+        assert(strlen($section) <= 255, $section);
         $this->section = $section;
 
         return $this;
@@ -204,7 +214,7 @@ class Article
         return $this->sections;
     }
 
-    public function setSections(?array $sections): static
+    public function setSections(?array $sections): self
     {
         $this->sections = $sections;
 
@@ -216,10 +226,16 @@ class Article
         return $this->keywords;
     }
 
-    public function setKeywords(?array $keywords): static
+    public function setKeywords(?array $keywords): self
     {
         $this->keywords = $keywords;
+//                if (count($keywords)) dd($keywords);
 
         return $this;
+    }
+
+    public function getUniqueIdentifiers(): array
+    {
+        return ['articleId' => $this->getUuid()];
     }
 }
