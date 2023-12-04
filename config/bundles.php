@@ -27,4 +27,5 @@ return [
     Survos\AuthBundle\SurvosAuthBundle::class => ['all' => true],
     Survos\DeploymentBundle\SurvosDeploymentBundle::class => ['all' => true],
     Survos\Bundle\MakerBundle\SurvosMakerBundle::class => ['dev' => true, 'test' => true],
+    Sentry\SentryBundle\SentryBundle::class => ['prod' => true],
 ];
