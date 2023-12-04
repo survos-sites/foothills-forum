@@ -6,16 +6,25 @@
     {% set columns =
         [
             {name: 'headline'},
-            {name: 'byline', sortable: true, browsable: true},
+            {name: 'sections'},
+            {name: 'byline'},
+            {name: 'authors'},
             {name: 'section', sortable: true, browsable: true},
         ] %}
-
 
 <twig:api_grid
         :class="class"
         :caller="_self"
         :columns="columns"
 >
+    <twig:block name="authors">
+        {% for author in row.authors %}
+            {{ author.fullName }}
+        {% endfor %}
+    </twig:block>
+    <twig:block name="sections">
+        {{ row.sections|join(',') }}
+    </twig:block>
     <twig:block name="headline">
         <a target="_blank" href="{{ row.url }}">{{ row.headline }}</a>
     </twig:block>

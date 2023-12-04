@@ -9,6 +9,7 @@
         "ext-iconv": "*",
         "ext-pdo_sqlite": "*",
         "ext-sodium": "*",
+        "ajthinking/archetype": "^1.1",
         "api-platform/core": "^3.2",
         "doctrine/doctrine-bundle": "^2.11",
         "doctrine/doctrine-migrations-bundle": "^3.3",
@@ -108,6 +109,7 @@
         }
     },
     "require-dev": {
+        "illuminate/support": "^4.2",
         "phpunit/phpunit": "^9.5",
         "survos/maker-bundle": "*",
         "symfony/browser-kit": "7.0.*",

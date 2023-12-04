@@ -3,7 +3,9 @@
 namespace App\Command;
 
 use App\Entity\Article;
+use App\Entity\Author;
 use App\Repository\ArticleRepository;
+use App\Repository\AuthorRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use phpseclib3\File\ASN1\Maps\UniqueIdentifier;
 use Psr\Log\LoggerInterface;
@@ -30,7 +32,9 @@ final class FfScrapeCommand extends InvokableServiceCommand
         private LoggerInterface $logger,
         private EntityManagerInterface $entityManager,
         private ArticleRepository $articleRepository,
+        private AuthorRepository $authorRepository,
         private array $articles = [],
+        private array $authors = [],
         string $name = null)
     {
         parent::__construct($name);
@@ -43,81 +47,76 @@ final class FfScrapeCommand extends InvokableServiceCommand
         bool $reset = false,
     ): void
     {
-        $html = $this->scraperService->fetchUrlUsingCache('https://foothills-forum.org/reporting-projects/?', asData: false);
-        $crawler = new Crawler($html['content']);
+
         foreach ($this->articleRepository->findAll() as $article) {
-            $articles[$article->getSlug()] = $article;
+            $this->articles[$article->getUuid()] = $article;
         }
 
-        $crawler
-            ->filter('.type-project a')
-            ->each(function (Crawler $node, $i): void {
-                $link = $node->link();
-                $uri = $link->getUri();
-                // the key is the path on rappnews
-                $path =  trim(parse_url($uri, PHP_URL_PATH), '/');
-                $key = str_replace('project/', '', $path);
-                $this->logger->warning("scraping " . $uri);
-                $stories = $this->scraperService->fetchUrlUsingCache($uri, asData: false);
-                $storyCrawler = new Crawler($stories['content']);
-                $storyCrawler->filter('.meta')
-                    ->each(function (Crawler $node) use ($key, $stories) {
-                        try {
-                            $headline = $node->filter('a')->text();
-                        } catch (\Exception $exception) {
-                            $this->logger->error("No a links in node");
-                            return;
-                            dd($node->html());
-                        }
-//                            $date = $node->filter('time')->text();
-                        try {
-                            $byline = $node->filter('.tnt-byline')?->text();
-                            $byline = u($byline)->after('By ')->toString();
-                        } catch (\Exception $exception) {
-                            $this->logger->error("No a links in node");
-                            $byline = 'missing tnt-byline';
-                        }
-                            try {
-                                $articleUri = $node->filter('a')->link()->getUri();
-                            } catch (\Exception $exception) {
-//                            dump($node->html());
-                                $this->logger->error("No a links in node ");
-//                                dd($stories['content']);
-                                return;
-                            }
-                            $this->logger->warning("parsing " . $articleUri);
-                            preg_match('|/news/(.*?)/ar|', $articleUri, $m);
-                            $mm =  explode('/', $articleUri);
-                            $slug = $mm[5];
+        foreach ($this->authorRepository->findAll() as $author) {
+            $this->authors[$author->getUuid()] = $author;
+        }
 
-//                            $slug = str_replace('project/', '', $articleUri);
-                            if (!$article = $this->articles[$slug]??null) {
-                                $article = (new Article())
-                                    ->setSlug($slug);
-                                $this->entityManager->persist($article);
-                            }
-                            $article
-                                ->setSection($key)
-                                ->setUrl($articleUri)
-                                ->setHeadline($headline)
-                                ->setByline($byline);
+//        https://www.rappnews.com/search/?f=html&q=%22foothills+forum%22&s=start_time&sd=desc&l=10&t=article&nsa=eedition&app%5B0%5D=editorial&o=100
+//        $url = https://www.rappnews.com/search/?f=html&q=%22foothills+forum%22&s=start_time&sd=desc&l=10&t=article&nsa=eedition&f=json
+        $perPage = 10;
+        $startingAt=0;
+        $base = 'https://www.rappnews.com/search/';
+        do {
+            $parameters = [
+                'f' => 'json',
+                's' => 'start_time',
+                'nsa' => 'eedition',
+                'q' => 'foothills forum',
+                't' => 'article',
+                'l' => 100,
+                'o' => $startingAt
+            ];
 
-//                            $this->articles[$key][] = [
-//                                'key' => $key,
-//                                'date' => $date,
-//                                'headline' => $headline,
-//                                'url' => $uri,
-//                                'byline' => $byline
-//                            ];
-                        try {
-                        } catch (\Exception $exception) {
-                            $this->logger->error($exception->getMessage());
-                        }
-                    });
-            });
-        $this->entityManager->flush();
+//        $base = 'https://www.rappnews.com/search/?f=html&q=%22foothills+forum%22&s=start_time&sd=desc&t=article&nsa=eedition&app%5B0%5D=editorial';
+//        $url = $base . sprintf("&l=%d&o=%d", $perPage, $startingAt);
+            $data = $this->scraperService->fetchUrlUsingCache($base, $parameters);
+            $total = $data['data']['total'];
+            $next = $data['data']['next'];
+            foreach ($data['data']['rows'] as $row) {
+                $uuid = $row['uuid'];
+                if (!$article = $articles[$uuid]??null) {
+                    $article = (new Article())
+                        ->setUuid($uuid);
+                    $this->entityManager->persist($article);
+                    $this->articles[$uuid] = $article; // in case of dups.
+                }
+                $article
+                    ->setHeadline($row['title'])
+                    ->setSubheadline($row['subheadline'])
+                    ->setByline($row['byline'])
+                    ->setUrl($row['url'])
+                    ->setSections($row['sections'])
+                ;
+                foreach ($row['authors'] as $author) {
+                    $this->addAuthor($author, $article);
+                }
+            }
+            $this->entityManager->flush();
+            $startingAt = $next;
+        } while ($next);
 
         $io->success('ff:scrape success.');
+    }
+
+    private function addAuthor(array $authorData, Article $article)
+    {
+        $uuid = $authorData['uuid'];
+        if (!$author = $this->authors[$uuid]??null) {
+            $author = (new Author())
+                ->setUuid($uuid);
+            $this->entityManager->persist($author);
+        }
+        $author
+            ->setAvatar($authorData['avatar'])
+            ->setProfile($authorData['profile'])
+            ->setFullName($authorData['full_name']);
+        $author->addArticle($article);
+//        dd($authorData, $article);
     }
 
 }
