@@ -30,7 +30,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     shortName: 'article',
     operations: [new Get(), new Put(), new Delete(), new Patch(),
         new GetCollection(
-//            provider: MeilliSearchStateProvider::class,
+            provider: MeilliSearchStateProvider::class,
         )],
     normalizationContext: [
         'groups' => ['article.read', 'rp'],
@@ -38,8 +38,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 
 // keyswords and sections are arrays, so fail with getCounts() if doctrine, okay if meili
-//#[ApiFilter(FacetsFieldSearchFilter::class, properties: ['section', 'byline', 'keywords', 'sections'])] // ,'sections','keywords'])]
-#[ApiFilter(FacetsFieldSearchFilter::class, properties: ['section', 'byline'])] // ,'sections','keywords'])]
+#[ApiFilter(FacetsFieldSearchFilter::class, properties: ['section', 'byline', 'keywords', 'sections'])] // ,'sections','keywords'])]
+//#[ApiFilter(FacetsFieldSearchFilter::class, properties: ['section', 'byline'])] // ,'sections','keywords'])]
 #[ApiFilter(MultiFieldSearchFilter::class, properties: ['headline', 'subheadline'])]
 #[ApiFilter(OrderFilter::class, properties: ['id',
     'byline',
