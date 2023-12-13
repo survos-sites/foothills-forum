@@ -81,6 +81,7 @@ final class AppMenuEventListener
             return;
         }
         $menu = $event->getMenu();
+        $this->add($menu, '')
         $submenu = $this->addSubmenu($menu, 'Articles');
 //        $this->add($submenu, 'article_browse');
 //        $this->add($submenu, 'article_index');

@@ -15,11 +15,14 @@
         "doctrine/doctrine-migrations-bundle": "^3.3",
         "doctrine/orm": "^2.17",
         "friendsofsymfony/jsrouting-bundle": "dev-master@dev",
+        "google/apiclient": "^2.15.0",
+        "league/oauth2-github": "^3.1",
+        "league/oauth2-google": "^4.0",
         "meilisearch/meilisearch-php": "^1.5",
         "nelmio/cors-bundle": "^2.4",
         "phpdocumentor/reflection-docblock": "^5.3",
         "phpstan/phpdoc-parser": "^1.24",
-        "sentry/sentry-symfony": "^4.12",
+        "sentry/sentry-symfony": "dev-master",
         "survos/api-grid-bundle": "^1.5",
         "survos/auth-bundle": "^1.5",
         "survos/bootstrap-bundle": "^1.5",
@@ -45,6 +48,7 @@
         "symfony/property-access": "^6.4 || ^7.0",
         "symfony/property-info": "^6.4 || ^7.0",
         "symfony/runtime": "^6.4 || ^7.0",
+        "symfony/scheduler": "^7.0",
         "symfony/security-bundle": "^6.4 || ^7.0",
         "symfony/serializer": "^6.4 || ^7.0",
         "symfony/stimulus-bundle": "^2.x-dev",
@@ -54,6 +58,7 @@
         "symfony/validator": "^6.4 || ^7.0",
         "symfony/web-link": "^6.4 || ^7.0",
         "symfony/yaml": "^6.4 || ^7.0",
+        "symfonycasts/verify-email-bundle": "^1.15",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/intl-extra": "^3.8",
         "twig/twig": "^2.12|^3.0"
@@ -107,11 +112,10 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "^6.4"
+            "require": "^7.0"
         }
     },
     "require-dev": {
-        "illuminate/support": "^4.2",
         "phpunit/phpunit": "^9.5",
         "survos/maker-bundle": "*",
         "symfony/browser-kit": "^6.4 || ^7.0",

@@ -12,6 +12,7 @@ use Psr\Log\LoggerInterface;
 use Survos\Scraper\Service\ScraperService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\Scheduler\Attribute\AsPeriodicTask;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Zenstruck\Console\Attribute\Option;
 use Zenstruck\Console\ConfigureWithAttributes;
@@ -24,6 +25,7 @@ use function Symfony\Component\String\u;
 
 #[AsCommand('ff:scrape', 'Scrape the foothills forum articles')]
 #[Assert\EnableAutoMapping]
+#[AsPeriodicTask('2 hours', schedule: 'default')]
 final class FfScrapeCommand extends InvokableServiceCommand
 {
     use ConfigureWithAttributes;

@@ -24,7 +24,10 @@
             {% endfor %}
         </twig:block>
         <twig:block name="array">
-            {{ row[field_name]|join(',') }}
+            {% for value in row[field_name] %}
+                <li>{{ value }}</li>
+            {% endfor %}
+{#            {{ row[field_name]|map(r => "<span class='badge badge-info'>#r</span>")|join('<br /') }}#}
         </twig:block>
         <twig:block name="headline">
             <div class="d-inline-block text-truncate">

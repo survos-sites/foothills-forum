@@ -20,6 +20,8 @@ use Survos\ApiGrid\Api\Filter\MultiFieldSearchFilter;
 use Survos\ApiGrid\State\MeilliSearchStateProvider;
 use Survos\CoreBundle\Entity\RouteParametersInterface;
 use Survos\CoreBundle\Entity\RouteParametersTrait;
+use Survos\CoreBundle\Traits\QueryBuilderHelperInterface;
+use Survos\CoreBundle\Traits\QueryBuilderHelperTrait;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -28,13 +30,16 @@ use Symfony\Component\Validator\Constraints as Assert;
     shortName: 'article',
     operations: [new Get(), new Put(), new Delete(), new Patch(),
         new GetCollection(
-            provider: MeilliSearchStateProvider::class,
+//            provider: MeilliSearchStateProvider::class,
         )],
     normalizationContext: [
         'groups' => ['article.read', 'rp'],
     ]
 )]
-#[ApiFilter(FacetsFieldSearchFilter::class, properties: ['section', 'byline', 'keywords', 'sections'])] // ,'sections','keywords'])]
+
+// keyswords and sections are arrays, so fail with getCounts() if doctrine, okay if meili
+//#[ApiFilter(FacetsFieldSearchFilter::class, properties: ['section', 'byline', 'keywords', 'sections'])] // ,'sections','keywords'])]
+#[ApiFilter(FacetsFieldSearchFilter::class, properties: ['section', 'byline'])] // ,'sections','keywords'])]
 #[ApiFilter(MultiFieldSearchFilter::class, properties: ['headline', 'subheadline'])]
 #[ApiFilter(OrderFilter::class, properties: ['id',
     'byline',
