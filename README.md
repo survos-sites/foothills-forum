@@ -2,7 +2,7 @@
 
 ## Setup
 
-from survos/survos, run the services (meili, redis, rabbit)
+from the __survos__ repo, run the services (meili, redis, rabbit)
 ```bash
 docker compose up -d
 ```
