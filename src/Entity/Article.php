@@ -17,6 +17,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Survos\ApiGrid\Api\Filter\FacetsFieldSearchFilter;
 use Survos\ApiGrid\Api\Filter\MultiFieldSearchFilter;
+use Survos\ApiGrid\Attribute\Facet;
 use Survos\ApiGrid\State\MeilliSearchStateProvider;
 use Survos\CoreBundle\Entity\RouteParametersInterface;
 use Survos\CoreBundle\Entity\RouteParametersTrait;
@@ -67,10 +68,12 @@ class Article implements RouteParametersInterface
     private ?string $url = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Facet()]
     private ?string $byline = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Length(max: 255)]
+    #[Facet()]
     private ?string $section = null;
 
     #[ORM\Column(type: Types::GUID)]
