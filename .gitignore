@@ -27,3 +27,5 @@
 /public/js
 
 .env.prod
+
+articles.db

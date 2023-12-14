@@ -21,8 +21,6 @@ use Survos\ApiGrid\Attribute\Facet;
 use Survos\ApiGrid\State\MeilliSearchStateProvider;
 use Survos\CoreBundle\Entity\RouteParametersInterface;
 use Survos\CoreBundle\Entity\RouteParametersTrait;
-use Survos\CoreBundle\Traits\QueryBuilderHelperInterface;
-use Survos\CoreBundle\Traits\QueryBuilderHelperTrait;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -38,7 +36,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     ]
 )]
 
-// keyswords and sections are arrays, so fail with getCounts() if doctrine, okay if meili
+// keywords and sections are arrays, so fail with getCounts() if doctrine, okay if meili
 #[ApiFilter(FacetsFieldSearchFilter::class, properties: ['section', 'byline', 'keywords', 'sections'])] // ,'sections','keywords'])]
 //#[ApiFilter(FacetsFieldSearchFilter::class, properties: ['section', 'byline'])] // ,'sections','keywords'])]
 #[ApiFilter(MultiFieldSearchFilter::class, properties: ['headline', 'subheadline'])]

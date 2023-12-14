@@ -25,6 +25,12 @@
                     "datatables.net-select-bs5/css/select.bootstrap5.min.css": true
                 }
             }
+        },
+        "@symfony/ux-chartjs": {
+            "chart": {
+                "enabled": true,
+                "fetch": "eager"
+            }
         }
     },
     "entrypoints": []

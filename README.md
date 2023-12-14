@@ -12,9 +12,11 @@ Install the application, the default database is sqlite.
 ```bash
 git clone git@github.com:survos-sites/foothills-forum.git ff && cd ff
 composer install
+bin/console d:d:drop --force
+bin/console d:d:create
 bin/console doctrine:schema:update --force --complete
 bin/console ff:scrape
-bin/console grid:index
+bin/console grid:index --reset
 symfony server:start -d
 symfony open:local 
 ```

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Article;
+use Survos\ApiGrid\State\MeilliSearchStateProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,7 +22,7 @@ class AppController extends AbstractController
     public function articles(): Response
     {
         return $this->render('app/index.html.twig', [
-            'class' => Article::class
+            'class' => Article::class,
         ]);
     }
 }
