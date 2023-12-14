@@ -100,7 +100,6 @@ final class AppMenuEventListener
 //        $this->addMenuItem($menu, ['route' => 'song_browse', 'label' => "Song Search", 'icon' => 'fas fa-search']);
 //        $subMenu = $this->addSubmenu($menu, 'songs');
 //        $subMenu->setExtra('btn', 'btn btn-danger');
-//        dump($subMenu);
 //        // either a button on a navlink
 //        $subMenu->setLinkAttribute('class', 'nav-link');
 
