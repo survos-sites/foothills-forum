@@ -43,7 +43,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, OAuthId
         return $this->email;
     }
 
-    public function setEmail(string $email): static
+    public function setEmail(?string $email): static
     {
         $this->email = $email;
 

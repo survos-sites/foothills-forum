@@ -54,6 +54,12 @@ final class FfScrapeCommand extends InvokableServiceCommand
     ): void
     {
 
+        if ($reset) {
+            $this->articleRepository->createQueryBuilder('a')
+                ->delete()
+                ->getQuery()
+                ->execute();
+        }
         foreach ($this->articleRepository->findAll() as $article) {
             $this->articles[$article->getUuid()] = $article;
         }
