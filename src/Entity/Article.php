@@ -23,6 +23,7 @@ use Survos\CoreBundle\Entity\RouteParametersInterface;
 use Survos\CoreBundle\Entity\RouteParametersTrait;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use function Symfony\Component\String\u;
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
 #[ApiResource(
@@ -37,7 +38,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 
 // keywords and sections are arrays, so fail with getCounts() if doctrine, okay if meili
-#[ApiFilter(FacetsFieldSearchFilter::class, properties: ['section', 'byline', 'keywords', 'sections'])] // ,'sections','keywords'])]
+#[ApiFilter(FacetsFieldSearchFilter::class, properties: ['section', 'byline', 'tags', 'keywords', 'sections'])] // ,'sections','keywords'])]
 //#[ApiFilter(FacetsFieldSearchFilter::class, properties: ['section', 'byline'])] // ,'sections','keywords'])]
 #[ApiFilter(MultiFieldSearchFilter::class, properties: ['headline', 'subheadline'])]
 #[ApiFilter(OrderFilter::class, properties: ['id',
@@ -91,6 +92,10 @@ class Article implements RouteParametersInterface
     #[ORM\Column(type: Types::JSON, nullable: true, options: ['jsonb' => true])]
     #[Groups(['article.read'])]
     private ?array $keywords = null;
+
+    #[ORM\Column(type: Types::JSON, nullable: true, options: ['jsonb' => true])]
+    #[Groups(['article.read'])]
+    private ?array $tags = null;
 
     public function __construct()
     {
@@ -243,5 +248,24 @@ class Article implements RouteParametersInterface
     public function getUniqueIdentifiers(): array
     {
         return ['articleId' => $this->getUuid()];
+    }
+
+    #[Groups(['article.read'])]
+
+    public function getTags(): ?array
+    {
+        return $this->tags;
+    }
+
+    public function setTags(?array $tags): self
+    {
+        $this->tags = [];
+        foreach ($tags as $tag) {
+            if (!preg_match('/foothills|hurl|sperryville/', $tag)) continue;
+            $this->tags[] = $tag;
+//            $this->tags[] = str_replace(' ', '_', $tag);
+        }
+
+        return $this;
     }
 }

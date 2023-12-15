@@ -84,6 +84,9 @@ final class FfScrapeCommand extends InvokableServiceCommand
             $total = $data['data']['total'];
             $next = $data['data']['next'];
             foreach ($data['data']['rows'] as $row) {
+
+                if (!count($row['keywords'])) continue;
+
                 $uuid = $row['uuid'];
                 if (!$article = $articles[$uuid]??null) {
                     $article = (new Article())
@@ -91,7 +94,6 @@ final class FfScrapeCommand extends InvokableServiceCommand
                     $this->entityManager->persist($article);
                     $this->articles[$uuid] = $article; // in case of dups.
                 }
-//                if (count($row['keywords'])) dd($row);
                 $article
                     ->setHeadline($row['title'])
                     ->setSubheadline($row['subheadline'])
@@ -99,16 +101,18 @@ final class FfScrapeCommand extends InvokableServiceCommand
                     ->setUrl($row['url'])
                     ->setSections($row['sections'])
                     ->setKeywords($row['keywords'])
+                    ->setTags($row['keywords'])
                 ;
+//                if (count($row['keywords'])) { dd($article->getTags()); }
                 foreach ($row['authors'] as $author) {
                     $this->addAuthor($author, $article);
                 }
 //                $this->entityManager->flush();
+                $errors = $this->validator->validate($article);
+                if ($errors->count()) {
+                    dd($row, (string)$errors);
+                }
 
-            }
-            $errors = $this->validator->validate($article);
-            if ($errors->count()) {
-                dd($row, (string)$errors);
             }
             $startingAt = $next;
         } while ($next);

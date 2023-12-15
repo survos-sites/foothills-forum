@@ -1,8 +1,10 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}{{ 'articles'|trans|title }}{% endblock %}
+{% block description %}{{ 'foothill_forum_archive'|trans|title }}{% endblock %}
 
 {% block body %}
+
     {% set columns =
         [
             {name: 'headline'},
@@ -11,6 +13,7 @@
             {name: 'byline'},
             {name: 'authors'},
             {name: 'section', sortable: true, browsable: true},
+            {name: 'tags', block: 'array'},
         ] %}
 
     <twig:api_grid
