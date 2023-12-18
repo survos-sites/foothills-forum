@@ -18,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Survos\ApiGrid\Api\Filter\FacetsFieldSearchFilter;
 use Survos\ApiGrid\Api\Filter\MultiFieldSearchFilter;
 use Survos\ApiGrid\Attribute\Facet;
-use Survos\ApiGrid\State\MeilliSearchStateProvider;
+use Survos\ApiGrid\State\MeiliSearchStateProvider;
 use Survos\CoreBundle\Entity\RouteParametersInterface;
 use Survos\CoreBundle\Entity\RouteParametersTrait;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -30,12 +30,20 @@ use function Symfony\Component\String\u;
     shortName: 'article',
     operations: [new Get(), new Put(), new Delete(), new Patch(),
         new GetCollection(
-            provider: MeilliSearchStateProvider::class,
+            provider: MeiliSearchStateProvider::class,
         )],
     normalizationContext: [
         'groups' => ['article.read', 'rp'],
     ]
 )]
+//#[GetCollection(
+//    uriTemplate: "meili/{indexName}",
+//    uriVariables: ["indexName"],
+//    provider: MeiliSearchStateProvider::class,
+//    normalizationContext: [
+//        'groups' => ['article.read', 'tree', 'rp'],
+//    ]
+//)]
 
 // keywords and sections are arrays, so fail with getCounts() if doctrine, okay if meili
 #[ApiFilter(FacetsFieldSearchFilter::class, properties: ['section', 'byline', 'tags', 'keywords', 'sections'])] // ,'sections','keywords'])]

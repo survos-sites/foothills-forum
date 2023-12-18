@@ -10,22 +10,25 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Survos\ApiGrid\State\MeilliSearchStateProvider;
+use Survos\ApiGrid\State\MeiliSearchStateProvider;
+use Survos\CoreBundle\Entity\RouteParametersInterface;
+use Survos\CoreBundle\Entity\RouteParametersTrait;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: AuthorRepository::class)]
 #[ApiResource(
     operations: [new Get(),
         new GetCollection(
-            provider: MeilliSearchStateProvider::class,
+            provider: MeiliSearchStateProvider::class,
         )],
     normalizationContext: ['groups' => ['author.read', 'rp']]
 )]
 
 #[Groups(['author.read'])]
 #[Assert\EnableAutoMapping]
-class Author
+class Author implements RouteParametersInterface
 {
+    use RouteParametersTrait;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
