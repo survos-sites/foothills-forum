@@ -86,7 +86,7 @@ final class FfScrapeCommand extends InvokableServiceCommand
 
 //        $base = 'https://www.rappnews.com/search/?f=html&q=%22foothills+forum%22&s=start_time&sd=desc&t=article&nsa=eedition&app%5B0%5D=editorial';
 //        $url = $base . sprintf("&l=%d&o=%d", $perPage, $startingAt);
-            $data = $this->scraperService->fetchUrlUsingCache($base, $parameters);
+            $data = $this->scraperService->fetchUrlUsingCache($base, $parameters, asData: 'array');
             $total = $data['data']['total'];
             $next = $data['data']['next'];
             foreach ($data['data']['rows'] as $row) {
