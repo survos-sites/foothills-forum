@@ -1,0 +1,24 @@
+{% extends "author/base.html.twig" %}
+
+{% block title %}{{  class }}{% endblock %}
+
+{% block body %}
+<h1>{{ class }} {{ _self }}</h1>
+
+    <code>{{ apiCall }}</code>
+<twig:api_grid
+        facets="false"
+        :class="class"
+        :meili="useMeili"
+        :apiGetCollectionUrl="apiCall"
+        :caller="_self"
+        :columns="columns"
+>
+
+    <twig:block name="id">
+        <a target="_blank" href="{{ path('author_show', row.rp) }}">
+            ID: {{ row.id }}
+        </a>
+    </twig:block>
+</twig:api_grid>
+{% endblock %}

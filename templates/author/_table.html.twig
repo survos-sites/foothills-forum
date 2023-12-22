@@ -1,0 +1,40 @@
+
+
+<table class="table js-datatable">
+    <thead>
+    <tr>
+        <th>actions</th>
+                    <th>Id</th>
+                    <th>Uuid</th>
+                    <th>Avatar</th>
+                    <th>Profile</th>
+                    <th>FullName</th>
+            </tr>
+    </thead>
+    <tbody>
+    {% for author in authors %}
+    <tr>
+        <td>
+            <a href="{{ path('author_show', author.rp) }}">
+                <span class="fas fa-eye"></span>
+                <i class="bi bi-info"></i>
+            </a>
+            <a href="{{ path('author_edit', author.rp) }}">
+                <span class="fas fa-edit"></span>
+                <i class="bi bi-pencil"></i>
+            </a>
+        </td>
+
+                    <td>{{ author.id }}</td>
+                    <td>{{ author.uuid }}</td>
+                    <td>{{ author.avatar }}</td>
+                    <td>{{ author.profile }}</td>
+                    <td>{{ author.fullName }}</td>
+            </tr>
+    {% else %}
+    <tr>
+        <td colspan="6">no records found</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>

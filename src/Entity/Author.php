@@ -13,14 +13,18 @@ use Doctrine\ORM\Mapping as ORM;
 use Survos\ApiGrid\State\MeiliSearchStateProvider;
 use Survos\CoreBundle\Entity\RouteParametersInterface;
 use Survos\CoreBundle\Entity\RouteParametersTrait;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: AuthorRepository::class)]
+#[UniqueEntity(['uuid'])]
+#[ORM\UniqueConstraint(
+    name: 'author_idx',
+    columns: ['uuid']
+)]
 #[ApiResource(
     operations: [new Get(),
-        new GetCollection(
-            provider: MeiliSearchStateProvider::class,
-        )],
+        new GetCollection()],
     normalizationContext: ['groups' => ['author.read', 'rp']]
 )]
 
@@ -132,5 +136,10 @@ class Author implements RouteParametersInterface
         $this->articles->removeElement($article);
 
         return $this;
+    }
+
+    public function getUniqueIdentifiers(): array
+    {
+        return ['authorId' => $this->getId()];
     }
 }

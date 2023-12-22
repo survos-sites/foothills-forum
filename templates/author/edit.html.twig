@@ -1,0 +1,8 @@
+{% extends "author/base.html.twig" %}
+
+{% block body %}
+    <h1>Edit Author</h1>
+
+    {{ include('author/_form.html.twig', {'button_label': 'Update'}) }}
+    {{ include('author/_delete_form.html.twig') }}
+{% endblock %}

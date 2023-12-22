@@ -21,11 +21,17 @@ use Survos\ApiGrid\Attribute\Facet;
 use Survos\ApiGrid\State\MeiliSearchStateProvider;
 use Survos\CoreBundle\Entity\RouteParametersInterface;
 use Survos\CoreBundle\Entity\RouteParametersTrait;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use function Symfony\Component\String\u;
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
+#[UniqueEntity(['uuid'])]
+#[ORM\UniqueConstraint(
+    name: 'article_idx',
+    columns: ['uuid']
+)]
 #[ApiResource(
     shortName: 'article',
     operations: [new Get(),  new GetCollection()],

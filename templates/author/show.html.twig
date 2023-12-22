@@ -1,0 +1,43 @@
+{% extends "author/base.html.twig" %}
+
+{% block body %}
+    <h1>Author</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ author.id }}</td>
+            </tr>
+            <tr>
+                <th>Uuid</th>
+                <td>{{ author.uuid }}</td>
+            </tr>
+            <tr>
+                <th>Avatar</th>
+                <td>{{ author.avatar }}</td>
+            </tr>
+            <tr>
+                <th>Profile</th>
+                <td>{{ author.profile }}</td>
+            </tr>
+            <tr>
+                <th>FullName</th>
+                <td>{{ author.fullName }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Articles</h3>
+    {% for article in author.articles|slice(0,3) %}
+        <li>{{ article.headline }}</li>
+    {% endfor %}
+
+    <h3>Articles Datatable (needs resource)</h3>
+    <a target="_blank" href="https://api-platform.com/docs/core/subresources/">Api platform docs</a>
+
+    <code>/api/author/{{ author.id }}/articles</code>
+
+
+
+{% endblock %}

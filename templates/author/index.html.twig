@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Author index{% endblock %}
+
+
+{% block body %}
+    <h1>Author index</h1>
+
+    {% include "author/_table.html.twig" %}
+
+    <a class="btn btn-primary" href="{{ path('author_new') }}"><span class="fas fa-plus"></span>New  Author</a>
+{% endblock %}

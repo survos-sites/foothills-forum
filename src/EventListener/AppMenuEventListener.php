@@ -122,6 +122,7 @@ final class AppMenuEventListener
             return;
         }
         $menu = $event->getMenu();
+        $this->add($menu, 'author_index');
 //        $this->addMenuItem($menu, ['route' => 'song_index', 'label' => "Songs", 'icon' => 'fas fa-home']);
 //        $this->addMenuItem($menu, ['route' => 'song_browse', 'label' => "Song Search", 'icon' => 'fas fa-search']);
 //        $subMenu = $this->addSubmenu($menu, 'songs');
