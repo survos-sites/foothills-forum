@@ -3,6 +3,16 @@
 {% block title %}{{ 'articles'|trans|title }}{% endblock %}
 {% block description %}{{ 'foothill_forum_archive'|trans|title }}{% endblock %}
 
+{% block PAGE_MENU %}
+    {% set options = {
+        entityClass: class
+    } %}
+
+    <twig:menu :type="PAGE_MENU" :caller="_self" :options="options">
+    </twig:menu>
+
+{% endblock %}
+
 {% block body %}
 
     {% set columns =
@@ -18,6 +28,7 @@
 
     <twig:api_grid
             :class="class"
+            meili="true"
             :caller="_self"
             :columns="columns"
     >

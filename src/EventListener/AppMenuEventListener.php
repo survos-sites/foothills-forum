@@ -3,6 +3,7 @@
 namespace App\EventListener;
 
 use Knp\Menu\ItemInterface;
+use Survos\ApiGrid\Service\DatatableService;
 use Survos\BootstrapBundle\Event\KnpMenuEvent;
 use Survos\BootstrapBundle\Service\ContextService;
 use Survos\BootstrapBundle\Traits\KnpMenuHelperTrait;
@@ -27,6 +28,7 @@ final class AppMenuEventListener
         #[Autowire('%kernel.environment%')] private string $env,
         private ContextService $contextService,
         private Security $security,
+        private DatatableService $datatableService,
         private ?AuthorizationCheckerInterface $authorizationChecker=null
     )
     {
@@ -49,13 +51,37 @@ final class AppMenuEventListener
 
     public function pageMenu(KnpMenuEvent $event): void
     {
-        if (!$this->supports($event)) {
-            return;
-        }
         $menu = $event->getMenu();
+        if ($class = $event->getOption('entityClass')) {
+            $this->addFieldMenu($menu, $class);
+        }
     }
 
-        public function footerMenu(KnpMenuEvent $event): void
+    public function addFieldMenu(ItemInterface $menu, string $class)
+    {
+        // hack, we really need an index map.  Also, move this to GridController
+        $index = (new \ReflectionClass($class))->getShortName();
+        $subMenu = $this->addSubmenu($menu, $index);
+        foreach (['survos_index_stats'] as $route) {
+            $this->add($subMenu, $route, ['indexName' => $index]);
+        }
+
+        $fields = $this->datatableService->getSettingsFromAttributes($class);
+        foreach ($fields as $code=>$field) {
+            if ($field['browsable']??false) {
+                $this->add($menu, 'survos_facet_show',
+                    ['indexName' => $index, 'fieldName' => $code],
+                    label: $code,
+                    translationDomain: null
+                );
+            }
+        }
+
+
+    }
+
+
+    public function footerMenu(KnpMenuEvent $event): void
     {
         if (!$this->supports($event)) {
             return;

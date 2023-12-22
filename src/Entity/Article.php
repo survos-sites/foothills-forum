@@ -28,22 +28,19 @@ use function Symfony\Component\String\u;
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
 #[ApiResource(
     shortName: 'article',
-    operations: [new Get(), new Put(), new Delete(), new Patch(),
-        new GetCollection(
-            provider: MeiliSearchStateProvider::class,
-        )],
+    operations: [new Get(),  new GetCollection()],
     normalizationContext: [
         'groups' => ['article.read', 'rp'],
     ]
 )]
-//#[GetCollection(
-//    uriTemplate: "meili/{indexName}",
-//    uriVariables: ["indexName"],
-//    provider: MeiliSearchStateProvider::class,
-//    normalizationContext: [
-//        'groups' => ['article.read', 'tree', 'rp'],
-//    ]
-//)]
+#[GetCollection(
+    uriTemplate: "meili/{indexName}",
+    uriVariables: ["indexName"],
+    provider: MeiliSearchStateProvider::class,
+    normalizationContext: [
+        'groups' => ['article.read', 'tree', 'rp'],
+    ]
+)]
 
 // keywords and sections are arrays, so fail with getCounts() if doctrine, okay if meili
 #[ApiFilter(FacetsFieldSearchFilter::class, properties: ['section', 'byline', 'tags', 'keywords', 'sections'])] // ,'sections','keywords'])]
