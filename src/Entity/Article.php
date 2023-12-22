@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Put;
 use App\Repository\ArticleRepository;
@@ -38,6 +39,22 @@ use function Symfony\Component\String\u;
     normalizationContext: [
         'groups' => ['article.read', 'rp'],
     ]
+)]
+#[ApiResource(
+    uriTemplate: '/author/{authorId}/article/{id}',
+    uriVariables: [
+        'authorId' => new Link(fromClass: Article::class, toProperty: 'authors'),
+        'id' => new Link(fromClass: Article::class),
+    ],
+    operations: [ new Get() ]
+)]
+
+#[ApiResource(
+    uriTemplate: '/author/{authorId}/article',
+    uriVariables: [
+        'authorId' => new Link(fromClass: Article::class, toProperty: 'authors'),
+    ],
+    operations: [ new GetCollection() ]
 )]
 #[GetCollection(
     uriTemplate: "meili/{indexName}",
