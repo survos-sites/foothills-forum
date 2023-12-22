@@ -37,8 +37,28 @@
 
     <a target="_blank" href="https://api-platform.com/docs/core/subresources/">Api platform docs</a>
 
-    {% set url = '/api/author/%d/article'|format(author.id) %}
-    <a class="btn btn-primary" target="_blank" href="{{ url }}">{{ url }}</a>
+    {% set apiCall = '/api/author/%d/article'|format(author.id) %}
+
+    {% set useMeili = false %}
+    {% set columns = [
+        'id',
+        'headline'
+    ] %}
+    <twig:api_grid
+            facets="false"
+            :class="class"
+            :meili="useMeili"
+            :apiGetCollectionUrl="apiCall"
+            :caller="_self"
+            :columns="columns"
+    >
+
+        <twig:block name="id">
+                ID: {{ row.id }}
+        </twig:block>
+    </twig:api_grid>
+
+    <a class="btn btn-primary" target="_blank" href="{{ apiCall }}">{{ apiCall }}</a>
 
     <h3>Meili Subresource</h3>
     {% set url = '/api/meili/author/%d/article'|format(author.id) %}

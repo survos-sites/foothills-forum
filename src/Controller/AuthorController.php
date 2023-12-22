@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Entity\Author;
 use App\Form\AuthorType;
 use Doctrine\ORM\EntityManagerInterface;
+use Google\Service\ServiceControl\Auth;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,6 +40,7 @@ class AuthorController extends AbstractController
         {
             return $this->render('author/show.html.twig', [
                 'author' => $author,
+                'class' => Author::class
             ]);
         }
 
