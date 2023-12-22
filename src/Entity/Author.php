@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -27,6 +29,9 @@ use Symfony\Component\Validator\Constraints as Assert;
         new GetCollection()],
     normalizationContext: ['groups' => ['author.read', 'rp']]
 )]
+#[ApiFilter(OrderFilter::class, properties: ['id',
+    'articleCount',
+])]
 
 #[Groups(['author.read'])]
 #[Assert\EnableAutoMapping]
@@ -36,6 +41,7 @@ class Author implements RouteParametersInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['article.read'])]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::GUID)]
@@ -50,7 +56,7 @@ class Author implements RouteParametersInterface
     private ?string $profile = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['article.read'])]
+    #[Groups(['article.read','author.read'])]
     private ?string $fullName = null;
 
     #[ORM\ManyToMany(targetEntity: Article::class, inversedBy: 'authors')]
@@ -129,6 +135,12 @@ class Author implements RouteParametersInterface
         }
 
         return $this;
+    }
+
+    #[Groups(['author.read'])]
+    public function getArticleCount(): int
+    {
+        return $this->getArticles()->count();
     }
 
     public function removeArticle(Article $article): static

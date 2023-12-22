@@ -32,6 +32,11 @@ class AppController extends AbstractController
         $defaultColumns = $apiGridComponent->getDefaultColumns();
         $apiGridComponent->columns = array_keys($defaultColumns);
         $columns = $apiGridComponent->getNormalizedColumns();
+        $columns = [
+            'headline',
+            'authorCount'
+        ];
+
 //        dd($columns, $class);
         $endpoints = $inspectionService->getAllUrlsForResource($class);
         $apiCall = $endpoints[$useMeili ? MeiliSearchStateProvider::class : CollectionProvider::class];

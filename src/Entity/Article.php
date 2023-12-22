@@ -71,6 +71,7 @@ use function Symfony\Component\String\u;
 #[ApiFilter(MultiFieldSearchFilter::class, properties: ['headline', 'subheadline'])]
 #[ApiFilter(OrderFilter::class, properties: ['id',
     'byline',
+    'authorCount',
     'section',
 ])]
 
@@ -237,6 +238,18 @@ class Article implements RouteParametersInterface
         }
 
         return $this;
+    }
+
+    #[Groups(['article.read'])]
+    public function getAuthorIds(): array
+    {
+        return $this->getAuthors()->map(fn(Author $author) => $author->getId())->toArray();
+    }
+
+    #[Groups(['article.read'])]
+    public function getAuthorCount(): int
+    {
+        return $this->getAuthors()->count();
     }
 
     public function removeAuthor(Author $author): static

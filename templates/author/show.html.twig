@@ -28,15 +28,21 @@
         </tbody>
     </table>
 
-    <h3>Articles</h3>
+    <h3>{{ author.articleCount }} Articles</h3>
     {% for article in author.articles|slice(0,3) %}
         <li>{{ article.headline }}</li>
     {% endfor %}
 
     <h3>Articles Datatable (needs resource)</h3>
+
     <a target="_blank" href="https://api-platform.com/docs/core/subresources/">Api platform docs</a>
 
-    <code>/api/author/{{ author.id }}/articles</code>
+    {% set url = '/api/author/%d/article'|format(author.id) %}
+    <a class="btn btn-primary" target="_blank" href="{{ url }}">{{ url }}</a>
+
+    <h3>Meili Subresource</h3>
+    {% set url = '/api/meili/author/%d/article'|format(author.id) %}
+    <a class="btn btn-success" target="_blank" href="{{ url }}">{{ url }}</a>
 
 
 

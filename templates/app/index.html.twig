@@ -18,10 +18,11 @@
     {% set columns =
         [
             {name: 'headline'},
+            {name: 'authors'},
+            {name: 'authorCount'},
             {name: 'keywords', block: 'array'},
             {name: 'sections', block: 'array'},
             {name: 'byline'},
-            {name: 'authors'},
             {name: 'section', sortable: true, browsable: true},
             {name: 'tags', block: 'array'},
         ] %}
@@ -34,7 +35,10 @@
     >
         <twig:block name="authors">
             {% for author in row.authors %}
-                {{ author.fullName }}
+                <a href="{{ path('author_show', author.rp) }}">
+                    #{{ author.id }}: {{ author.fullName }}
+
+                </a>
             {% endfor %}
         </twig:block>
         <twig:block name="array">
@@ -46,7 +50,7 @@
         <twig:block name="headline">
             <div class="d-inline-block text-truncate">
             <a title="{{ row.headline }}" target="_blank" href="{{ row.url }}" style="max-width: 150px;">
-                {{ row.headline }}
+                {{ row.headline|slice(0, 30) }}
             </a>
             </div>
         </twig:block>
