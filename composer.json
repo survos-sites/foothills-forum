@@ -29,6 +29,7 @@
         "survos/command-bundle": "^1.5",
         "survos/deployment-bundle": "^1.5",
         "survos/scraper-bundle": "^1.5",
+        "survos/workflow-helper-bundle": "^1.5",
         "symfony/asset": "^6.4 || ^7.0",
         "symfony/asset-mapper": "^6.4 || ^7.0",
         "symfony/console": "^6.4 || ^7.0",

@@ -2,6 +2,8 @@
 
 namespace App\EventListener;
 
+use App\Entity\Article;
+use App\Entity\Author;
 use Knp\Menu\ItemInterface;
 use Survos\ApiGrid\Service\DatatableService;
 use Survos\BootstrapBundle\Event\KnpMenuEvent;
@@ -137,6 +139,17 @@ final class AppMenuEventListener
 
 //        $this->addMenuItem($menu, ['route' => 'video_index', 'label' => "Videos", 'icon' => 'fas fa-home']);
 //        $this->addMenuItem($menu, ['route' => 'video_index', 'label' => "Videos (API)", 'icon' => 'fas fa-sync']);
+
+        foreach ([Author::class/*, Article::class*/] as $class) {
+            $name = (new \ReflectionClass($class))->getShortName();
+            $subMenu = $this->addSubmenu($menu, $name);
+            // @todo: get Crud attributes or controller methods as routes
+            foreach (['_browse','_index','_symfony_crud_index', '_new'] as $suffix) {
+                $route = strtolower($name) . $suffix;
+                $this->add($subMenu, $route);
+            }
+        }
+
         if ($this->env === 'dev' && $this->security->isGranted('ROLE_ADMIN')) {
             $subMenu = $this->addSubmenu($menu, 'admin');
             $this->add($subMenu, 'survos_commands', label: "Commands");

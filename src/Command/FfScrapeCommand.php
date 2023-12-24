@@ -134,12 +134,13 @@ final class FfScrapeCommand extends InvokableServiceCommand
             $author = (new Author())
                 ->setUuid($uuid);
             $this->entityManager->persist($author);
+            // in this case, it can be when we first persist
+            $author
+                ->setAvatar($authorData['avatar'])
+                ->setProfile($authorData['profile'])
+                ->setFullName($authorData['full_name']);
             $this->authors[$uuid] = $author;
         }
-        $author
-            ->setAvatar($authorData['avatar'])
-            ->setProfile($authorData['profile'])
-            ->setFullName($authorData['full_name']);
         $author->addArticle($article);
 //        dd($authorData, $article);
     }

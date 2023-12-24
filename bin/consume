@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+set SYMFONY_DEPRECATIONS_HELPER=disabled
+
+# more verbose on the first run
+bin/console mess:stats  async
+SYMFONY_DEPRECATIONS_HELPER=disabled bin/console messenger:consume async -vv --limit 1 --time-limit 10
+#symfony console messenger:consume high normal low -vv --limit 1 --time-limit 30;
+
+## use sleep  so that you can break out with ^C
+while true; do bin/console mess:stats && bin/console messenger:consume async -v --limit 100 --time-limit 90; sleep 2;   done;
+#while true; do sleep 30; yarn encore dev; symfony console messenger:consume high normal low -vv --limit 30 --time-limit 90;  done;
