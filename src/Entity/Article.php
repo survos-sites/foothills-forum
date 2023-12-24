@@ -35,7 +35,7 @@ use function Symfony\Component\String\u;
 )]
 #[ApiResource(
     shortName: 'article',
-    operations: [new Get(),  new GetCollection()],
+    operations: [new Get(),  new GetCollection(name: 'api_doctrine_articles')],
     normalizationContext: [
         'groups' => ['article.read', 'rp'],
     ]
@@ -49,6 +49,15 @@ use function Symfony\Component\String\u;
     operations: [ new Get() ]
 )]
 
+#[GetCollection(
+    uriTemplate: "meili/{indexName}",
+    uriVariables: ["indexName"],
+    provider: MeiliSearchStateProvider::class,
+    normalizationContext: [
+        'groups' => ['article.read'],
+    ]
+)]
+
 #[ApiResource(
     uriTemplate: '/author/{authorId}/article',
     uriVariables: [
@@ -57,9 +66,12 @@ use function Symfony\Component\String\u;
     operations: [ new GetCollection() ]
 )]
 #[GetCollection(
-    uriTemplate: "meili/{indexName}",
-    uriVariables: ["indexName"],
+    uriTemplate: "meili/article",
+//    uriVariables: ["indexName"],
     provider: MeiliSearchStateProvider::class,
+    extraProperties: [
+        'indexName' => 'Article'
+    ],
     normalizationContext: [
         'groups' => ['article.read', 'tree', 'rp'],
     ]

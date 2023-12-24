@@ -51,7 +51,7 @@ final class FfScrapeCommand extends InvokableServiceCommand
 
         #[Option(description: 'reset the scrape cache')]
         bool $reset = false,
-    ): void
+    ): int
     {
 
         if ($reset) {
@@ -86,6 +86,7 @@ final class FfScrapeCommand extends InvokableServiceCommand
 
 //        $base = 'https://www.rappnews.com/search/?f=html&q=%22foothills+forum%22&s=start_time&sd=desc&t=article&nsa=eedition&app%5B0%5D=editorial';
 //        $url = $base . sprintf("&l=%d&o=%d", $perPage, $startingAt);
+            $this->logger->info("Scraping $base", $parameters);
             $data = $this->scraperService->fetchUrlUsingCache($base, $parameters, asData: 'array');
             $total = $data['data']['total'];
             $next = $data['data']['next'];
@@ -125,6 +126,7 @@ final class FfScrapeCommand extends InvokableServiceCommand
         $this->entityManager->flush();
 
         $io->success('ff:scrape success.');
+        return self::SUCCESS;
     }
 
     private function addAuthor(array $authorData, Article $article)

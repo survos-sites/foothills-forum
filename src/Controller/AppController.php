@@ -15,8 +15,12 @@ use Archetype\Facades\PHPFile;
 class AppController extends AbstractController
 {
     #[Route('/', name: 'app_homepage')]
-    public function index(): Response
+    public function index(InspectionService $inspectionService): Response
     {
+        $class = Article::class;
+        $map = $inspectionService->getAllUrlsForResource($class);
+//        dd($map);
+
         return $this->render('app/index.html.twig', [
             'class' => Article::class
         ]);
@@ -39,7 +43,8 @@ class AppController extends AbstractController
 
 //        dd($columns, $class);
         $endpoints = $inspectionService->getAllUrlsForResource($class);
-        $apiCall = $endpoints[$useMeili ? MeiliSearchStateProvider::class : CollectionProvider::class];
+        $apiCall = 'api_doctrine_articles';
+//        $apiCall = $endpoints[$useMeili ? MeiliSearchStateProvider::class : CollectionProvider::class];
 
 
         return $this->render('@SurvosApiGrid/datatables.html.twig', get_defined_vars() + [

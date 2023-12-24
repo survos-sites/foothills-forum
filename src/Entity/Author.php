@@ -20,17 +20,32 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: AuthorRepository::class)]
 #[ApiResource(
     // normal get is the database
-    operations: [new Get(), new GetCollection()],
+    operations: [new Get(), new GetCollection(
+        name: 'api_authors', extraProperties: ['alias' => 'author_list']
+    )],
     normalizationContext: ['groups' => ['author.read', 'rp']]
 )]
+//#[GetCollection(
+//    uriTemplate: "meili/{indexName}",
+//    uriVariables: ["indexName"],
+//    provider: MeiliSearchStateProvider::class,
+//    normalizationContext: [
+//        'groups' => ['author.read', 'tree', 'rp'],
+//    ]
+//)]
 #[GetCollection(
-    uriTemplate: "meili/{indexName}",
-    uriVariables: ["indexName"],
+    name: 'author_meili',
+    uriTemplate: "meili/author",
+//    uriVariables: ["indexName"],
     provider: MeiliSearchStateProvider::class,
+    extraProperties: [
+        'indexName' => 'AuthorIndex'
+    ],
     normalizationContext: [
-        'groups' => ['author.read', 'tree', 'rp'],
+        'groups' => ['article.read', 'tree', 'rp'],
     ]
 )]
+
 #[ApiFilter(OrderFilter::class, properties: ['id',
     'fullName',
     'articleCount'
