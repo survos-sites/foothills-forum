@@ -12,6 +12,7 @@ use App\Form\AuthorType;
 use App\Repository\AuthorRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Survos\ApiGrid\Components\ApiGridComponent;
+use Survos\ApiGrid\Service\DatatableService;
 use Survos\ApiGrid\State\MeiliSearchStateProvider;
 use Survos\InspectionBundle\Services\InspectionService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -33,29 +34,29 @@ class AuthorCollectionController extends AbstractController
     }
 
     #[Route(path: '/{apiRoute}/', name: 'author_browse',
-        requirements: ['apiRoute' => 'index|browse|_api_meili/author_get_collection'],
+        requirements: ['apiRoute' => '|index|browse|_api_meili/author_get_collection'],
         methods: ['GET'])]
-    #[Route('/index', name: 'author_index')]
     public function browseauthor(Request $request,
                                  InspectionService $inspectionService,
-                                 string $apiRoute='index',
+                                 DatatableService $datatableService,
+                                 string $apiRoute='',
     ): Response
     {
         $class = Author::class;
         $map = $inspectionService->getAllUrlsForResource($class);
-        dd($map, $apiRoute);
 
         $shortClass = 'Author';
         $useMeili = 'app_browse' == $request->get('_route');
         // this should be from inspection bundle!
-        $apiCall = '_api_meili/author_get_collection';
+//        $apiCall = '_api_meili/author_get_collection';
 //        $apiCall = $useMeili
 //            ? '/api/meili/' . $shortClass
 //            : $this->iriConverter->getIriFromResource($class, operation: new GetCollection(),
 //                context: $context ?? []);
 
-        $this->apiGridComponent->class = $class;
-        $c = $this->apiGridComponent->getDefaultColumns();
+        $this->apiGridComponent->setClass($class);
+        $c = $datatableService->getSettingsFromAttributes($class);
+//        $c = $this->apiGridComponent->getDefaultColumns();
         $columns = array_values($c);
         $useMeili = 'author_browse' == $request->get('_route');
 
@@ -77,7 +78,7 @@ class AuthorCollectionController extends AbstractController
         return $this->render('author/browse.html.twig', [
             'class' => $class,
             'useMeili' => $useMeili,
-            'apiCall' => $apiCall,
+            'apiCall' => $apiRoute,
             'columns' => $columns,
             'filter' => [],
         ]);
@@ -103,7 +104,7 @@ class AuthorCollectionController extends AbstractController
             $entityManager->persist($author);
             $entityManager->flush();
 
-            return $this->redirectToRoute('author_index');
+            return $this->redirectToRoute('author_browse');
         }
 
         return $this->render('author/new.html.twig', [

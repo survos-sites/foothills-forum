@@ -124,7 +124,7 @@ final class AppMenuEventListener
             return;
         }
         $menu = $event->getMenu();
-        $this->add($menu, 'author_index');
+        $this->add($menu, 'author_browse');
 //        $this->addMenuItem($menu, ['route' => 'song_index', 'label' => "Songs", 'icon' => 'fas fa-home']);
 //        $this->addMenuItem($menu, ['route' => 'song_browse', 'label' => "Song Search", 'icon' => 'fas fa-search']);
 //        $subMenu = $this->addSubmenu($menu, 'songs');
@@ -144,7 +144,7 @@ final class AppMenuEventListener
             $name = (new \ReflectionClass($class))->getShortName();
             $subMenu = $this->addSubmenu($menu, $name);
             // @todo: get Crud attributes or controller methods as routes
-            foreach (['_browse','_index','_symfony_crud_index', '_new'] as $suffix) {
+            foreach (['_browse','_symfony_crud_index', '_new'] as $suffix) {
                 $route = strtolower($name) . $suffix;
                 $this->add($subMenu, $route);
             }

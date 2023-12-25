@@ -22,7 +22,8 @@ class AppController extends AbstractController
 //        dd($map);
 
         return $this->render('app/index.html.twig', [
-            'class' => Article::class
+            'class' => Article::class,
+            'apiCall' => null
         ]);
     }
     #[Route('/doctrine', name: 'app_articles_with_doctrine')]
