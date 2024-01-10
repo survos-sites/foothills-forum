@@ -14,8 +14,8 @@ use Archetype\Facades\PHPFile;
 
 class AppController extends AbstractController
 {
-    #[Route('/', name: 'app_homepage')]
-    public function index(InspectionService $inspectionService): Response
+    #[Route('/{apiRoute}', name: 'app_homepage')]
+    public function index(InspectionService $inspectionService, string $apiRoute=null): Response
     {
         $class = Article::class;
         $map = $inspectionService->getAllUrlsForResource($class);
@@ -23,16 +23,20 @@ class AppController extends AbstractController
 
         return $this->render('app/index.html.twig', [
             'class' => Article::class,
+            'apiRoute' => $apiRoute,
             'apiCall' => null
         ]);
     }
     #[Route('/doctrine', name: 'app_articles_with_doctrine')]
-    public function articles(ApiGridComponent $apiGridComponent, InspectionService $inspectionService): Response
+    public function articles(
+//        ApiGridComponent $apiGridComponent,
+        InspectionService $inspectionService): Response
     {
+        assert(false, "pass the correct key to browse");
         $useMeili = true;
         $class = Article::class;
 
-        $apiGridComponent->class = $class;
+        $apiGridComponent->setClass($class);
         $shortClass = 'Article';
         $defaultColumns = $apiGridComponent->getDefaultColumns();
         $apiGridComponent->columns = array_keys($defaultColumns);

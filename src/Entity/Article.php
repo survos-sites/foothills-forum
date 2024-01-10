@@ -50,6 +50,7 @@ use function Symfony\Component\String\u;
 )]
 
 #[GetCollection(
+    name: 'api_meili_articles',
     uriTemplate: "meili/{indexName}",
     uriVariables: ["indexName"],
     provider: MeiliSearchStateProvider::class,
