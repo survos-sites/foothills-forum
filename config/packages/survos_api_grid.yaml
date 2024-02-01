@@ -3,7 +3,7 @@
 survos_api_grid:
   meiliHost: '%env(MEILI_SERVER)%'
   meiliKey: '%env(MEILI_API_KEY)%'
-  maxValuesPerFacet: 1000
+  maxValuesPerFacet: 350
 
 when@dev:
   survos_api_grid:

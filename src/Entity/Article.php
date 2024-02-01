@@ -23,9 +23,9 @@ use Survos\ApiGrid\State\MeiliSearchStateProvider;
 use Survos\CoreBundle\Entity\RouteParametersInterface;
 use Survos\CoreBundle\Entity\RouteParametersTrait;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use function Symfony\Component\String\u;
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
 #[UniqueEntity(['uuid'])]
@@ -62,11 +62,40 @@ use function Symfony\Component\String\u;
 //)]
 //
 #[ApiResource(
+    uriTemplate: '/author/{authorId}/article/{id}',
+    uriVariables: [
+        'authorId' => new Link(fromClass: Article::class, toProperty: 'authors'),
+        'id' => new Link(fromClass: Article::class),
+    ],
+    operations: [ new Get() ]
+)]
+
+#[GetCollection(
+    uriTemplate: "meili/{indexName}",
+    uriVariables: ["indexName"],
+    provider: MeiliSearchStateProvider::class,
+    normalizationContext: [
+        'groups' => ['article.read'],
+    ]
+)]
+
+#[ApiResource(
     uriTemplate: '/author/{authorId}/article',
     uriVariables: [
         'authorId' => new Link(fromClass: Article::class, toProperty: 'authors'),
     ],
     operations: [ new GetCollection(name: 'author_articles')]
+)]
+#[GetCollection(
+    uriTemplate: "meili/article",
+//    uriVariables: ["indexName"],
+    provider: MeiliSearchStateProvider::class,
+    extraProperties: [
+        'indexName' => 'Article'
+    ],
+    normalizationContext: [
+        'groups' => ['article.read', 'tree', 'rp'],
+    ]
 )]
 
 // keywords and sections are arrays, so fail with getCounts() if doctrine, okay if meili

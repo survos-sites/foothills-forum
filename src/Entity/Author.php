@@ -15,48 +15,68 @@ use Doctrine\ORM\Mapping as ORM;
 use Survos\ApiGrid\State\MeiliSearchStateProvider;
 use Survos\CoreBundle\Entity\RouteParametersInterface;
 use Survos\CoreBundle\Entity\RouteParametersTrait;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: AuthorRepository::class)]
-#[UniqueEntity(['uuid'])]
-#[ORM\UniqueConstraint(
-    name: 'author_idx',
-    columns: ['uuid']
-)]
 #[ApiResource(
-    operations: [new Get(),
-        new GetCollection()],
+    // normal get is the database
+    operations: [new Get(), new GetCollection(
+        name: 'api_authors', extraProperties: ['alias' => 'author_list']
+    )],
     normalizationContext: ['groups' => ['author.read', 'rp']]
 )]
+//#[GetCollection(
+//    uriTemplate: "meili/{indexName}",
+//    uriVariables: ["indexName"],
+//    provider: MeiliSearchStateProvider::class,
+//    normalizationContext: [
+//        'groups' => ['author.read', 'tree', 'rp'],
+//    ]
+//)]
+#[GetCollection(
+    name: 'author_meili',
+    uriTemplate: "meili/author",
+//    uriVariables: ["indexName"],
+    provider: MeiliSearchStateProvider::class,
+    extraProperties: [
+        'indexName' => 'AuthorIndex'
+    ],
+    normalizationContext: [
+        'groups' => ['article.read', 'tree', 'rp'],
+    ]
+)]
+
 #[ApiFilter(OrderFilter::class, properties: ['id',
-    'articleCount',
+    'fullName',
+    'articleCount'
 ])]
 
-#[Groups(['author.read'])]
+
 #[Assert\EnableAutoMapping]
+//#[Groups(['author.read'])]
 class Author implements RouteParametersInterface
 {
     use RouteParametersTrait;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['article.read'])]
+    #[Groups(['article.read', 'author.read'])]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::GUID)]
-    #[Groups(['article.read'])]
+    #[Groups(['article.read', 'author.read'])]
     private ?string $uuid = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['article.read', 'author.read'])]
     private ?string $avatar = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['article.read'])]
+    #[Groups(['article.read', 'author.read'])]
     private ?string $profile = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['article.read','author.read'])]
+    #[Groups(['article.read', 'author.read'])]
     private ?string $fullName = null;
 
     #[ORM\ManyToMany(targetEntity: Article::class, inversedBy: 'authors')]
@@ -128,6 +148,12 @@ class Author implements RouteParametersInterface
         return $this->articles;
     }
 
+    #[Groups(['author.read'])]
+    public function getArticleCount(): int
+    {
+        return $this->getArticles()->count();
+    }
+
     public function addArticle(Article $article): static
     {
         if (!$this->articles->contains($article)) {
@@ -137,21 +163,10 @@ class Author implements RouteParametersInterface
         return $this;
     }
 
-    #[Groups(['author.read'])]
-    public function getArticleCount(): int
-    {
-        return $this->getArticles()->count();
-    }
-
     public function removeArticle(Article $article): static
     {
         $this->articles->removeElement($article);
 
         return $this;
-    }
-
-    public function getUniqueIdentifiers(): array
-    {
-        return ['authorId' => $this->getId()];
     }
 }

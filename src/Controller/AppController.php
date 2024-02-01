@@ -22,8 +22,16 @@ class AppController extends AbstractController
     {
         return [
         'apiRoute' => $request->get('doctrine', false) ? 'doctrine-articles' : 'meili-articles',
-
         'class' => Article::class];
+
+        $class = Article::class;
+        $map = $inspectionService->getAllUrlsForResource($class);
+//        dd($map);
+
+        return $this->render('app/index.html.twig', [
+            'class' => Article::class,
+            'apiCall' => null
+        ]);
     }
     #[Route('/doctrine', name: 'app_articles_with_doctrine')]
     public function articles(ApiGridComponent $apiGridComponent, InspectionService $inspectionService): Response
@@ -43,7 +51,8 @@ class AppController extends AbstractController
 
 //        dd($columns, $class);
         $endpoints = $inspectionService->getAllUrlsForResource($class);
-        $apiCall = $endpoints[$useMeili ? MeiliSearchStateProvider::class : CollectionProvider::class];
+        $apiCall = 'api_doctrine_articles';
+//        $apiCall = $endpoints[$useMeili ? MeiliSearchStateProvider::class : CollectionProvider::class];
 
 
         return $this->render('@SurvosApiGrid/datatables.html.twig', get_defined_vars() + [
