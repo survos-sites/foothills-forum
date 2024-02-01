@@ -27,9 +27,10 @@
             {name: 'tags', block: 'array'},
         ] %}
 
+    meili="true"
     <twig:api_grid
             :class="class"
-            meili="true"
+            :apiRoute="apiRoute"
             :caller="_self"
             :columns="columns"
     >

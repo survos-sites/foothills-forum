@@ -14,9 +14,9 @@ use Survos\ApiGrid\Components\ApiGridComponent;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
 // @todo: if Workflow Bundle active
-use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/author')]
 class AuthorCollectionController extends AbstractController
@@ -31,7 +31,7 @@ class AuthorCollectionController extends AbstractController
 
     #[Route(path: '/browse/', name: 'author_browse', methods: ['GET'])]
     #[Route('/index', name: 'author_index')]
-    public function browseauthor(Request $request): Response
+    public function browseAuthor(Request $request): Response
     {
         $class = Author::class;
         $shortClass = 'Author';
@@ -42,7 +42,7 @@ class AuthorCollectionController extends AbstractController
             : $this->iriConverter->getIriFromResource($class, operation: new GetCollection(),
                 context: $context ?? []);
 
-        $this->apiGridComponent->class = $class;
+        $this->apiGridComponent->setClass($class);
         $c = $this->apiGridComponent->getDefaultColumns();
         $columns = array_values($c);
         $useMeili = 'author_browse' == $request->get('_route');

@@ -33,36 +33,40 @@ use function Symfony\Component\String\u;
     name: 'article_idx',
     columns: ['uuid']
 )]
+#[GetCollection(
+    uriTemplate: "meili/Articles",
+    normalizationContext: [
+        'groups' => ['article.read', 'tree', 'rp'],
+    ],
+    name: 'meili-articles',
+    provider: MeiliSearchStateProvider::class
+)]
 #[ApiResource(
     shortName: 'article',
-    operations: [new Get(),  new GetCollection()],
+    operations: [new Get(),
+        new GetCollection(name: 'doctrine-articles'
+        )],
     normalizationContext: [
         'groups' => ['article.read', 'rp'],
     ]
 )]
-#[ApiResource(
-    uriTemplate: '/author/{authorId}/article/{id}',
-    uriVariables: [
-        'authorId' => new Link(fromClass: Article::class, toProperty: 'authors'),
-        'id' => new Link(fromClass: Article::class),
-    ],
-    operations: [ new Get() ]
-)]
-
+// @todo: fix why this is causing a match on meili GetCollection search.
+//#[ApiResource(
+//    uriTemplate: '/author/{authorId}/article/{id}',
+//    shortName: 'author_article',
+//    operations: [ new Get(name: 'author_article') ],
+//    uriVariables: [
+//        'authorId' => new Link(toProperty: 'authors', fromClass: Article::class),
+//        'id' => new Link(fromClass: Article::class),
+//    ]
+//)]
+//
 #[ApiResource(
     uriTemplate: '/author/{authorId}/article',
     uriVariables: [
         'authorId' => new Link(fromClass: Article::class, toProperty: 'authors'),
     ],
-    operations: [ new GetCollection() ]
-)]
-#[GetCollection(
-    uriTemplate: "meili/{indexName}",
-    uriVariables: ["indexName"],
-    provider: MeiliSearchStateProvider::class,
-    normalizationContext: [
-        'groups' => ['article.read', 'tree', 'rp'],
-    ]
+    operations: [ new GetCollection(name: 'author_articles')]
 )]
 
 // keywords and sections are arrays, so fail with getCounts() if doctrine, okay if meili
