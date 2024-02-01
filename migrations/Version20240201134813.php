@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20231204183123 extends AbstractMigration
+final class Version20240201134813 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -23,12 +23,14 @@ final class Version20231204183123 extends AbstractMigration
         $this->addSql('CREATE SEQUENCE article_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE author_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE users_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE TABLE article (id INT NOT NULL, slug TEXT DEFAULT NULL, headline TEXT NOT NULL, url TEXT NOT NULL, byline TEXT DEFAULT NULL, section VARCHAR(255) DEFAULT NULL, uuid UUID NOT NULL, subheadline TEXT DEFAULT NULL, sections JSONB DEFAULT NULL, keywords JSONB DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE article (id INT NOT NULL, slug TEXT DEFAULT NULL, headline TEXT NOT NULL, url TEXT NOT NULL, byline TEXT DEFAULT NULL, section VARCHAR(255) DEFAULT NULL, uuid UUID NOT NULL, subheadline TEXT DEFAULT NULL, sections JSONB DEFAULT NULL, keywords JSONB DEFAULT NULL, tags JSONB DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE UNIQUE INDEX article_idx ON article (uuid)');
         $this->addSql('CREATE TABLE author (id INT NOT NULL, uuid UUID NOT NULL, avatar TEXT DEFAULT NULL, profile TEXT DEFAULT NULL, full_name TEXT DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE UNIQUE INDEX author_idx ON author (uuid)');
         $this->addSql('CREATE TABLE author_article (author_id INT NOT NULL, article_id INT NOT NULL, PRIMARY KEY(author_id, article_id))');
         $this->addSql('CREATE INDEX IDX_47009125F675F31B ON author_article (author_id)');
         $this->addSql('CREATE INDEX IDX_470091257294869C ON author_article (article_id)');
-        $this->addSql('CREATE TABLE users (id INT NOT NULL, email VARCHAR(180) NOT NULL, roles JSON NOT NULL, password VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE users (id INT NOT NULL, email VARCHAR(180) NOT NULL, roles JSON NOT NULL, password VARCHAR(255) NOT NULL, identifiers JSONB DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_1483A5E9E7927C74 ON users (email)');
         $this->addSql('CREATE TABLE messenger_messages (id BIGSERIAL NOT NULL, body TEXT NOT NULL, headers TEXT NOT NULL, queue_name VARCHAR(190) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, available_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, delivered_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_75EA56E0FB7336F0 ON messenger_messages (queue_name)');

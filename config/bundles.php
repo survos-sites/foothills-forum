@@ -30,4 +30,5 @@ return [
     Survos\AuthBundle\SurvosAuthBundle::class => ['all' => true],
     SymfonyCasts\Bundle\VerifyEmail\SymfonyCastsVerifyEmailBundle::class => ['all' => true],
     Symfony\UX\Chartjs\ChartjsBundle::class => ['all' => true],
+    Survos\CrawlerBundle\SurvosCrawlerBundle::class => ['all' => true],
 ];
