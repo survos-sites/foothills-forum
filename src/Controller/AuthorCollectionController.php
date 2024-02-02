@@ -18,9 +18,9 @@ use Survos\InspectionBundle\Services\InspectionService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
 // @todo: if Workflow Bundle active
-use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/author')]
 class AuthorCollectionController extends AbstractController
@@ -33,6 +33,8 @@ class AuthorCollectionController extends AbstractController
     {
     }
 
+//    #[Route(path: '/browse/', name: 'author_browse', methods: ['GET'])]
+    #[Route('/index', name: 'author_index')]
     #[Route(path: '/{apiRoute}/', name: 'author_browse',
         requirements: ['apiRoute' => '|index|browse|_api_meili/author_get_collection'],
         methods: ['GET'])]
@@ -55,6 +57,7 @@ class AuthorCollectionController extends AbstractController
 //                context: $context ?? []);
 
         $this->apiGridComponent->setClass($class);
+        $c = $this->apiGridComponent->getDefaultColumns();
         $c = $datatableService->getSettingsFromAttributes($class);
 //        $c = $this->apiGridComponent->getDefaultColumns();
         $columns = array_values($c);

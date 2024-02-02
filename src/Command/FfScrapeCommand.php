@@ -77,8 +77,8 @@ final class FfScrapeCommand extends InvokableServiceCommand
             $parameters = [
                 'f' => 'json',
                 's' => 'start_time',
-                'nsa' => 'eedition',
-                'q' => 'foothills forum',
+                'nsa' => 'eedition', // e-edition, not a typo
+                'q' => 'foothills',
                 't' => 'article',
                 'l' => 100,
                 'o' => $startingAt
@@ -90,12 +90,13 @@ final class FfScrapeCommand extends InvokableServiceCommand
             $data = $this->scraperService->fetchUrlUsingCache($base, $parameters, asData: 'array');
             $total = $data['data']['total'];
             $next = $data['data']['next'];
+            $this->logger->info(sprintf('total: %d, next: %d', $total, $next));
             foreach ($data['data']['rows'] as $row) {
 
                 if (!count($row['keywords'])) continue;
 
                 $uuid = $row['uuid'];
-                if (!$article = $articles[$uuid]??null) {
+                if (!$article = $this->articles[$uuid]??null) {
                     $article = (new Article())
                         ->setUuid($uuid);
                     $this->entityManager->persist($article);

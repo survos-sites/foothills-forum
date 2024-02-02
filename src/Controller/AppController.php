@@ -7,16 +7,23 @@ use App\Entity\Article;
 use Survos\ApiGrid\Components\ApiGridComponent;
 use Survos\ApiGrid\State\MeiliSearchStateProvider;
 use Survos\InspectionBundle\Services\InspectionService;
+use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Archetype\Facades\PHPFile;
 
 class AppController extends AbstractController
 {
-    #[Route('/{apiRoute}', name: 'app_homepage')]
-    public function index(InspectionService $inspectionService, string $apiRoute=null): Response
+    #[Route('/', name: 'app_homepage')]
+    #[Template("app/index.html.twig")]
+    public function index(Request $request): array
     {
+        return [
+        'apiRoute' => $request->get('doctrine', false) ? 'doctrine-articles' : 'meili-articles',
+        'class' => Article::class];
+
         $class = Article::class;
         $map = $inspectionService->getAllUrlsForResource($class);
 //        dd($map);

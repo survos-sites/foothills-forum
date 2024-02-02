@@ -146,4 +146,14 @@ return [
     'chart.js/auto' => [
         'version' => '3.9.1',
     ],
+    'datatables.net-searchbuilder-bs5' => [
+        'version' => '1.6.0',
+    ],
+    'datatables.net-searchbuilder' => [
+        'version' => '1.6.0',
+    ],
+    'datatables.net-searchbuilder-bs5/css/searchBuilder.bootstrap5.min.css' => [
+        'version' => '1.6.0',
+        'type' => 'css',
+    ],
 ];

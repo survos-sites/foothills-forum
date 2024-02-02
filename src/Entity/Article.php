@@ -23,9 +23,9 @@ use Survos\ApiGrid\State\MeiliSearchStateProvider;
 use Survos\CoreBundle\Entity\RouteParametersInterface;
 use Survos\CoreBundle\Entity\RouteParametersTrait;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use function Symfony\Component\String\u;
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
 #[UniqueEntity(['uuid'])]
@@ -33,13 +33,34 @@ use function Symfony\Component\String\u;
     name: 'article_idx',
     columns: ['uuid']
 )]
+#[GetCollection(
+    uriTemplate: "meili/Articles",
+    normalizationContext: [
+        'groups' => ['article.read', 'tree', 'rp'],
+    ],
+    name: 'meili-articles',
+    provider: MeiliSearchStateProvider::class
+)]
 #[ApiResource(
     shortName: 'article',
-    operations: [new Get(),  new GetCollection(name: 'api_doctrine_articles')],
+    operations: [new Get(),
+        new GetCollection(name: 'doctrine-articles'
+        )],
     normalizationContext: [
         'groups' => ['article.read', 'rp'],
     ]
 )]
+// @todo: fix why this is causing a match on meili GetCollection search.
+//#[ApiResource(
+//    uriTemplate: '/author/{authorId}/article/{id}',
+//    shortName: 'author_article',
+//    operations: [ new Get(name: 'author_article') ],
+//    uriVariables: [
+//        'authorId' => new Link(toProperty: 'authors', fromClass: Article::class),
+//        'id' => new Link(fromClass: Article::class),
+//    ]
+//)]
+//
 #[ApiResource(
     uriTemplate: '/author/{authorId}/article/{id}',
     uriVariables: [
@@ -64,7 +85,7 @@ use function Symfony\Component\String\u;
     uriVariables: [
         'authorId' => new Link(fromClass: Article::class, toProperty: 'authors'),
     ],
-    operations: [ new GetCollection() ]
+    operations: [ new GetCollection(name: 'author_articles')]
 )]
 #[GetCollection(
     uriTemplate: "meili/article",
