@@ -64,7 +64,8 @@ final class AppMenuEventListener
         // hack, we really need an index map.  Also, move this to GridController
         $index = (new \ReflectionClass($class))->getShortName();
         $subMenu = $this->addSubmenu($menu, $index);
-        foreach (['survos_index_stats'] as $route) {
+        if (0) // debugging
+        foreach (['survos_index_stats', 'survos_meili_realtime_stats'] as $route) {
             $this->add($subMenu, $route, ['indexName' => $index]);
         }
 
@@ -124,7 +125,6 @@ final class AppMenuEventListener
             return;
         }
         $menu = $event->getMenu();
-        $this->add($menu, 'author_browse');
 //        $this->addMenuItem($menu, ['route' => 'song_index', 'label' => "Songs", 'icon' => 'fas fa-home']);
 //        $this->addMenuItem($menu, ['route' => 'song_browse', 'label' => "Song Search", 'icon' => 'fas fa-search']);
 //        $subMenu = $this->addSubmenu($menu, 'songs');
@@ -140,13 +140,17 @@ final class AppMenuEventListener
 //        $this->addMenuItem($menu, ['route' => 'video_index', 'label' => "Videos", 'icon' => 'fas fa-home']);
 //        $this->addMenuItem($menu, ['route' => 'video_index', 'label' => "Videos (API)", 'icon' => 'fas fa-sync']);
 
-        foreach ([Author::class/*, Article::class*/] as $class) {
+        foreach ([Author::class, Article::class] as $class) {
             $name = (new \ReflectionClass($class))->getShortName();
             $subMenu = $this->addSubmenu($menu, $name);
             // @todo: get Crud attributes or controller methods as routes
-            foreach (['_browse','_symfony_crud_index', '_new'] as $suffix) {
-                $route = strtolower($name) . $suffix;
-                $this->add($subMenu, $route);
+            foreach (['_browse','_symfony_crud_index'] as $suffix) {
+                // hack
+                if ( ($name == 'Author') || ($suffix == '_browse')) {
+                    $route = strtolower($name) . $suffix;
+                    $this->add($subMenu, $route);
+
+                }
             }
         }
 

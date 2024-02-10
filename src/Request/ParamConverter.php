@@ -12,6 +12,9 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 
 class ParamConverter implements ValueResolverInterface
 {
+    /**
+     * @return array<mixed>
+     */
     public function resolve(Request $request, ArgumentMetadata $argument): array
     {
         // get the argument type (e.g. BookingId)

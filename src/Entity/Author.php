@@ -35,7 +35,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 //)]
 #[GetCollection(
     name: 'author_meili',
-    uriTemplate: "meili/author",
+    uriTemplate: "meili/Author",
 //    uriVariables: ["indexName"],
     provider: MeiliSearchStateProvider::class,
     extraProperties: [
@@ -45,15 +45,10 @@ use Symfony\Component\Validator\Constraints as Assert;
         'groups' => ['article.read', 'tree', 'rp'],
     ]
 )]
-
-#[ApiFilter(OrderFilter::class, properties: ['id',
-    'fullName',
-    'articleCount'
-])]
-
+#[ApiFilter(OrderFilter::class, properties: ['id', 'fullName', 'articleCount'])]
 
 #[Assert\EnableAutoMapping]
-//#[Groups(['author.read'])]
+#[Groups(['author.read'])]
 class Author implements RouteParametersInterface
 {
     use RouteParametersTrait;

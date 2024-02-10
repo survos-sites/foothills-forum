@@ -5,13 +5,12 @@
 namespace App\Controller;
 
 use App\Entity\Author;
-use App\Form\AuthorType;
 use Doctrine\ORM\EntityManagerInterface;
 use Google\Service\ServiceControl\Auth;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Workflow\WorkflowInterface;
 
 #[Route('/author/{authorId}')]
@@ -44,34 +43,5 @@ class AuthorController extends AbstractController
             ]);
         }
 
-    #[Route('/edit', name: 'author_edit', options: ['expose' => true])]
-        public function edit(Request $request, Author $author): Response
-        {
-            $form = $this->createForm(AuthorType::class, $author);
-            $form->handleRequest($request);
 
-            if ($form->isSubmitted() && $form->isValid()) {
-                $this->entityManager->flush();
-
-                return $this->redirectToRoute('author_browse');
-            }
-
-            return $this->render('author/edit.html.twig', [
-                'author' => $author,
-                'form' => $form->createView(),
-            ]);
-        }
-
-    #[Route('/delete', name: 'author_delete', methods: ['DELETE'])]
-        public function delete(Request $request, Author $author): Response
-        {
-            // hard-coded to getId, should be get parameter of uniqueIdentifiers()
-            if ($this->isCsrfTokenValid('delete'.$author->getId(), $request->request->get('_token'))) {
-                $entityManager = $this->entityManager;
-                $entityManager->remove($author);
-                $entityManager->flush();
-            }
-
-            return $this->redirectToRoute('author_browse');
-        }
 }

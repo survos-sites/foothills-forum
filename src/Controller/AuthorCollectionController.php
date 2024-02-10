@@ -33,7 +33,6 @@ class AuthorCollectionController extends AbstractController
     {
     }
 
-//    #[Route(path: '/browse/', name: 'author_browse', methods: ['GET'])]
     #[Route('/index', name: 'author_index')]
     #[Route(path: '/{apiRoute}/', name: 'author_browse',
         requirements: ['apiRoute' => '|index|browse|_api_meili/author_get_collection'],
@@ -44,6 +43,7 @@ class AuthorCollectionController extends AbstractController
                                  string $apiRoute='',
     ): Response
     {
+        $apiRoute = 'author-meili';
         $class = Author::class;
         $map = $inspectionService->getAllUrlsForResource($class);
 
@@ -72,9 +72,9 @@ class AuthorCollectionController extends AbstractController
 //                context: $context ?? []);
 //dd($useMeili, $apiCall, $map, $route);
         $columns = [
+            'fullName',
             'id',
             'uuid',
-            'fullName',
             'articleCount'
         ];
 

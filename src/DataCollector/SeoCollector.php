@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 // src/DataCollector/SeoCollector.php
-
+//   from https://www.strangebuzz.com/en/blog/adding-a-custom-data-collector-in-the-symfony-debug-bar
 namespace App\DataCollector;
 
 use App\Twig\Extension\SeoExtension;

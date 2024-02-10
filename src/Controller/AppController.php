@@ -34,13 +34,13 @@ class AppController extends AbstractController
             'apiCall' => null
         ]);
     }
-    #[Route('/doctrine', name: 'app_articles_with_doctrine')]
+    #[Route('/doctrine', name: 'article_browse')]
     public function articles(
-//        ApiGridComponent $apiGridComponent,
+        ApiGridComponent $apiGridComponent,
         InspectionService $inspectionService): Response
     {
-        assert(false, "pass the correct key to browse");
-        $useMeili = true;
+//        assert(false, "pass the correct key to browse");
+        $useMeili = false;
         $class = Article::class;
 
         $apiGridComponent->setClass($class);
@@ -55,12 +55,11 @@ class AppController extends AbstractController
 
 //        dd($columns, $class);
         $endpoints = $inspectionService->getAllUrlsForResource($class);
-        $apiCall = 'api_doctrine_articles';
+        $apiRoute = 'doctrine-articles';
 //        $apiCall = $endpoints[$useMeili ? MeiliSearchStateProvider::class : CollectionProvider::class];
 
-
         return $this->render('@SurvosApiGrid/datatables.html.twig', get_defined_vars() + [
-                'apiCall' => $apiCall,
+                'apiRoute' => $apiRoute,
                 'useMeili' => $useMeili,
                 'caller' => '@SurvosApiGrid/datatables.html.twig',
                 'indexName' => $shortClass, // @todo: call the name method, might include a prefix
