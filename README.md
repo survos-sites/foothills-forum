@@ -22,3 +22,7 @@ symfony open:local
 ```
 
 
+## Photos and Events
+
+See https://rappahannockcountyhs.rschoolteams.com/ for school events 
+
