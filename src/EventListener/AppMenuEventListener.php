@@ -110,6 +110,8 @@ final class AppMenuEventListener
             return;
         }
         $menu = $event->getMenu();
+        $this->add($menu, 'submission_new');
+
         $this->add($menu, 'survos_commands');
 //        $this->add($menu, 'app_articles_with_doctrine')
         $submenu = $this->addSubmenu($menu, 'Articles');

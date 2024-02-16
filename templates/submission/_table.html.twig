@@ -1,0 +1,36 @@
+
+
+<table class="table js-datatable">
+    <thead>
+    <tr>
+        <th>actions</th>
+                    <th>Id</th>
+                    <th>ImageName</th>
+                    <th>ImageSize</th>
+            </tr>
+    </thead>
+    <tbody>
+    {% for submission in submissions %}
+    <tr>
+        <td>
+            <a href="{{ path('submission_show', submission.rp) }}">
+                <span class="fas fa-eye"></span>
+                <i class="bi bi-info"></i>
+            </a>
+            <a href="{{ path('submission_edit', submission.rp) }}">
+                <span class="fas fa-edit"></span>
+                <i class="bi bi-pencil"></i>
+            </a>
+        </td>
+
+                    <td>{{ submission.id }}</td>
+                    <td>{{ submission.imageName }}</td>
+                    <td>{{ submission.imageSize }}</td>
+            </tr>
+    {% else %}
+    <tr>
+        <td colspan="4">no records found</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
