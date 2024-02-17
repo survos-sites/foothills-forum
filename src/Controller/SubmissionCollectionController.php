@@ -72,24 +72,4 @@ class SubmissionCollectionController extends AbstractController
         ]);
     }
 
-    #[Route('submission/new', name: 'submission_new')]
-    public function new(Request $request): Response
-    {
-        $submission = new Submission();
-        $form = $this->createForm(SubmissionType::class, $submission);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->entityManager;
-            $entityManager->persist($submission);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('submission_index');
-        }
-
-        return $this->render('submission/new.html.twig', [
-            'submission' => $submission,
-            'form' => $form->createView(),
-        ]);
-    }
 }

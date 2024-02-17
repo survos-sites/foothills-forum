@@ -28,3 +28,4 @@
 .env.prod
 
 articles.db
+public/images

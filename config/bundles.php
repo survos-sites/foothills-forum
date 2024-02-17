@@ -33,4 +33,5 @@ return [
     Survos\CrawlerBundle\SurvosCrawlerBundle::class => ['all' => true, 'dev' => true, 'test' => true],
     Survos\WorkflowBundle\SurvosWorkflowBundle::class => ['all' => true],
     Vich\UploaderBundle\VichUploaderBundle::class => ['all' => true],
+    Endroid\QrCodeBundle\EndroidQrCodeBundle::class => ['all' => true],
 ];

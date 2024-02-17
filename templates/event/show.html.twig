@@ -1,0 +1,56 @@
+{% extends "event/base.html.twig" %}
+
+{% block body %}
+    <h1>Event</h1>
+
+    {% set url = absolute_url('event_show', event.rp) %}
+    <img src="{{ qr_code_url(url) }}" />
+
+    <a href="{{ path('submission_new', event.rp) }}">
+        Submit a photo
+    </a>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ event.id }}</td>
+            </tr>
+            <tr>
+                <th>EventDate</th>
+                <td>{{ event.eventDate ? event.eventDate|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Type</th>
+                <td>{{ event.type }}</td>
+            </tr>
+            <tr>
+                <th>Opponent</th>
+                <td>{{ event.opponent }}</td>
+            </tr>
+            <tr>
+                <th>Location</th>
+                <td>{{ event.location }}</td>
+            </tr>
+            <tr>
+                <th>Score</th>
+                <td>{{ event.score }}</td>
+            </tr>
+            <tr>
+                <th>Summary</th>
+                <td>{{ event.summary }}</td>
+            </tr>
+            <tr>
+                <th>Sport</th>
+                <td>{{ event.sport }}</td>
+            </tr>
+            <tr>
+                <th>Section</th>
+                <td>{{ event.section }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a class="btn btn-primary" href="{{ path('event_edit', event.rp) }}">edit</a>
+    {{ include('event/_delete_form.html.twig') }}
+{% endblock %}

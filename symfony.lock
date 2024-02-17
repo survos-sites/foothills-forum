@@ -40,6 +40,9 @@
             "migrations/.gitignore"
         ]
     },
+    "endroid/qr-code-bundle": {
+        "version": "5.0.1"
+    },
     "friendsofsymfony/jsrouting-bundle": {
         "version": "3.9999999",
         "recipe": {
