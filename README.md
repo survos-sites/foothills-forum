@@ -26,3 +26,5 @@ symfony open:local
 
 See https://rappahannockcountyhs.rschoolteams.com/ for school events 
 
+
+aws s3 ls s3://foothills-forum/

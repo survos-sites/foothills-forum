@@ -14,6 +14,7 @@
 >
 
     <twig:block name="opponent">
+        <a href="{{ path('submission_new', row.rp) }}" target="_blank">+Photo</a>
         <a href="{{ path('event_show', row.rp) }}">
             {{ row.eventdate|date('Y-m-d') }}
             {{ row.opponent }}

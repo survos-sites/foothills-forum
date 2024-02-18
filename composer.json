@@ -111,6 +111,8 @@
             "importmap:install": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
         },
+        "fos-js": "bin/console fos:js-routing:dump --format=js --target=public/js/fos_js_routes.js --callback=\"export default\" ",
+
         "post-install-cmd": [
             "@auto-scripts"
         ],

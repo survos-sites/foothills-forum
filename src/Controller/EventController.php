@@ -44,7 +44,7 @@ class EventController extends AbstractController
             ]);
         }
 
-    #[Route('submission/new', name: 'submission_new')]
+    #[Route('submission/new', name: 'submission_new', options: ['expose' => true])]
     public function new(Event $event, Request $request): Response
     {
         $submission = new Submission();
