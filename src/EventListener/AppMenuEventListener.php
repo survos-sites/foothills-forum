@@ -114,6 +114,7 @@ final class AppMenuEventListener
         $menu = $event->getMenu();
         $this->add($menu, 'submission_index');
         $this->add($menu, 'event_index');
+        $this->add($menu, 'flysystem_browse_default');
 
         $this->add($menu, 'survos_commands');
 //        $this->add($menu, 'app_articles_with_doctrine')

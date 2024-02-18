@@ -1,0 +1,33 @@
+# Read the documentation at https://github.com/thephpleague/flysystem-bundle/blob/master/docs/1-getting-started.md
+flysystem:
+    storages:
+        #        default.storage:
+        #            adapter: 'local'
+        #            options:
+        #                directory: '%kernel.project_dir%/var/storage/default'
+
+        # until we support local uploads to s3, let's just use the disk on our server
+        uploads_filesystem:
+            adapter: 'local'
+            options:
+                directory: '%kernel.project_dir%/public/images/uploads'
+
+        images_filesystem:
+            adapter: 'local'
+            options:
+                directory: '%kernel.project_dir%/../data/raw'
+        #                directory: '%env(RAW_IMAGES_ROOT)%'
+
+        #        cache_uploads_filesystem:
+        #            adapter: 'local'
+        #            options:
+        #                directory: '%kernel.project_dir%/public/images/uploads'
+
+        default.storage:
+            adapter: 'aws'
+            # visibility: public # Make the uploaded file publicly accessible in S3
+            options:
+                client: 'Aws\S3\S3Client' # The service ID of the Aws\S3\S3Client instance
+                bucket: '%env(AWS_S3_BUCKET_NAME)%'
+                streamReads: true
+                prefix: '%env(S3_STORAGE_PREFIX)%'

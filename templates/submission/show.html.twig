@@ -3,6 +3,9 @@
 {% block body %}
     <h1>Submission</h1>
 
+    <img src="{{ vich_uploader_asset(submission) }}" alt="{{ submission.imageName }}">
+    <tt>{{ vich_uploader_asset(submission) }}</tt>
+
     <table class="table">
         <tbody>
             <tr>
