@@ -58,7 +58,7 @@ class EventController extends AbstractController
             $entityManager->persist($submission);
             $entityManager->flush();
 
-            return $this->redirectToRoute('submission_index');
+            return $this->redirectToRoute('submission_show', $submission->getrp());
         }
 
         return $this->render('submission/new.html.twig', [
