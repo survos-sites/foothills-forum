@@ -35,7 +35,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 //#[ApiFilter(MultiFieldSearchFilter::class, properties: ['headline', 'subheadline'])]
 #[ApiFilter(OrderFilter::class,
     properties: ['id',
-    'submissionCount'
+    'submissionCount',
+        'eventDate'
 ])]
 
 #[Groups('event.read')]

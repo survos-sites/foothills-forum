@@ -8,7 +8,11 @@
         </a>
     </h3>
 
-{#    <img class="thumbnail"  src="{{ vich_uploader_asset(submission) }}" alt="{{ submission.imageName }}">#}
+    <h3>S3</h3>
+    {% set s3Url = vich_uploader_asset(submission) %}
+    <a href="{{ s3Url }}" target="_blank">
+        <img class="thumbnail"  src="{{ s3Url }}" alt="{{ submission.imageName }}">
+    </a>
 
 {#    <img class="thumbnail" src="{{ uploadHelper.asset(submission) }}"/>#}
 
