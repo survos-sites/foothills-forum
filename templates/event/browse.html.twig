@@ -17,15 +17,24 @@
         <a class="btn btn-sm btn-outline-primary" href="{{ path('submission_new', row.rp) }}" target="_blank">+Photo</a>
 
         <a href="{{ path('event_show', row.rp) }}">
-            {{ row.eventdate|date('Y-m-d') }}
+            {{ row.eventDate|date('Y-m-d') }}
             {{ row.opponent }}
-            {{ row.location ? '@' ~ row.locaation }}
         </a>
     </twig:block>
 
+    <twig:block name="eventDate">
+        <p>
+            <time data-controller="timeago"
+                  data-timeago-add-suffix-value="true"
+                  data-timeago-datetime-value="{{ row.eventDate|date('c') }}"></time>
+
+        </p>
+    </twig:block>
 
     <twig:block name="id">
-        ID: {{ row.id }}
+        <a target="_blank" href="https://rappahannockcountyhs.rschoolteams.com/page/{{ row.rSchoolId }}">
+            {{ row.rSchoolId }}
+        </a>
     </twig:block>
     <twig:block name="sport">
         {{ row.sport.code }}

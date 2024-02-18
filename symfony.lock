@@ -91,6 +91,9 @@
     "knplabs/knp-menu-bundle": {
         "version": "v3.3.0"
     },
+    "knplabs/knp-time-bundle": {
+        "version": "v2.2.0"
+    },
     "knpuniversity/oauth2-client-bundle": {
         "version": "2.17",
         "recipe": {

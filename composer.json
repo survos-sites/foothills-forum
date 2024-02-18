@@ -19,6 +19,7 @@
         "endroid/qr-code-bundle": "^5.0",
         "friendsofsymfony/jsrouting-bundle": "dev-master@dev",
         "google/apiclient": "^2.15.0",
+        "knplabs/knp-time-bundle": "^2.2",
         "league/flysystem-aws-s3-v3": "^3.0",
         "league/flysystem-bundle": "^3.3",
         "league/oauth2-github": "^3.1",

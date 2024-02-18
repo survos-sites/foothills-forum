@@ -37,4 +37,5 @@ return [
     Liip\ImagineBundle\LiipImagineBundle::class => ['all' => true],
     League\FlysystemBundle\FlysystemBundle::class => ['all' => true],
     Aws\Symfony\AwsBundle::class => ['all' => true],
+    Knp\Bundle\TimeBundle\KnpTimeBundle::class => ['all' => true],
 ];

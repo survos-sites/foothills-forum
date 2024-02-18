@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Entity\Event;
+use App\Entity\Location;
 use App\Entity\School;
 use App\Entity\Sport;
 use App\Entity\Team;
@@ -91,6 +92,7 @@ IO $io,
     {
         $teamName = $sport->getSchool()->getCode() . '-' . $sport->getName() . ' ' . $sectionName;
         $team = $this->getEntity(Team::class, $teamName);
+        $team->setSection($sectionName);
         $sport->getSchool()->addTeam($team);
         $sport->addTeam($team);
         $page = $this->scraperService->fetchUrl(self::BASE_URL  . $url)['content'];
@@ -111,6 +113,11 @@ IO $io,
                 $dt = new \DateTime($row['Date']);
             }
 
+            $locationName = $row['Location'] . ' ' . $team->getSport()->getName();
+            $location = $this->getEntity(Location::class, $locationName);
+            assert($location->getCode(), $locationName);
+
+            assert($team->getSection());
             $event = $this->getEntity(Event::class, 'Event '.$id);
             $event
                 ->setRSchoolId($id) // since we have a unique id, but really rSchoolId
@@ -119,7 +126,7 @@ IO $io,
                 ->setEventDate($dt)
                 ->setType($row['Event'])
                 ->setOpponent($row['Opponent'])
-                ->setLocation($row['Location'])
+                ->setLocation($location)
                 ->setScore($row['Score'])
                 ->setSummary($row['Game Summary'])
                 ;
@@ -132,7 +139,7 @@ IO $io,
 
     private function loadExisting()
     {
-        foreach ([School::class, Team::class, Sport::class, Event::class] as $entityClass) {
+        foreach ([School::class, Team::class, Sport::class, Location::class, Event::class] as $entityClass) {
             $repo = $this->entityManager->getRepository($entityClass);
             foreach ($repo->findAll() as $entity) {
                 $this->existing[$entityClass][$entity->getCode()] = $entity;
@@ -140,9 +147,9 @@ IO $io,
         }
     }
 
-    public function getEntity(string $entityClass, string $text): Team|School|Sport|Event
+    public function getEntity(string $entityClass, string $text, ?string $code=null): Team|School|Sport|Event|Location
     {
-        $code = $this->asciiSlugger->slug($text)->lower()->toString();
+        $code = $code ?: $this->asciiSlugger->slug($text)->lower()->toString();
         if (!$entity = $this->existing[$entityClass][$code]??null) {
             $entity = (new $entityClass($code))->setName($text);
             $this->existing[$entityClass][$code] = $entity;

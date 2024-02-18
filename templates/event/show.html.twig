@@ -36,7 +36,10 @@
             </tr>
             <tr>
                 <th>EventDate</th>
-                <td>{{ event.eventDate ? event.eventDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    {{ event.eventDate ? event.eventDate|date('Y-m-d H:i:s') : '' }}
+                    {{ event.eventDate ? event.eventDate|ago }}
+                </td>
             </tr>
             <tr>
                 <th>Type</th>
@@ -48,7 +51,7 @@
             </tr>
             <tr>
                 <th>Location</th>
-                <td>{{ event.location }}</td>
+                <td>{{ event.location }} / {{ event.location.name }}</td>
             </tr>
             <tr>
                 <th>Score</th>
