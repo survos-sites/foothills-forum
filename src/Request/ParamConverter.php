@@ -6,6 +6,7 @@ use App\Entity\Author;
 use App\Entity\Article;
 
 use App\Entity\Event;
+use App\Entity\Location;
 use App\Entity\Submission;
 use App\Repository\EventRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -24,10 +25,15 @@ class ParamConverter implements ValueResolverInterface
         $argumentType = $argument->getType();
         switch ($argumentType) {
             case Event::class:
-                $repository = $this->entityManager->getRepository($argumentType);
                 $value = $request->attributes->get('eventId');
-                $event = $repository->findOneBy(['code' => $value]);
-                return [$event];
+                $repository = $this->entityManager->getRepository($argumentType);
+                $entity = $repository->findOneBy(['code' => $value]);
+                return [$entity];
+            case Location::class:
+                $value = $request->attributes->get('locationId');
+                $repository = $this->entityManager->getRepository($argumentType);
+                $entity = $repository->findOneBy(['code' => $value]);
+                return [$entity];
             case Submission::class:
                 $repository = $this->entityManager->getRepository($argumentType);
                 $value = $request->attributes->get('submissionId');

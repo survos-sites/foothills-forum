@@ -73,10 +73,11 @@ class Submission implements RouteParametersInterface, MarkingInterface
     private ?File $imageFile = null;
 
     #[ORM\ManyToOne(inversedBy: 'submissions')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Event $event = null;
 
     #[ORM\ManyToOne(inversedBy: 'submissions')]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Location $location = null;
 
     public function getImageFile(): ?File

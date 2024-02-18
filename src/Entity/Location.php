@@ -33,6 +33,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 //#[ApiFilter(MultiFieldSearchFilter::class, properties: ['headline', 'subheadline'])]
 #[ApiFilter(OrderFilter::class,
     properties: ['id',
+        'name',
         'school'
     ])]
 
@@ -182,4 +183,11 @@ class Location implements RouteParametersInterface, \Stringable
 
         return $this;
     }
+
+    public function getUniqueIdentifiers(): array
+    {
+        return ['locationId' => $this->getCode()];
+    }
+
+
 }

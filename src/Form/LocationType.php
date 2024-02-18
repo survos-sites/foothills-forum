@@ -2,29 +2,31 @@
 
 namespace App\Form;
 
-use App\Entity\Submission;
+use App\Entity\Location;
+use App\Entity\School;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Vich\UploaderBundle\Form\Type\VichImageType;
 
-class SubmissionType extends AbstractType
+class LocationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('imageFile', VichImageType::class)
-            ->add('event', null, ['disabled' => true])
-            ->add('location', null, ['disabled' => true])
-//            ->add('imageName')
-//            ->add('imageSize')
+            ->add('code')
+            ->add('name')
+            ->add('school', EntityType::class, [
+                'class' => School::class,
+'choice_label' => 'id',
+            ])
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Submission::class,
+            'data_class' => Location::class,
         ]);
     }
 }

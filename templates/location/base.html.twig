@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}BASE Location{% endblock %}
+
+{% block page_title %}{{ location }}{% endblock %}
+{% block page_subtitle %}{{ app.request.get('_route') }}{% endblock %}
+
+{% block body %}
+
+If we have a Location entity, we should display it here.
+
+{% endblock %}

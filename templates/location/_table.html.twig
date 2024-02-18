@@ -1,0 +1,36 @@
+
+
+<table class="table js-datatable">
+    <thead>
+    <tr>
+        <th>actions</th>
+                    <th>Id</th>
+                    <th>Code</th>
+                    <th>Name</th>
+            </tr>
+    </thead>
+    <tbody>
+    {% for location in locations %}
+    <tr>
+        <td>
+            <a href="{{ path('location_show', location.rp) }}">
+                <span class="fas fa-eye"></span>
+                <i class="bi bi-info"></i>
+            </a>
+            <a href="{{ path('location_edit', location.rp) }}">
+                <span class="fas fa-edit"></span>
+                <i class="bi bi-pencil"></i>
+            </a>
+        </td>
+
+                    <td>{{ location.id }}</td>
+                    <td>{{ location.code }}</td>
+                    <td>{{ location.name }}</td>
+            </tr>
+    {% else %}
+    <tr>
+        <td colspan="4">no records found</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
