@@ -64,12 +64,16 @@ class Location implements RouteParametersInterface, \Stringable
     #[ORM\ManyToOne(inversedBy: 'locations')]
     private ?School $school = null;
 
+    #[ORM\OneToMany(mappedBy: 'location', targetEntity: Submission::class)]
+    private Collection $submissions;
+
     public function __construct(?string $code=null)
     {
         if ($code) {
             $this->setCode($code);
         }
         $this->events = new ArrayCollection();
+        $this->submissions = new ArrayCollection();
     }
 
 
@@ -145,6 +149,36 @@ class Location implements RouteParametersInterface, \Stringable
     public function setSchool(?School $school): static
     {
         $this->school = $school;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Submission>
+     */
+    public function getSubmissions(): Collection
+    {
+        return $this->submissions;
+    }
+
+    public function addSubmission(Submission $submission): static
+    {
+        if (!$this->submissions->contains($submission)) {
+            $this->submissions->add($submission);
+            $submission->setLocation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubmission(Submission $submission): static
+    {
+        if ($this->submissions->removeElement($submission)) {
+            // set the owning side to null (unless already changed)
+            if ($submission->getLocation() === $this) {
+                $submission->setLocation(null);
+            }
+        }
 
         return $this;
     }
