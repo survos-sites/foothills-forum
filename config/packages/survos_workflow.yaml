@@ -1,0 +1,4 @@
+survos_workflow:
+  direction: LR
+  entities:
+    - App\Entity\Submission

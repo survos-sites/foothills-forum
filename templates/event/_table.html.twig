@@ -1,0 +1,48 @@
+
+
+<table class="table js-datatable">
+    <thead>
+    <tr>
+        <th>actions</th>
+                    <th>Id</th>
+                    <th>EventDate</th>
+                    <th>Type</th>
+                    <th>Opponent</th>
+                    <th>Location</th>
+                    <th>Score</th>
+                    <th>Summary</th>
+                    <th>Sport</th>
+                    <th>Section</th>
+            </tr>
+    </thead>
+    <tbody>
+    {% for event in events %}
+    <tr>
+        <td>
+            <a href="{{ path('event_show', event.rp) }}">
+                <span class="fas fa-eye"></span>
+                <i class="bi bi-info"></i>
+            </a>
+            <a href="{{ path('event_edit', event.rp) }}">
+                <span class="fas fa-edit"></span>
+                <i class="bi bi-pencil"></i>
+            </a>
+        </td>
+
+                    <td>{{ event.id }}</td>
+                    <td>{{ event.eventDate ? event.eventDate|date('Y-m-d H:i:s') : '' }}</td>
+                    <td>{{ event.type }}</td>
+                    <td>{{ event.opponent }}</td>
+                    <td>{{ event.location }}</td>
+                    <td>{{ event.score }}</td>
+                    <td>{{ event.summary }}</td>
+                    <td>{{ event.sport }}</td>
+                    <td>{{ event.section }}</td>
+            </tr>
+    {% else %}
+    <tr>
+        <td colspan="10">no records found</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>

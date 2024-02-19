@@ -9,6 +9,7 @@ use Survos\ApiGrid\Service\DatatableService;
 use Survos\BootstrapBundle\Event\KnpMenuEvent;
 use Survos\BootstrapBundle\Service\ContextService;
 use Survos\BootstrapBundle\Traits\KnpMenuHelperTrait;
+use Survos\WorkflowBundle\Service\WorkflowHelperService;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
@@ -31,6 +32,7 @@ final class AppMenuEventListener
         private ContextService $contextService,
         private Security $security,
         private DatatableService $datatableService,
+        private WorkflowHelperService $workflowHelperService,
         private ?AuthorizationCheckerInterface $authorizationChecker=null
     )
     {
@@ -110,6 +112,9 @@ final class AppMenuEventListener
             return;
         }
         $menu = $event->getMenu();
+        $this->add($menu, 'submission_index');
+        $this->add($menu, 'event_index');
+
         $this->add($menu, 'survos_commands');
 //        $this->add($menu, 'app_articles_with_doctrine')
         $submenu = $this->addSubmenu($menu, 'Articles');
@@ -124,7 +129,19 @@ final class AppMenuEventListener
         if (!$this->supports($event)) {
             return;
         }
+
         $menu = $event->getMenu();
+
+        if (true || $this->isGranted('ROLE_SUPER_ADMIN')) {
+            $workflowMenu = $this->addSubmenu($menu, 'Workflows', icon: 'fas fa-diagram-project');
+            $this->add($workflowMenu, route: 'survos_workflows', label: "All");
+            foreach ($this->workflowHelperService->getWorkflowsIndexedByName() as $workflowCode => $workflow) {
+                $this->add($workflowMenu, 'survos_workflow', [
+                    'flowCode' => $workflowCode,
+                ], $workflowCode);
+            }
+        }
+
 //        $this->addMenuItem($menu, ['route' => 'song_index', 'label' => "Songs", 'icon' => 'fas fa-home']);
 //        $this->addMenuItem($menu, ['route' => 'song_browse', 'label' => "Song Search", 'icon' => 'fas fa-search']);
 //        $subMenu = $this->addSubmenu($menu, 'songs');

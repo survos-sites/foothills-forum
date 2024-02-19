@@ -1,0 +1,32 @@
+{% extends "event/base.html.twig" %}
+
+{% block title %}{{  class }}{% endblock %}
+
+{% block body %}
+<h1>{{ class }} {{ _self }}</h1>
+
+<twig:api_grid
+        facets="false"
+        :class="class"
+        :apiGetCollectionUrl="apiCall"
+        :caller="_self"
+        :columns="columns"
+>
+
+    <twig:block name="opponent">
+        <a href="{{ path('event_show', row.rp) }}">
+            {{ row.eventdate|date('Y-m-d') }}
+            {{ row.opponent }}
+            {{ row.location ? '@' ~ row.locaation }}
+        </a>
+    </twig:block>
+
+
+    <twig:block name="id">
+        ID: {{ row.id }}
+    </twig:block>
+    <twig:block name="sport">
+        {{ row.sport.code }}
+    </twig:block>
+</twig:api_grid>
+{% endblock %}

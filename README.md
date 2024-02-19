@@ -21,10 +21,13 @@ symfony server:start -d
 symfony open:local 
 ```
 
-
 # rSchoolToday
 
 Activity Scheduler: 
 
 Representative in Virginia for rSchoolToday:  Samantha Townsend, 804-678-8410 samantha.townsend@rschooltoday.com
+
+## Photos and Events
+
+See https://rappahannockcountyhs.rschoolteams.com/ for school events 
 

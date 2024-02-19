@@ -1,0 +1,25 @@
+{% extends "submission/base.html.twig" %}
+
+{% block body %}
+    <h1>Submission</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ submission.id }}</td>
+            </tr>
+            <tr>
+                <th>ImageName</th>
+                <td>{{ submission.imageName }}</td>
+            </tr>
+            <tr>
+                <th>ImageSize</th>
+                <td>{{ submission.imageSize }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a class="btn btn-primary" href="{{ path('submission_edit', submission.rp) }}">edit</a>
+    {{ include('submission/_delete_form.html.twig') }}
+{% endblock %}

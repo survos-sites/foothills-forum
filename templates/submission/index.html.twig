@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Submission index{% endblock %}
+
+
+{% block body %}
+    <h1>Submission index</h1>
+
+    {% include "submission/_table.html.twig" %}
+
+    <a class="btn btn-primary" href="{{ path('submission_new') }}"><span class="fas fa-plus"></span>New  Submission</a>
+{% endblock %}
