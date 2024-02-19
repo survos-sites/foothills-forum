@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20240217121900 extends AbstractMigration
+final class Version20240218184504 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -23,6 +23,7 @@ final class Version20240217121900 extends AbstractMigration
         $this->addSql('CREATE SEQUENCE article_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE author_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE event_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
+        $this->addSql('CREATE SEQUENCE location_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE school_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE sport_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE submission_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
@@ -34,8 +35,11 @@ final class Version20240217121900 extends AbstractMigration
         $this->addSql('CREATE TABLE author_article (author_id INT NOT NULL, article_id INT NOT NULL, PRIMARY KEY(author_id, article_id))');
         $this->addSql('CREATE INDEX IDX_47009125F675F31B ON author_article (author_id)');
         $this->addSql('CREATE INDEX IDX_470091257294869C ON author_article (article_id)');
-        $this->addSql('CREATE TABLE event (id INT NOT NULL, sport_id INT NOT NULL, event_date TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, type VARCHAR(255) DEFAULT NULL, opponent VARCHAR(255) DEFAULT NULL, location VARCHAR(255) DEFAULT NULL, score VARCHAR(255) DEFAULT NULL, summary TEXT DEFAULT NULL, section VARCHAR(255) DEFAULT NULL, code VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, r_school_id INT DEFAULT NULL, submission_count INT DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE event (id INT NOT NULL, sport_id INT NOT NULL, location_id INT NOT NULL, event_date TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, type VARCHAR(255) DEFAULT NULL, opponent VARCHAR(255) DEFAULT NULL, score VARCHAR(255) DEFAULT NULL, summary TEXT DEFAULT NULL, section VARCHAR(255) DEFAULT NULL, code VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, r_school_id INT DEFAULT NULL, submission_count INT DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_3BAE0AA7AC78BCF8 ON event (sport_id)');
+        $this->addSql('CREATE INDEX IDX_3BAE0AA764D218E ON event (location_id)');
+        $this->addSql('CREATE TABLE location (id INT NOT NULL, school_id INT DEFAULT NULL, code VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE INDEX IDX_5E9E89CBC32A47EE ON location (school_id)');
         $this->addSql('CREATE TABLE school (id INT NOT NULL, name VARCHAR(255) NOT NULL, code VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE TABLE sport (id INT NOT NULL, school_id INT NOT NULL, name VARCHAR(255) NOT NULL, code VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_1A85EFD2C32A47EE ON sport (school_id)');
@@ -64,6 +68,8 @@ final class Version20240217121900 extends AbstractMigration
         $this->addSql('ALTER TABLE author_article ADD CONSTRAINT FK_47009125F675F31B FOREIGN KEY (author_id) REFERENCES author (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE author_article ADD CONSTRAINT FK_470091257294869C FOREIGN KEY (article_id) REFERENCES article (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE event ADD CONSTRAINT FK_3BAE0AA7AC78BCF8 FOREIGN KEY (sport_id) REFERENCES sport (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE event ADD CONSTRAINT FK_3BAE0AA764D218E FOREIGN KEY (location_id) REFERENCES location (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE location ADD CONSTRAINT FK_5E9E89CBC32A47EE FOREIGN KEY (school_id) REFERENCES school (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE sport ADD CONSTRAINT FK_1A85EFD2C32A47EE FOREIGN KEY (school_id) REFERENCES school (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE submission ADD CONSTRAINT FK_DB055AF371F7E88B FOREIGN KEY (event_id) REFERENCES event (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE team ADD CONSTRAINT FK_C4E0A61FC32A47EE FOREIGN KEY (school_id) REFERENCES school (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
@@ -77,6 +83,7 @@ final class Version20240217121900 extends AbstractMigration
         $this->addSql('DROP SEQUENCE article_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE author_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE event_id_seq CASCADE');
+        $this->addSql('DROP SEQUENCE location_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE school_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE sport_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE submission_id_seq CASCADE');
@@ -85,6 +92,8 @@ final class Version20240217121900 extends AbstractMigration
         $this->addSql('ALTER TABLE author_article DROP CONSTRAINT FK_47009125F675F31B');
         $this->addSql('ALTER TABLE author_article DROP CONSTRAINT FK_470091257294869C');
         $this->addSql('ALTER TABLE event DROP CONSTRAINT FK_3BAE0AA7AC78BCF8');
+        $this->addSql('ALTER TABLE event DROP CONSTRAINT FK_3BAE0AA764D218E');
+        $this->addSql('ALTER TABLE location DROP CONSTRAINT FK_5E9E89CBC32A47EE');
         $this->addSql('ALTER TABLE sport DROP CONSTRAINT FK_1A85EFD2C32A47EE');
         $this->addSql('ALTER TABLE submission DROP CONSTRAINT FK_DB055AF371F7E88B');
         $this->addSql('ALTER TABLE team DROP CONSTRAINT FK_C4E0A61FC32A47EE');
@@ -93,6 +102,7 @@ final class Version20240217121900 extends AbstractMigration
         $this->addSql('DROP TABLE author');
         $this->addSql('DROP TABLE author_article');
         $this->addSql('DROP TABLE event');
+        $this->addSql('DROP TABLE location');
         $this->addSql('DROP TABLE school');
         $this->addSql('DROP TABLE sport');
         $this->addSql('DROP TABLE submission');

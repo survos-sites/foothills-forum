@@ -1,5 +1,6 @@
 <?php
 
+// see https://blog.theodo.com/2013/11/dynamic-mapping-in-doctrine-and-symfony-how-to-extend-entities/ for re-use
 namespace App\Entity;
 
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
@@ -72,8 +73,12 @@ class Submission implements RouteParametersInterface, MarkingInterface
     private ?File $imageFile = null;
 
     #[ORM\ManyToOne(inversedBy: 'submissions')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Event $event = null;
+
+    #[ORM\ManyToOne(inversedBy: 'submissions')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Location $location = null;
 
     public function getImageFile(): ?File
     {
@@ -130,6 +135,18 @@ class Submission implements RouteParametersInterface, MarkingInterface
     public function getUniqueIdentifiers(): array
     {
         return ['submissionId' => $this->getId()];
+    }
+
+    public function getLocation(): ?Location
+    {
+        return $this->location;
+    }
+
+    public function setLocation(?Location $location): static
+    {
+        $this->location = $location;
+
+        return $this;
     }
 
 

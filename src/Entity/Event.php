@@ -35,7 +35,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 //#[ApiFilter(MultiFieldSearchFilter::class, properties: ['headline', 'subheadline'])]
 #[ApiFilter(OrderFilter::class,
     properties: ['id',
-    'submissionCount'
+    'submissionCount',
+        'eventDate'
 ])]
 
 #[Groups('event.read')]
@@ -47,6 +48,7 @@ class Event implements RouteParametersInterface, \Stringable
     #[ORM\Id]
     #[ORM\Column]
     #[ORM\GeneratedValue]
+    #[ApiProperty(identifier: false)]
     private ?int $id = null;
 
     /**
@@ -82,16 +84,13 @@ class Event implements RouteParametersInterface, \Stringable
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups('event.read')]
-    private ?string $location = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Groups('event.read')]
     private ?string $score = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $summary = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups('event.read')]
     private ?string $section = null;
 
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: Submission::class, orphanRemoval: true)]
@@ -109,10 +108,15 @@ class Event implements RouteParametersInterface, \Stringable
     private ?string $name = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups('event.read')]
     private ?int $rSchoolId = null;
 
     #[ORM\Column(nullable: true)]
     private ?int $submissionCount = 0;
+
+    #[ORM\ManyToOne(inversedBy: 'events')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Location $location = null;
 
     public function getId(): ?int
     {
@@ -151,18 +155,6 @@ class Event implements RouteParametersInterface, \Stringable
     public function setOpponent(?string $opponent): static
     {
         $this->opponent = $opponent;
-
-        return $this;
-    }
-
-    public function getLocation(): ?string
-    {
-        return $this->location;
-    }
-
-    public function setLocation(?string $location): static
-    {
-        $this->location = $location;
 
         return $this;
     }
@@ -310,6 +302,18 @@ class Event implements RouteParametersInterface, \Stringable
     {
         return $this->getSport()->getCode();
 
+    }
+
+    public function getLocation(): ?Location
+    {
+        return $this->location;
+    }
+
+    public function setLocation(?Location $location): static
+    {
+        $this->location = $location;
+
+        return $this;
     }
 
 

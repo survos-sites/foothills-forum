@@ -156,4 +156,34 @@ return [
         'version' => '1.6.0',
         'type' => 'css',
     ],
+    'stimulus-timeago' => [
+        'version' => '4.1.0',
+    ],
+    'date-fns' => [
+        'version' => '2.30.0',
+    ],
+    '@babel/runtime/helpers/esm/typeof' => [
+        'version' => '7.23.8',
+    ],
+    '@babel/runtime/helpers/esm/createForOfIteratorHelper' => [
+        'version' => '7.23.8',
+    ],
+    '@babel/runtime/helpers/esm/assertThisInitialized' => [
+        'version' => '7.23.8',
+    ],
+    '@babel/runtime/helpers/esm/inherits' => [
+        'version' => '7.23.8',
+    ],
+    '@babel/runtime/helpers/esm/createSuper' => [
+        'version' => '7.23.8',
+    ],
+    '@babel/runtime/helpers/esm/classCallCheck' => [
+        'version' => '7.23.8',
+    ],
+    '@babel/runtime/helpers/esm/createClass' => [
+        'version' => '7.23.8',
+    ],
+    '@babel/runtime/helpers/esm/defineProperty' => [
+        'version' => '7.23.8',
+    ],
 ];

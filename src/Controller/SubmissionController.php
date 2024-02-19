@@ -7,11 +7,13 @@ namespace App\Controller;
 use App\Entity\Submission;
 use App\Form\SubmissionType;
 use Doctrine\ORM\EntityManagerInterface;
+use League\Flysystem\FilesystemOperator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Workflow\WorkflowInterface;
+use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
 #[Route('/submission/{submissionId}')]
 class SubmissionController extends AbstractController
@@ -35,9 +37,10 @@ class SubmissionController extends AbstractController
     }
 
     #[Route('/', name: 'submission_show', options: ['expose' => true])]
-        public function show(Submission $submission): Response
+        public function show(Submission $submission, UploaderHelper $uploaderHelper): Response
         {
-            return $this->render('submission/show.html.twig', [
+        return $this->render('submission/show.html.twig', [
+            'uploadHelper' => $uploaderHelper,
                 'submission' => $submission,
             ]);
         }

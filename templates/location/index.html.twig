@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Location index{% endblock %}
+
+
+{% block body %}
+    <h1>Location index</h1>
+
+    {% include "location/_table.html.twig" %}
+
+    <a class="btn btn-primary" href="{{ path('location_new') }}"><span class="fas fa-plus"></span>New  Location</a>
+{% endblock %}

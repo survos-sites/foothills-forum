@@ -1,0 +1,22 @@
+{% extends "location/base.html.twig" %}
+
+{% block title %}{{  class }}{% endblock %}
+
+{% block body %}
+<h1>{{ class }} {{ _self }}</h1>
+
+<twig:api_grid
+        facets="false"
+        :class="class"
+        :apiGetCollectionUrl="apiCall"
+        :caller="_self"
+        :columns="columns"
+>
+
+    <twig:block name="id">
+        <a class="btn btn-outline-primary" href="{{ path('location_submission_new', row.rp) }}">
+            +PHOTO
+        </a>
+    </twig:block>
+</twig:api_grid>
+{% endblock %}

@@ -1,7 +1,46 @@
 {% extends "submission/base.html.twig" %}
 
 {% block body %}
-    <h1>Submission</h1>
+    <h1>Submission {{ submission.id }}</h1>
+    {% for property in ['event','location'] %}
+        {% set prop = attribute(submission, property) %}
+        {% if prop %}
+        <h3 class="text-muted">
+            {{ property }}:
+            <a href="{{ path(property ~ '_show', prop.rp) }}">
+                {{ prop }}
+            </a>
+        </h3>
+        {% endif %}
+    {% endfor %}
+
+    <h3>S3</h3>
+    {% set s3Url = vich_uploader_asset(submission) %}
+    <a href="{{ s3Url }}" target="_blank">
+        <img class="thumbnail"  src="{{ s3Url }}" alt="{{ submission.imageName }}">
+    </a>
+
+{#    <img class="thumbnail" src="{{ uploadHelper.asset(submission) }}"/>#}
+
+    {% set flysystemPath = submission.imageName %}
+    {% for filter in ['squared_thumbnail_medium','squared_thumbnail_tiny'] %}
+        {% set thumbUrl = flysystemPath | imagine_filter(filter)   %}
+        <figure class="figure">
+            <a href="{{ thumbUrl }}" target="_blank">
+                <img src="{{ thumbUrl }}" class="figure-img img-fluid rounded" alt="{{ thumbUrl }}">
+            </a>
+            <figcaption class="figure-caption text-end">{{ filter }}
+                <b>
+                    {{ flysystemPath }}
+
+                </b>
+            </figcaption>
+        </figure>
+        {#                <br /><b>{{ thumbUrl }}</b>#}
+        {#                <br /><b>{{ imagePath }}</b>#}
+
+    {% endfor %}
+
 
     <table class="table">
         <tbody>

@@ -6,6 +6,24 @@
     {% set url = absolute_url('event_show', event.rp) %}
     <img src="{{ qr_code_url(url) }}" />
 
+    {% set filter = 'squared_thumbnail_medium' %}
+    {% for submission in event.submissions %}
+        {% set flysystemPath = submission.imageName %}
+        {% set thumbUrl = flysystemPath | imagine_filter(filter)   %}
+        <figure class="figure">
+            <a href="{{ thumbUrl }}" target="_blank">
+                <img src="{{ thumbUrl }}" class="figure-img img-fluid rounded" alt="{{ thumbUrl }}">
+            </a>
+            <figcaption class="figure-caption text-end">{{ filter }}
+                <b>
+                    {{ flysystemPath }}
+
+                </b>
+            </figcaption>
+        </figure>
+
+    {% endfor %}
+
     <a href="{{ path('submission_new', event.rp) }}">
         Submit a photo
     </a>
@@ -18,7 +36,10 @@
             </tr>
             <tr>
                 <th>EventDate</th>
-                <td>{{ event.eventDate ? event.eventDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    {{ event.eventDate ? event.eventDate|date('Y-m-d H:i:s') : '' }}
+                    {{ event.eventDate ? event.eventDate|ago }}
+                </td>
             </tr>
             <tr>
                 <th>Type</th>
@@ -30,7 +51,7 @@
             </tr>
             <tr>
                 <th>Location</th>
-                <td>{{ event.location }}</td>
+                <td>{{ event.location }} / {{ event.location.name }}</td>
             </tr>
             <tr>
                 <th>Score</th>

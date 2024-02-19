@@ -29,6 +29,9 @@ class School
     #[ORM\OneToMany(mappedBy: 'school', targetEntity: Sport::class, orphanRemoval: true)]
     private Collection $sports;
 
+    #[ORM\OneToMany(mappedBy: 'school', targetEntity: Location::class)]
+    private Collection $locations;
+
     public function __construct(?string $code=null)
     {
         if ($code) {
@@ -36,6 +39,7 @@ class School
         }
         $this->teams = new ArrayCollection();
         $this->sports = new ArrayCollection();
+        $this->locations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -121,6 +125,36 @@ class School
             // set the owning side to null (unless already changed)
             if ($sport->getSchool() === $this) {
                 $sport->setSchool(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Location>
+     */
+    public function getLocations(): Collection
+    {
+        return $this->locations;
+    }
+
+    public function addLocation(Location $location): static
+    {
+        if (!$this->locations->contains($location)) {
+            $this->locations->add($location);
+            $location->setSchool($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLocation(Location $location): static
+    {
+        if ($this->locations->removeElement($location)) {
+            // set the owning side to null (unless already changed)
+            if ($location->getSchool() === $this) {
+                $location->setSchool(null);
             }
         }
 
