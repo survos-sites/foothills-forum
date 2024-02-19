@@ -117,7 +117,9 @@ final class AppMenuEventListener
         $this->add($menu, 'location_index');
         $this->add($menu, 'flysystem_browse_default');
 
-        $this->add($menu, 'survos_commands');
+        if ( ($this->env === 'dev') || $this->security->isGranted('ROLE_ADMIN')) {
+            $this->add($menu, 'survos_commands');
+        }
 //        $this->add($menu, 'app_articles_with_doctrine')
         $submenu = $this->addSubmenu($menu, 'Articles');
 //        $this->add($submenu, 'article_browse');
@@ -173,7 +175,7 @@ final class AppMenuEventListener
             }
         }
 
-        if ($this->env === 'dev' && $this->security->isGranted('ROLE_ADMIN')) {
+        if ( ($this->env === 'dev') || $this->security->isGranted('ROLE_ADMIN')) {
             $subMenu = $this->addSubmenu($menu, 'admin');
             $this->add($subMenu, 'survos_commands', label: "Commands");
         }
