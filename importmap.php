@@ -186,4 +186,8 @@ return [
     '@babel/runtime/helpers/esm/defineProperty' => [
         'version' => '7.23.8',
     ],
+    'bootswatch/dist/cerulean/bootstrap.min.css' => [
+        'version' => '5.3.2',
+        'type' => 'css',
+    ],
 ];

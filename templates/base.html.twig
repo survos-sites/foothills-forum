@@ -1,6 +1,8 @@
 {% extends "@SurvosBootstrap/%s/base.html.twig"|format(theme_option('theme')) %}
 
         {% block stylesheets %}
+            {{ parent() }}
+            {# theme_option('theme') #}
         {% endblock %}
 
         {% block javascripts %}
