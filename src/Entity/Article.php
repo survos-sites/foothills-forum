@@ -156,6 +156,9 @@ class Article implements RouteParametersInterface
     #[Groups(['article.read'])]
     private ?array $tags = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $content = null;
+
     public function __construct()
     {
         $this->authors = new ArrayCollection();
@@ -336,6 +339,18 @@ class Article implements RouteParametersInterface
             $this->tags[] = $tag;
 //            $this->tags[] = str_replace(' ', '_', $tag);
         }
+
+        return $this;
+    }
+
+    public function getContent(): ?string
+    {
+        return $this->content;
+    }
+
+    public function setContent(?string $content): static
+    {
+        $this->content = $content;
 
         return $this;
     }
