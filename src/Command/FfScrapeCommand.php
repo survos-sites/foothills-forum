@@ -92,6 +92,7 @@ final class FfScrapeCommand extends InvokableServiceCommand
             $next = $data['data']['next'];
             $this->logger->info(sprintf('total: %d, next: %d', $total, $next));
             foreach ($data['data']['rows'] as $row) {
+                dd($row);
 
                 if (!count($row['keywords'])) continue;
 
