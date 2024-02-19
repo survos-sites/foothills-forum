@@ -14,7 +14,7 @@
 >
 
     <twig:block name="opponent">
-        <a class="btn btn-sm btn-outline-primary" href="{{ path('submission_new', row.rp) }}" target="_blank">+Photo</a>
+        <a class="btn btn-sm btn-outline-primary" href="{{ path('event_submission_new', row.rp) }}" target="_blank">+Photo</a>
 
         <a href="{{ path('event_show', row.rp) }}">
             {{ row.eventDate|date('Y-m-d') }}
