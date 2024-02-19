@@ -9,6 +9,7 @@
         "ext-iconv": "*",
         "ext-pdo_sqlite": "*",
         "ext-sodium": "*",
+        "ext-gd": "*",
         "ajthinking/archetype": "^1.1",
         "api-platform/core": "^3.2",
         "aws/aws-sdk-php-symfony": "^2.7",
