@@ -1,30 +1,14 @@
 {% extends "event/base.html.twig" %}
 
 {% block body %}
-    <h1>Event</h1>
+    <h1>Event {{ event }}</h1>
 
-    {% set url = absolute_url('event_show', event.rp) %}
-    <img src="{{ qr_code_url(url) }}" />
-
-    {% set filter = 'squared_thumbnail_medium' %}
-    {% for submission in event.submissions %}
-        {% set flysystemPath = submission.imageName %}
-        {% set thumbUrl = flysystemPath | imagine_filter(filter)   %}
-        <figure class="figure">
-            <a href="{{ thumbUrl }}" target="_blank">
-                <img src="{{ thumbUrl }}" class="figure-img img-fluid rounded" alt="{{ thumbUrl }}">
-            </a>
-            <figcaption class="figure-caption text-end">{{ filter }}
-                <b>
-                    {{ flysystemPath }}
-
-                </b>
-            </figcaption>
-        </figure>
-
-    {% endfor %}
-
-    <a href="{{ path('event_submission_new', event.rp) }}">
+    {% set url = absolute_url(path('event_submission_new', event.rp)) %}
+<a href="{{ url }}">
+    <img src="{{ qr_code_url(url) }}"  alt="{{ url }}"/>
+</a>
+<br />
+    <a href="{{ url }}">
         Submit a photo
     </a>
 
@@ -72,6 +56,23 @@
         </tbody>
     </table>
 
-    <a class="btn btn-primary" href="{{ path('event_edit', event.rp) }}">edit</a>
-    {{ include('event/_delete_form.html.twig') }}
+    <hr />
+    <h3>Existing Photos</h3>
+    {% set filter = 'squared_thumbnail_medium' %}
+    {% for submission in event.submissions %}
+        {% set flysystemPath = submission.imageName %}
+        {% set thumbUrl = flysystemPath | imagine_filter(filter)   %}
+
+        <figure class="figure">
+            <img src="{{ thumbUrl }}" class="figure-img img-fluid rounded" title="{{ filter }}" alt="{{ thumbUrl }}">
+            <figcaption class="figure-caption text-end">
+                <b class="text-small">
+                    {{ flysystemPath }}
+                </b>
+            </figcaption>
+        </figure>
+
+    {% endfor %}
+
+
 {% endblock %}
