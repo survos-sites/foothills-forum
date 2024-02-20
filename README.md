@@ -7,6 +7,7 @@ from the __survos__ repo, run the services (meili, redis, rabbit)
 docker compose up -d
 ```
 
+Although the default is postgres, it runs with sqlite as well, 
 Install the application, the default database is sqlite.
 
 ```bash
