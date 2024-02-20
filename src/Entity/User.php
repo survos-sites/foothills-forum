@@ -30,7 +30,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, OAuthId
     /**
      * @var string The hashed password
      */
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?string $password = null;
 
     public function getId(): ?int
@@ -82,12 +82,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, OAuthId
     /**
      * @see PasswordAuthenticatedUserInterface
      */
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
         return $this->password;
     }
 
-    public function setPassword(string $password): static
+    public function setPassword(?string $password): self
     {
         $this->password = $password;
 
