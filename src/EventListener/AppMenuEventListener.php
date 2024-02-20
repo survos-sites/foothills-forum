@@ -112,14 +112,11 @@ final class AppMenuEventListener
             return;
         }
         $menu = $event->getMenu();
-        $this->add($menu, 'submission_index');
-        $this->add($menu, 'event_index');
-        $this->add($menu, 'location_index');
-        $this->add($menu, 'flysystem_browse_default');
+        $submenu = $this->addSubmenu($menu, 'School Sports');
+        $this->add($submenu, 'submission_index');
+        $this->add($submenu, 'event_index');
+        $this->add($submenu, 'location_index');
 
-        if ( ($this->env === 'dev') || $this->security->isGranted('ROLE_ADMIN')) {
-            $this->add($menu, 'survos_commands');
-        }
 //        $this->add($menu, 'app_articles_with_doctrine')
         $submenu = $this->addSubmenu($menu, 'Articles');
 //        $this->add($submenu, 'article_browse');
@@ -178,6 +175,7 @@ final class AppMenuEventListener
         if ( ($this->env === 'dev') || $this->security->isGranted('ROLE_ADMIN')) {
             $subMenu = $this->addSubmenu($menu, 'admin');
             $this->add($subMenu, 'survos_commands', label: "Commands");
+            $this->add($subMenu, 'flysystem_browse_default');
         }
 
 //        $nestedMenu = $this->addMenuItem($menu, ['label' => 'Credits']);
