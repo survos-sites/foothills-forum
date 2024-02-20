@@ -9,6 +9,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use App\Repository\SubmissionRepository;
+use Doctrine\DBAL\Types\Types;
 use Survos\ApiGrid\Api\Filter\FacetsFieldSearchFilter;
 use Survos\ApiGrid\Api\Filter\MultiFieldSearchFilter;
 use Survos\CoreBundle\Entity\RouteParametersInterface;
@@ -80,6 +81,9 @@ class Submission implements RouteParametersInterface, MarkingInterface
     #[ORM\JoinColumn(nullable: true)]
     private ?Location $location = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $notes = null;
+
     public function getImageFile(): ?File
     {
         return $this->imageFile;
@@ -145,6 +149,18 @@ class Submission implements RouteParametersInterface, MarkingInterface
     public function setLocation(?Location $location): static
     {
         $this->location = $location;
+
+        return $this;
+    }
+
+    public function getNotes(): ?string
+    {
+        return $this->notes;
+    }
+
+    public function setNotes(?string $notes): static
+    {
+        $this->notes = $notes;
 
         return $this;
     }

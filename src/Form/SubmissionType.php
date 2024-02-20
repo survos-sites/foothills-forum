@@ -12,13 +12,24 @@ class SubmissionType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        /** @var Submission $submission */
+        $submission = $options['data'];
         $builder
-            ->add('imageFile', VichImageType::class)
-            ->add('event', null, ['disabled' => true])
-            ->add('location', null, ['disabled' => true])
+            ->add('imageFile', VichImageType::class);
+        if ($submission->getEvent()) {
+            $builder
+                ->add('event', null, ['disabled' => true]);
+        }
+        if ($submission->getLocation()) {
+            $builder
+                ->add('location', null, ['disabled' => true]);
+        }
+        $builder->add('notes', null, [
+            'required' => false
+        ]);
+
 //            ->add('imageName')
 //            ->add('imageSize')
-        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

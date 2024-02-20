@@ -116,6 +116,7 @@ class Event implements RouteParametersInterface, \Stringable
 
     #[ORM\ManyToOne(inversedBy: 'events')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups('event.read')]
     private ?Location $location = null;
 
     public function getId(): ?int
