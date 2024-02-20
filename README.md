@@ -34,3 +34,4 @@ https://www.bullrundistrictva.org/public/schoolactivities/genie/359/school/6/
 
 aws s3 ls s3://foothills-forum/
 
+https://rappnews.com/tncms/webservice/#operation/editorial_asset_options
