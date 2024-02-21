@@ -1,0 +1,12 @@
+# Enable RewriteEngine
+RewriteEngine On
+
+# Redirect all requests not pointing directly to files to index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+
+# Set Cache-Control headers for specific image types to cache for 3 days
+<FilesMatch "\.(jpg|jpeg|png|gif|ico)$">
+    Header set Cache-Control "max-age=259200, public"
+</FilesMatch>
