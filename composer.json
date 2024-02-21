@@ -129,8 +129,8 @@
     },
     "extra": {
         "symfony": {
-            "allow-contrib": false,
-            "require": "^6.4"
+            "allow-contrib": true,
+            "require": "^7.0"
         }
     },
     "require-dev": {
