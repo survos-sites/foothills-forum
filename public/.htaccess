@@ -1,59 +1,12 @@
-# Enable Rewrite Engine
+# Enable RewriteEngine
 RewriteEngine On
 
-# Redirect HTTP to HTTPS
-RewriteCond %{HTTPS} off
-RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-
-# Front Controller Pattern: route all requests through index.php
-# Exclude existing files and directories from routing
+# Redirect all requests not pointing directly to files to index.php
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^ index.php [QSA,L]
+RewriteRule . /index.php [L]
 
-# Increase security by hiding file extensions
-# Example: Access /file instead of /file.php
-RewriteCond %{REQUEST_FILENAME}.php -f
-RewriteRule !.*\.php$ %{REQUEST_FILENAME}.php [QSA,L]
-
-# Prevent directory listings
-Options -Indexes
-
-# Set UTF-8 Encoding
-AddDefaultCharset UTF-8
-
-# Set File Upload Size Limit (requires mod_php, might not work in all environments)
-php_value upload_max_filesize 100M
-php_value post_max_size 100M
-
-# Security Headers
-Header set X-Frame-Options "SAMEORIGIN"
-Header set X-XSS-Protection "1; mode=block"
-Header set X-Content-Type-Options "nosniff"
-
-# Enable GZIP Compression
-<IfModule mod_deflate.c>
-  AddOutputFilterByType DEFLATE text/plain
-  AddOutputFilterByType DEFLATE text/html
-  AddOutputFilterByType DEFLATE text/xml
-  AddOutputFilterByType DEFLATE text/css
-  AddOutputFilterByType DEFLATE application/xml
-  AddOutputFilterByType DEFLATE application/xhtml+xml
-  AddOutputFilterByType DEFLATE application/rss+xml
-  AddOutputFilterByType DEFLATE application/javascript
-  AddOutputFilterByType DEFLATE application/x-javascript
-</IfModule>
-
-# Caching for Static Resources
-<IfModule mod_expires.c>
-  ExpiresActive On
-  ExpiresByType image/jpg "access plus 1 year"
-  ExpiresByType image/jpeg "access plus 1 year"
-  ExpiresByType image/gif "access plus 1 year"
-  ExpiresByType image/png "access plus 1 year"
-  ExpiresByType text/css "access plus 1 month"
-  ExpiresByType application/pdf "access plus 1 month"
-  ExpiresByType application/javascript "access plus 1 month"
-  ExpiresByType image/x-icon "access plus 1 year"
-  ExpiresByType image/svg+xml "access plus 1 year"
-</IfModule>
+# Set Cache-Control headers for specific image types to cache for 3 days
+<FilesMatch "\.(jpg|jpeg|png|gif|ico)$">
+    Header set Cache-Control "max-age=259200, public"
+</FilesMatch>
