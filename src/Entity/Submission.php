@@ -75,6 +75,7 @@ class Submission implements RouteParametersInterface, MarkingInterface
 
     #[ORM\ManyToOne(inversedBy: 'submissions')]
     #[ORM\JoinColumn(nullable: true)]
+    #[Groups('submission.read')]
     private ?Event $event = null;
 
     #[ORM\ManyToOne(inversedBy: 'submissions')]

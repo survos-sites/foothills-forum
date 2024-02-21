@@ -6,9 +6,9 @@
 <h1>{{ class }} {{ _self }}</h1>
 
     {% set columns = [
-        'id',
+        'marking',
         'imageName',
-        'submissionCount',
+        'event',
     ] %}
 <twig:api_grid
         facets="false"
@@ -18,12 +18,15 @@
         :columns="columns"
 >
 
-    <twig:block name="id">
-        ID: {{ row.id }}
+    <twig:block name="event">
+        <a href="{{ path('event_slideshow', row.event.rp) }}">
+            {{ row.event.title }}
+        </a>
     </twig:block>
     <twig:block name="imageName">
         <a href="{{ path('submission_show', row.rp) }}" title="{{ row.imageName }}">
-            <img class="thumbnail" src="/images/submissions/{{ row.imageName }}" />
+            {#  because it's created after upload.  hackish! Need an event #}
+            <img class="thumbnail" src="/media/cache/squared_thumbnail_medium/{{ row.imageName }}" />
         </a>
     </twig:block>
 </twig:api_grid>

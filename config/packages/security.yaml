@@ -16,7 +16,7 @@ security:
         main:
             lazy: true
             provider: app_user_provider
-            entry_point: Survos\AuthBundle\Security\Authenticator
+            entry_point: App\Security\AppAuthenticator
             custom_authenticators:
                 - App\Security\AppAuthenticator
                 - Survos\AuthBundle\Security\Authenticator
