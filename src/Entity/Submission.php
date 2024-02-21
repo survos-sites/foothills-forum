@@ -42,7 +42,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 ])]
 
 #[Workflow('PLACE_')]
-class Submission implements RouteParametersInterface, MarkingInterface
+class Submission implements RouteParametersInterface, MarkingInterface, \Stringable
 {
     const PLACE_NEW='new';
     const PLACE_APPROVED='approved';
@@ -51,6 +51,9 @@ class Submission implements RouteParametersInterface, MarkingInterface
     const TRANSITION_APPROVE='approve';
     #[Transition(from:[self::PLACE_NEW], to: self::PLACE_REJECTED)]
     const TRANSITION_REJECT='reject';
+
+    #[Transition(from:[self::PLACE_REJECTED, self::PLACE_APPROVED], to: self::PLACE_NEW)]
+    const TRANSITION_RESET='reset';
 
     const MEILI_ROUTE='';
     const DOCTRINE_ROUTE='doctrine-submission';
@@ -91,6 +94,11 @@ class Submission implements RouteParametersInterface, MarkingInterface
     public function getImageFile(): ?File
     {
         return $this->imageFile;
+    }
+
+    public function getFlowCode(): string
+    {
+        return 'Submission';
     }
 
     public function setImageFile(?File $imageFile): Submission
@@ -182,4 +190,8 @@ class Submission implements RouteParametersInterface, MarkingInterface
     }
 
 
+    public function __toString()
+    {
+        return $this->getEvent()->getTitle() . '#' . $this->getId();
+    }
 }

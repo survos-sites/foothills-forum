@@ -9,6 +9,8 @@ use App\Form\SubmissionType;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Flysystem\FilesystemOperator;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
+use Survos\WorkflowBundle\Controller\HandleTransitionsInterface;
+use Survos\WorkflowBundle\Traits\HandleTransitionsTrait;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -22,8 +24,9 @@ use Symfony\Component\Workflow\WorkflowInterface;
 use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
 #[Route('/submission/{submissionId}')]
-class SubmissionController extends AbstractController
+class SubmissionController extends AbstractController implements HandleTransitionsInterface
 {
+    use HandleTransitionsTrait;
     public function __construct(private EntityManagerInterface $entityManager)
     {
     }
@@ -54,6 +57,7 @@ class SubmissionController extends AbstractController
 //            assert(file_exists($path), $path);
 
 
+
         $addr = 'tacman@gmail.com';
             $survos = 'tac@survos.com';
             // @todo: dispatch!
@@ -82,8 +86,7 @@ class SubmissionController extends AbstractController
 //            $email->attach(4)
 
         try {
-            $mailer->send($email);
-            dump($email);
+//            $mailer->send($email);
         } catch (\Exception $exception) {
             dd($exception->getMessage());
         }

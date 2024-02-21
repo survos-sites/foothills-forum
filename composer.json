@@ -9,7 +9,6 @@
         "ext-exif": "*",
         "ext-gd": "*",
         "ext-iconv": "*",
-        "ext-imagick": "*",
         "ext-pdo_sqlite": "*",
         "ext-redis": "*",
         "ext-sodium": "*",

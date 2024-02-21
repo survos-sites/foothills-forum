@@ -113,6 +113,16 @@ IO $io,
                 $dt = new \DateTime($row['Date']);
             }
 
+            $current_date = new \DateTime('yesterday');
+
+            if ($dt < $current_date)
+            {
+                continue;
+            }
+
+            // only load if > now
+
+
             $locationName = $row['Location'] . ' ' . $team->getSport()->getName();
             $location = $this->getEntity(Location::class, $locationName);
             assert($location->getCode(), $locationName);
