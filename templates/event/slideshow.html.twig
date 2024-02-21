@@ -1,0 +1,25 @@
+{% extends "event/base.html.twig" %}
+
+{% block body %}
+    <h1>{{ event }}</h1>
+
+
+    <h3>Existing Photos</h3>
+    {% set filter = 'squared_thumbnail_medium' %}
+    {% for submission in event.submissions %}
+        {% set flysystemPath = submission.imageName %}
+        {% set thumbUrl = flysystemPath | imagine_filter(filter)   %}
+
+        <figure class="figure">
+            <img src="{{ thumbUrl }}" class="figure-img img-fluid rounded" title="{{ filter }}" alt="{{ thumbUrl }}">
+            <figcaption class="figure-caption text-end">
+                <b class="text-small">
+                    {{ flysystemPath }}
+                </b>
+            </figcaption>
+        </figure>
+
+    {% endfor %}
+
+
+{% endblock %}

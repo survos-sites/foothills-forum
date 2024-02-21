@@ -1,28 +1,35 @@
 {% extends "event/base.html.twig" %}
 
 {% block body %}
-    <h1>Event {{ event }}</h1>
+    <h1>{{ event }}</h1>
+
+    <h3>Become a citizen photographer!</h3>
+    <p>
+        Scan the QR code below and submit your pictures to the Rappahannock News.
+    </p>
+
 
     {% set url = absolute_url(path('event_submission_new', event.rp)) %}
-<a href="{{ url }}">
-    <img src="{{ qr_code_url(url) }}"  alt="{{ url }}"/>
-</a>
-<br />
-    <a href="{{ url }}">
+    <div class="align-content-center">
+        <a href="{{ url }}">
+            <img src="{{ qr_code_url(url) }}"  alt="{{ url }}"/>
+        </a>
+
+    </div>
+
+    <a class="d-print-none" href="{{ url }}">
         Submit a photo
     </a>
 
     <table class="table">
         <tbody>
             <tr>
-                <th>Id</th>
-                <td>{{ event.id }}</td>
-            </tr>
-            <tr>
-                <th>EventDate</th>
+                <th>When</th>
                 <td>
-                    {{ event.eventDate ? event.eventDate|date('Y-m-d H:i:s') : '' }}
+                    {{ event.eventDate ? event.eventDate|date('D M d, Y H:i') : '' }}
+                    <span class="d-print-none">
                     {{ event.eventDate ? event.eventDate|ago }}
+                    </span>
                 </td>
             </tr>
             <tr>
@@ -34,45 +41,17 @@
                 <td>{{ event.opponent }}</td>
             </tr>
             <tr>
-                <th>Location</th>
+                <th>Where</th>
                 <td>{{ event.location }} / {{ event.location.name }}</td>
             </tr>
             <tr>
-                <th>Score</th>
-                <td>{{ event.score }}</td>
-            </tr>
-            <tr>
-                <th>Summary</th>
-                <td>{{ event.summary }}</td>
-            </tr>
-            <tr>
                 <th>Sport</th>
-                <td>{{ event.sport }}</td>
-            </tr>
-            <tr>
-                <th>Section</th>
-                <td>{{ event.section }}</td>
+                <td>{{ event.sport }}
+                    {{ event.section }}
+                </td>
             </tr>
         </tbody>
     </table>
-
-    <hr />
-    <h3>Existing Photos</h3>
-    {% set filter = 'squared_thumbnail_medium' %}
-    {% for submission in event.submissions %}
-        {% set flysystemPath = submission.imageName %}
-        {% set thumbUrl = flysystemPath | imagine_filter(filter)   %}
-
-        <figure class="figure">
-            <img src="{{ thumbUrl }}" class="figure-img img-fluid rounded" title="{{ filter }}" alt="{{ thumbUrl }}">
-            <figcaption class="figure-caption text-end">
-                <b class="text-small">
-                    {{ flysystemPath }}
-                </b>
-            </figcaption>
-        </figure>
-
-    {% endfor %}
 
 
 {% endblock %}

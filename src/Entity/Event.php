@@ -319,7 +319,7 @@ class Event implements RouteParametersInterface, \Stringable
 
     public function getTitle()
     {
-        return sprintf("%s %s %s", $this->getSport(), $this->getSection(), $this->getEventDate()->format("Y-m-d"));
+        return sprintf("%s %s %s", $this->getSport(), $this->getSection(), $this->getEventDate()->format('D M d, Y H:iA'));
 
     }
 

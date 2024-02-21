@@ -9,6 +9,7 @@ use App\Entity\Submission;
 use App\Form\EventType;
 use App\Form\SubmissionType;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,12 +38,22 @@ class EventController extends AbstractController
     }
 
     #[Route('/', name: 'event_show', options: ['expose' => true])]
-        public function show(Event $event): Response
-        {
-            return $this->render('event/show.html.twig', [
-                'event' => $event,
-            ]);
-        }
+    #[Template('event/show.html.twig')]
+    public function show(Event $event): Response|array
+    {
+        return get_defined_vars();
+        return $this->render('event/show.html.twig', [
+            'event' => $event,
+        ]);
+    }
+
+    #[Route('/slideshow', name: 'event_slideshow', options: ['expose' => true])]
+    #[Template('event/slideshow.html.twig')]
+    public function slideshow(Event $event): Response|array
+    {
+        return get_defined_vars();
+    }
+
 
     #[Route('submission/new', name: 'event_submission_new', options: ['expose' => true])]
     public function new(Event $event, Request $request): Response
@@ -69,33 +80,33 @@ class EventController extends AbstractController
 
 
     #[Route('/edit', name: 'event_edit', options: ['expose' => true])]
-        public function edit(Request $request, Event $event): Response
-        {
-            $form = $this->createForm(EventType::class, $event);
-            $form->handleRequest($request);
+    public function edit(Request $request, Event $event): Response
+    {
+        $form = $this->createForm(EventType::class, $event);
+        $form->handleRequest($request);
 
-            if ($form->isSubmitted() && $form->isValid()) {
-                $this->entityManager->flush();
-
-                return $this->redirectToRoute('event_index');
-            }
-
-            return $this->render('event/edit.html.twig', [
-                'event' => $event,
-                'form' => $form->createView(),
-            ]);
-        }
-
-    #[Route('/delete', name: 'event_delete', methods: ['DELETE'])]
-        public function delete(Request $request, Event $event): Response
-        {
-            // hard-coded to getId, should be get parameter of uniqueIdentifiers()
-            if ($this->isCsrfTokenValid('delete'.$event->getId(), $request->request->get('_token'))) {
-                $entityManager = $this->entityManager;
-                $entityManager->remove($event);
-                $entityManager->flush();
-            }
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->entityManager->flush();
 
             return $this->redirectToRoute('event_index');
         }
+
+        return $this->render('event/edit.html.twig', [
+            'event' => $event,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/delete', name: 'event_delete', methods: ['DELETE'])]
+    public function delete(Request $request, Event $event): Response
+    {
+        // hard-coded to getId, should be get parameter of uniqueIdentifiers()
+        if ($this->isCsrfTokenValid('delete' . $event->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->entityManager;
+            $entityManager->remove($event);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('event_index');
+    }
 }

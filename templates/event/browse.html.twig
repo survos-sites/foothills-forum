@@ -34,6 +34,7 @@
     </twig:block>
     <twig:block name="eventDate">
         <p>
+            <a class="btn btn-sm btn-outline-primary" href="{{ path('event_show', row.rp) }}" target="_blank">Flyer</a>
             <time data-controller="timeago"
                   data-timeago-add-suffix-value="true"
                   data-timeago-datetime-value="{{ row.eventDate|date('c') }}"></time>
@@ -45,6 +46,9 @@
         <a target="_blank" href="https://rappahannockcountyhs.rschoolteams.com/page/{{ row.rSchoolId }}">
             {{ row.rSchoolId }}
         </a>
+    </twig:block>
+    <twig:block name="submissionCount">
+        <a href="{{ path('event_slideshow', row.rp) }}">{{ row.submissionCount }}</a>
     </twig:block>
     <twig:block name="sport">
         {{ row.sport.code }}
