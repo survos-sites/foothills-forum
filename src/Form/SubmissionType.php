@@ -15,7 +15,9 @@ class SubmissionType extends AbstractType
         /** @var Submission $submission */
         $submission = $options['data'];
         $builder
-            ->add('imageFile', VichImageType::class);
+            ->add('imageFile', VichImageType::class, [
+                'help' => "photo must be less than " . ini_get("upload_max_filesize")
+            ]);
         if ($submission->getEvent()) {
             $builder
                 ->add('event', null, ['disabled' => true]);
