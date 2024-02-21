@@ -18,8 +18,9 @@ class AppController extends AbstractController
 {
     #[Route('/', name: 'app_homepage')]
     #[Template("app/index.html.twig")]
-    public function index(Request $request): array
+    public function index(Request $request): array|Response
     {
+        return $this->redirectToRoute('event_index');
         return [
         'apiRoute' => $request->get('doctrine', false) ? 'doctrine-articles' : 'meili-articles',
         'class' => Article::class];

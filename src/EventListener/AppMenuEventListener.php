@@ -13,6 +13,7 @@ use Survos\WorkflowBundle\Service\WorkflowHelperService;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
@@ -32,6 +33,7 @@ final class AppMenuEventListener
         private ContextService $contextService,
         private Security $security,
         private DatatableService $datatableService,
+        private RequestStack $requestStack,
         private WorkflowHelperService $workflowHelperService,
         private ?AuthorizationCheckerInterface $authorizationChecker=null
     )
@@ -91,6 +93,9 @@ final class AppMenuEventListener
         if (!$this->supports($event)) {
             return;
         }
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            return;
+        }
         $menu = $event->getMenu();
 
 //        $subMenu = $this->addSubmenu($menu, 'songs');
@@ -112,10 +117,6 @@ final class AppMenuEventListener
             return;
         }
         $menu = $event->getMenu();
-        $submenu = $this->addSubmenu($menu, 'School Sports');
-        $this->add($submenu, 'submission_index');
-        $this->add($submenu, 'event_index');
-        $this->add($submenu, 'location_index');
 
 //        $this->add($menu, 'app_articles_with_doctrine')
         $submenu = $this->addSubmenu($menu, 'Articles');
@@ -131,6 +132,13 @@ final class AppMenuEventListener
             return;
         }
 
+        // hack for release
+
+        $route = $this->requestStack->getCurrentRequest()->get('_route');
+        if (in_array($route, ['submission_show', 'event_submission_new'])) {
+            return;
+        }
+
         $menu = $event->getMenu();
 
         if (true || $this->isGranted('ROLE_SUPER_ADMIN')) {
@@ -142,6 +150,13 @@ final class AppMenuEventListener
                 ], $workflowCode);
             }
         }
+
+        $submenu = $this->addSubmenu($menu, 'School Sports');
+        $this->add($submenu, 'event_index');
+        $this->add($submenu, 'location_index');
+
+        $this->add($submenu, 'submission_index');
+
 
 //        $this->addMenuItem($menu, ['route' => 'song_index', 'label' => "Songs", 'icon' => 'fas fa-home']);
 //        $this->addMenuItem($menu, ['route' => 'song_browse', 'label' => "Song Search", 'icon' => 'fas fa-search']);
@@ -158,16 +173,18 @@ final class AppMenuEventListener
 //        $this->addMenuItem($menu, ['route' => 'video_index', 'label' => "Videos", 'icon' => 'fas fa-home']);
 //        $this->addMenuItem($menu, ['route' => 'video_index', 'label' => "Videos (API)", 'icon' => 'fas fa-sync']);
 
-        foreach ([Author::class, Article::class] as $class) {
-            $name = (new \ReflectionClass($class))->getShortName();
-            $subMenu = $this->addSubmenu($menu, $name);
-            // @todo: get Crud attributes or controller methods as routes
-            foreach (['_browse','_symfony_crud_index'] as $suffix) {
-                // hack
-                if ( ($name == 'Author') || ($suffix == '_browse')) {
-                    $route = strtolower($name) . $suffix;
-                    $this->add($subMenu, $route);
+        if ($this->isGranted('ROLE_ADMIN')) {
+            foreach ([Author::class, Article::class] as $class) {
+                $name = (new \ReflectionClass($class))->getShortName();
+                $subMenu = $this->addSubmenu($menu, $name);
+                // @todo: get Crud attributes or controller methods as routes
+                foreach (['_browse','_symfony_crud_index'] as $suffix) {
+                    // hack
+                    if ( ($name == 'Author') || ($suffix == '_browse')) {
+                        $route = strtolower($name) . $suffix;
+                        $this->add($subMenu, $route);
 
+                    }
                 }
             }
         }

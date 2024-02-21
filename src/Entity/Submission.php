@@ -84,6 +84,9 @@ class Submission implements RouteParametersInterface, MarkingInterface
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $notes = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $credit = null;
+
     public function getImageFile(): ?File
     {
         return $this->imageFile;
@@ -161,6 +164,18 @@ class Submission implements RouteParametersInterface, MarkingInterface
     public function setNotes(?string $notes): static
     {
         $this->notes = $notes;
+
+        return $this;
+    }
+
+    public function getCredit(): ?string
+    {
+        return $this->credit;
+    }
+
+    public function setCredit(?string $credit): static
+    {
+        $this->credit = $credit;
 
         return $this;
     }

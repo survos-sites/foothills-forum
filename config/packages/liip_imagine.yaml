@@ -17,12 +17,14 @@ liip_imagine:
         auto_rotate: ~
         squared_thumbnail_medium:
             filters:
+                auto_rotate: ~
                 thumbnail:
                     size:          [400, 400]
                     allow_upscale: true
                     mode: inset
         squared_thumbnail_small:
             filters:
+                auto_rotate: ~
                 thumbnail:
                     size:          [200, 200]
                     allow_upscale: true
@@ -30,6 +32,7 @@ liip_imagine:
 
         squared_thumbnail_tiny:
             filters:
+                auto_rotate: ~
                 thumbnail:
                     size:          [100, 100]
                     allow_upscale: true

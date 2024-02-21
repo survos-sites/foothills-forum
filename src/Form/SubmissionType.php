@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Submission;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vich\UploaderBundle\Form\Type\VichImageType;
@@ -16,6 +17,7 @@ class SubmissionType extends AbstractType
         $submission = $options['data'];
         $builder
             ->add('imageFile', VichImageType::class, [
+                'label' => "Your photo",
                 'help' => "photo must be less than " . ini_get("upload_max_filesize")
             ]);
         if ($submission->getEvent()) {
@@ -27,8 +29,19 @@ class SubmissionType extends AbstractType
                 ->add('location', null, ['disabled' => true]);
         }
         $builder->add('notes', null, [
-            'required' => false
+            'required' => false,
+            'help' => "e.g. Player name, action, etc."
         ]);
+        $builder->add('credit', null, [
+            'required' => true,
+            'help' => "Your name for photo credit"
+        ])
+            ->add('agree_to_terms', CheckboxType::class, [
+                'required' => true,
+                'mapped' => false,
+                'help' => "I agree to license this photo without restriction to Rappahannock News, Foothills Forum and licensees"
+            ])
+        ;
 
 //            ->add('imageName')
 //            ->add('imageSize')

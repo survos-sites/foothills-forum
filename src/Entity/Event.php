@@ -235,7 +235,7 @@ class Event implements RouteParametersInterface, \Stringable
 
     public function __toString()
     {
-        return $this->getCode();
+        return $this->getTitle();
     }
 
     public function getCode(): ?string
@@ -315,6 +315,12 @@ class Event implements RouteParametersInterface, \Stringable
         $this->location = $location;
 
         return $this;
+    }
+
+    public function getTitle()
+    {
+        return sprintf("%s %s %s", $this->getSport(), $this->getSection(), $this->getEventDate()->format("Y-m-d"));
+
     }
 
 

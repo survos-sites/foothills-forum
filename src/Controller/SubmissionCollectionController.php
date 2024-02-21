@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 // @todo: if Workflow Bundle active
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/submissions')]
 class SubmissionCollectionController extends AbstractController
@@ -34,6 +35,7 @@ class SubmissionCollectionController extends AbstractController
 
     #[Route(path: '/browse/', name: 'submission_browse', methods: ['GET'])]
     #[Route('/index', name: 'submission_index')]
+    #[IsGranted('ROLE_ADMIN')]
     public function browsesubmission(Request $request): Response
     {
         $class = Submission::class;

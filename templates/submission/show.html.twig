@@ -2,6 +2,9 @@
 
 {% block body %}
     <h1>Submission {{ submission.id }}</h1>
+
+    Thanks for submitting! Your photo is being reviewed.
+
     {% for property in ['event','location'] %}
         {% set prop = attribute(submission, property) %}
         {% if prop %}
@@ -14,24 +17,26 @@
         {% endif %}
     {% endfor %}
 
+    {% if is_granted('ROLE_ADMIN') %}
     <h3>S3</h3>
     {% set s3Url = vich_uploader_asset(submission) %}
-    <a href="{{ s3Url }}" target="_blank">
-        <img class="thumbnail"  src="{{ s3Url }}" alt="{{ submission.imageName }}">
+    <a href="{{ s3Url }}" target="_blank">See on S3
+{#        <img class="thumbnail"  src="{{ s3Url }}" alt="{{ submission.imageName }}">#}
     </a>
+    {% endif %}
 
     {% set flysystemPath = submission.imageName %}
-    {% for filter in ['squared_thumbnail_medium','squared_thumbnail_tiny'] %}
+    {% for filter in ['squared_thumbnail_medium'] %}
         {% set thumbUrl = flysystemPath | imagine_filter(filter)   %}
         <div>
             <figure class="figure">
                 <a href="{{ thumbUrl }}" target="_blank">
                     <img src="{{ thumbUrl }}" class="figure-img img-fluid rounded" alt="{{ thumbUrl }}">
                 </a>
-                <figcaption class="figure-caption text-end">{{ filter }}
+                <figcaption title="{{ flysystemPath }}" class="figure-caption text-end">
                     <b>
-                        {{ flysystemPath }}
-
+{#                        {{ flysystemPath }}#}
+                        Credit: {{ submission.credit }}
                     </b>
                 </figcaption>
             </figure>
@@ -41,21 +46,8 @@
 
     {% endfor %}
 
+    {% if submission.event %}
+    <a class="btn btn-primary" href="{{ path('event_submission_new', submission.event.rp) }}">Submit Another Photo at this event</a>
+    {% endif %}
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ submission.id }}</td>
-            </tr>
-            <tr>
-                <th>ImageName</th>
-                <td>{{ submission.imageName }}</td>
-            </tr>
-            <tr>
-                <th>ImageSize</th>
-                <td>{{ submission.imageSize }}</td>
-            </tr>
-        </tbody>
-    </table>
 {% endblock %}
