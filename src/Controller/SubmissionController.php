@@ -8,9 +8,15 @@ use App\Entity\Submission;
 use App\Form\SubmissionType;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Flysystem\FilesystemOperator;
+use Liip\ImagineBundle\Imagine\Cache\CacheManager;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mime\Part\DataPart;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Workflow\WorkflowInterface;
 use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
@@ -37,8 +43,51 @@ class SubmissionController extends AbstractController
     }
 
     #[Route('/', name: 'submission_show', options: ['expose' => true])]
-        public function show(Submission $submission, UploaderHelper $uploaderHelper): Response
+        public function show(Submission $submission, UploaderHelper $uploaderHelper
+    , MailerInterface $mailer, CacheManager $imagineCacheManager,
+    #[Autowire('%kernel.project_dir%')] $projectDir
+    ): Response
         {
+
+            $resolvedPath = $imagineCacheManager->getBrowserPath($submission->getImageName(), 'squared_thumbnail_medium');
+//            $path = $projectDir . '/public/media/cache/squared_thumbnail_medium/' . $submission->getImageName();
+//            assert(file_exists($path), $path);
+
+
+        $addr = 'tacman@gmail.com';
+            $survos = 'tac@survos.com';
+            // @todo: dispatch!
+            $email = (new TemplatedEmail())
+                ->htmlTemplate('emails/submission.html.twig', ['sub'])
+                ->context([
+                    'imageUrl' => $resolvedPath,
+                    'submission' => $submission,
+                    'expiration_date' => new \DateTime('+7 days'),
+                    'username' => 'foo',
+                ])
+//                ->addPart(new DataPart($path))
+                ->from($survos)
+                ->to(...[$addr] )
+                //->cc('cc@example.com')
+                //->bcc('bcc@example.com')
+                //->replyTo('fabien@example.com')
+                ->priority(Email::PRIORITY_HIGH)
+                ->subject('Photo submitted to ' . $submission->getEvent()->getTitle())
+                // get the image contents from a PHP resource
+                // get the image contents from an existing file
+                ->html(sprintf('<p>See Twig integration for better HTML integration!
+
+%s
+</p>', $submission->getImageName()));
+//            $email->attach(4)
+
+        try {
+            $mailer->send($email);
+            dump($email);
+        } catch (\Exception $exception) {
+            dd($exception->getMessage());
+        }
+
         return $this->render('submission/show.html.twig', [
             'uploadHelper' => $uploaderHelper,
                 'submission' => $submission,

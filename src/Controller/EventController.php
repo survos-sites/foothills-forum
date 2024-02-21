@@ -13,6 +13,9 @@ use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mime\Part\DataPart;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Workflow\WorkflowInterface;
 
@@ -56,7 +59,7 @@ class EventController extends AbstractController
 
 
     #[Route('submission/new', name: 'event_submission_new', options: ['expose' => true])]
-    public function new(Event $event, Request $request): Response
+    public function new(Event $event, Request $request, MailerInterface $mailer): Response
     {
         $submission = new Submission();
         $event->addSubmission($submission);
@@ -71,7 +74,6 @@ class EventController extends AbstractController
 
             return $this->redirectToRoute('submission_show', $submission->getrp());
         }
-
         return $this->render('submission/new.html.twig', [
             'submission' => $submission,
             'form' => $form->createView(),
