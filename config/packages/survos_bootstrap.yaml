@@ -12,7 +12,7 @@ survos_bootstrap:
 
   app:
     code: ff
-    abbr: <b>ff</b>Explorer
+    abbr: Foothills Forum
   options:
     # consider https://startbootstrap.com/previews/simple-sidebar as another theme
     theme: bootswatch

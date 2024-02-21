@@ -19,6 +19,7 @@ use Survos\ApiGrid\State\MeiliSearchStateProvider;
 use Survos\CoreBundle\Entity\RouteParametersInterface;
 use Survos\CoreBundle\Entity\RouteParametersTrait;
 use Symfony\Component\Serializer\Annotation\Groups;
+use function Symfony\Component\String\u;
 
 #[ORM\Entity(repositoryClass: EventRepository::class)]
 #[ApiResource(
@@ -319,7 +320,7 @@ class Event implements RouteParametersInterface, \Stringable
 
     public function getTitle()
     {
-        return sprintf("%s %s %s", $this->getSport(), $this->getSection(), $this->getEventDate()->format('D M d, Y H:iA'));
+        return sprintf("%s %s %s", $this->getSection(), u($this->getSport())->title(), $this->getEventDate()->format('D M d, Y h:iA'));
 
     }
 
