@@ -211,4 +211,9 @@ class Submission implements RouteParametersInterface, MarkingInterface, \Stringa
 
         return $this;
     }
+
+    public function getCode()
+    {
+        return sprintf("photo-%d", $this->getId());
+    }
 }
