@@ -19,7 +19,6 @@ use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Zenstruck\Console\Attribute\Argument;
 use Zenstruck\Console\Attribute\Option;
-use Zenstruck\Console\ConfigureWithAttributes;
 use Zenstruck\Console\InvokableServiceCommand;
 use Zenstruck\Console\IO;
 use Zenstruck\Console\RunsCommands;
@@ -29,7 +28,6 @@ use function Symfony\Component\String\u;
 #[AsCommand('app:rschools', 'Scrape the rschools pages')]
 final class AppRschoolsCommand extends InvokableServiceCommand
 {
-    use ConfigureWithAttributes;
     use RunsCommands;
     use RunsProcesses;
 

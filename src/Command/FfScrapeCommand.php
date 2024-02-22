@@ -15,7 +15,6 @@ use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\Scheduler\Attribute\AsPeriodicTask;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Zenstruck\Console\Attribute\Option;
-use Zenstruck\Console\ConfigureWithAttributes;
 use Zenstruck\Console\InvokableServiceCommand;
 use Zenstruck\Console\IO;
 use Zenstruck\Console\RunsCommands;
@@ -28,7 +27,6 @@ use function Symfony\Component\String\u;
 #[AsPeriodicTask('2 hours', schedule: 'default')]
 final class FfScrapeCommand extends InvokableServiceCommand
 {
-    use ConfigureWithAttributes;
     use RunsCommands;
     use RunsProcesses;
 
