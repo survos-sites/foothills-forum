@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\Part\DataPart;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Workflow\WorkflowInterface;
 
@@ -59,9 +60,17 @@ class EventController extends AbstractController
 
 
     #[Route('submission/new', name: 'event_submission_new', options: ['expose' => true])]
-    public function new(Event $event, Request $request, MailerInterface $mailer): Response
+    public function new(Event $event, Request $request, PropertyAccessorInterface $propertyAccessor, MailerInterface $mailer): Response
     {
         $submission = new Submission();
+
+        // saved by session, could eventually be event or place when this is generic
+        $session = $request->getSession();
+        $formVarsToSaveInSession = ['credit'];
+        foreach ($formVarsToSaveInSession as $formVar) {
+            $value = $session->get($formVar, '');
+            $propertyAccessor->setValue($submission, $formVar, $value);
+        }
         $event->addSubmission($submission);
 //        $submission->setEvent($event);
         $form = $this->createForm(SubmissionType::class, $submission);
@@ -71,6 +80,10 @@ class EventController extends AbstractController
             $entityManager = $this->entityManager;
             $entityManager->persist($submission);
             $entityManager->flush();
+
+            foreach ($formVarsToSaveInSession as $formVar) {
+                $session->set($formVar, $propertyAccessor->getValue($submission, $formVar));
+            }
 
             return $this->redirectToRoute('submission_show', $submission->getrp());
         }

@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Survos\CoreBundle\Entity\RouteParametersInterface;
 use Survos\CoreBundle\Entity\RouteParametersTrait;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: TeamRepository::class)]
 #[ApiResource]
@@ -37,6 +38,10 @@ class Team implements RouteParametersInterface, \Stringable
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $section = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Groups(['event.read','team.read'])]
+    private ?int $rSchoolId = null;
 
     public function __construct(?string $code=null)
     {
@@ -113,6 +118,18 @@ class Team implements RouteParametersInterface, \Stringable
     public function __toString()
     {
         return $this->getCode();
+    }
+
+    public function getRSchoolId(): ?int
+    {
+        return $this->rSchoolId;
+    }
+
+    public function setRSchoolId(?int $rSchoolId): static
+    {
+        $this->rSchoolId = $rSchoolId;
+
+        return $this;
     }
 
 }

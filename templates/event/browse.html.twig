@@ -15,12 +15,17 @@
 
     <twig:block name="opponent">
         <div class="max-24rem">
-            <a class="btn btn-sm btn-outline-primary" href="{{ path('event_submission_new', row.rp) }}" target="_blank">+Photo</a>
 
             <a href="{{ path('event_show', row.rp) }}">
                 {{ row.eventDate|date('Y-m-d') }}
-                {{ row.opponent }}
+                <span class="">
+                {{ row.opponent|slice(0, 30) }}
+                </span>
             </a>
+            <br />
+            <a class="btn btn-sm btn-outline-primary" href="{{ path('event_submission_new', row.rp) }}" target="_blank">+Photo</a>
+            <a class="btn btn-sm btn-outline-success" href="{{ path('event_show', row.rp) }}" target="_blank">Flyer</a>
+            <a class="btn btn-sm btn-outline-warning" href="{{ path('event_slideshow', row.rp) }}" target="_blank">Photos ({{ row.submissionCount }})</a>
 
         </div>
     </twig:block>

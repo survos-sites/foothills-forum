@@ -23,6 +23,7 @@ use Zenstruck\Console\InvokableServiceCommand;
 use Zenstruck\Console\IO;
 use Zenstruck\Console\RunsCommands;
 use Zenstruck\Console\RunsProcesses;
+use function Symfony\Component\String\u;
 
 #[AsCommand('app:rschools', 'Scrape the rschools pages')]
 final class AppRschoolsCommand extends InvokableServiceCommand
@@ -92,6 +93,8 @@ IO $io,
     {
         $teamName = $sport->getSchool()->getCode() . '-' . $sport->getName() . ' ' . $sectionName;
         $team = $this->getEntity(Team::class, $teamName);
+        $pageId = u($url)->after('/page/')->toString();
+        $team->setRSchoolId((int)$pageId);
         $team->setSection($sectionName);
         $sport->getSchool()->addTeam($team);
         $sport->addTeam($team);
