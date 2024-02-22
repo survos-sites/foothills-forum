@@ -59,6 +59,7 @@
         "symfony/http-client": "^6.4 || ^7.0",
         "symfony/intl": "^6.4 || ^7.0",
         "symfony/mailer": "^7.0",
+        "symfony/mailer-send-mailer": "^7.0",
         "symfony/mime": "^6.4 || ^7.0",
         "symfony/monolog-bundle": "^3.0",
         "symfony/notifier": "^6.4 || ^7.0",
