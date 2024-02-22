@@ -8,10 +8,13 @@
     {% set filter = 'squared_thumbnail_medium' %}
     {% for submission in event.submissions %}
         {% set flysystemPath = submission.imageName %}
-        {% set thumbUrl = flysystemPath | imagine_filter(filter)   %}
+        {% set thumbUrl = flysystemPath | imagine_filter(filter) %}
 
         <figure class="figure">
-            <img src="{{ thumbUrl }}" class="figure-img img-fluid rounded" title="{{ filter }}" alt="{{ thumbUrl }}">
+            <a href="{{ path('submission_show', submission.rp) }}">
+                <img src="{{ thumbUrl }}" class="figure-img img-fluid rounded" title="{{ filter }}"
+                     alt="{{ thumbUrl }}">
+            </a>
             <figcaption class="figure-caption text-end">
                 <b class="text-small">
                     {{ flysystemPath }}

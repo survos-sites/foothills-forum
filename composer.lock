@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "09fd0e43eb4d67e31d1ca7987c2bbda5",
+    "content-hash": "9395a6cc27c6a0cb519448992a8dee43",
     "packages": [
         {
             "name": "ajthinking/archetype",
@@ -16318,6 +16318,7 @@
         "ext-exif": "*",
         "ext-gd": "*",
         "ext-iconv": "*",
+        "ext-openssl": "*",
         "ext-pdo_sqlite": "*",
         "ext-redis": "*",
         "ext-sodium": "*"
