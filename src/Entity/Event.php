@@ -120,6 +120,10 @@ class Event implements RouteParametersInterface, \Stringable
     #[Groups('event.read')]
     private ?Location $location = null;
 
+    #[ORM\ManyToOne(inversedBy: 'events')]
+    #[Groups('event.read')]
+    private ?Team $team = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -323,6 +327,18 @@ class Event implements RouteParametersInterface, \Stringable
     {
         return sprintf("%s %s %s", $this->getSection(), u($this->getSport())->title(), $this->getEventDate()->format('D M d, Y h:iA'));
 
+    }
+
+    public function getTeam(): ?Team
+    {
+        return $this->team;
+    }
+
+    public function setTeam(?Team $team): static
+    {
+        $this->team = $team;
+
+        return $this;
     }
 
 

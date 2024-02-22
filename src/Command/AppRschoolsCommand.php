@@ -18,6 +18,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Zenstruck\Console\Attribute\Argument;
+use Zenstruck\Console\Attribute\Option;
 use Zenstruck\Console\ConfigureWithAttributes;
 use Zenstruck\Console\InvokableServiceCommand;
 use Zenstruck\Console\IO;
@@ -51,10 +52,10 @@ final class AppRschoolsCommand extends InvokableServiceCommand
     }
 
     public function __invoke(
-
-IO $io,
+        IO $io,
+        #[Option(description: 'reset the database')] bool $reset = false,
 ): void {
-        $this->loadExisting();
+        $this->loadExisting($reset);
         $school = $this->getEntity(School::class,  'rappahannockcountyhs');
         $html = $this->scraperService->fetchUrl(self::BASE_URL)['content'];
         $crawler = new Crawler($html, self::BASE_URL);
@@ -109,6 +110,9 @@ IO $io,
         }
         foreach ($table->getIterator() as $row) {
             $id = $row[''];
+            if (empty($row['Date'])) {
+                continue; // e.g. https://rappahannockcountyhs.rschoolteams.com/page/5416
+            }
             $dateTimeString = $row['Date'] . ' ' .  $row['Time'];
             try {
                 $dt = new \DateTime($dateTimeString);
@@ -122,6 +126,7 @@ IO $io,
             {
                 continue;
             }
+
 
             // only load if > now
 
@@ -143,6 +148,7 @@ IO $io,
                 ->setScore($row['Score'])
                 ->setSummary($row['Game Summary'])
                 ;
+            $team->addEvent($event);
         }
         $this->entityManager->flush();
 
@@ -150,12 +156,16 @@ IO $io,
 
     }
 
-    private function loadExisting()
+    private function loadExisting(bool $reset = false)
     {
-        foreach ([School::class, Team::class, Sport::class, Location::class, Event::class] as $entityClass) {
+        foreach ([Event::class, Team::class,  Sport::class, School::class, Location::class, ] as $entityClass) {
             $repo = $this->entityManager->getRepository($entityClass);
             foreach ($repo->findAll() as $entity) {
-                $this->existing[$entityClass][$entity->getCode()] = $entity;
+                if ($reset) {
+                    $this->entityManager->remove($entity);
+                } else {
+                    $this->existing[$entityClass][$entity->getCode()] = $entity;
+                }
             }
         }
     }

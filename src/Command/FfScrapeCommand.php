@@ -49,8 +49,7 @@ final class FfScrapeCommand extends InvokableServiceCommand
     public function __invoke(
         IO   $io,
 
-        #[Option(description: 'reset the scrape cache')]
-        bool $reset = false,
+        #[Option(description: 'reset the scrape cache')] bool $reset = false,
     ): int
     {
 

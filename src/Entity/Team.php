@@ -6,6 +6,7 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\TeamRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Survos\CoreBundle\Entity\RouteParametersInterface;
 use Survos\CoreBundle\Entity\RouteParametersTrait;
@@ -43,11 +44,15 @@ class Team implements RouteParametersInterface, \Stringable
     #[Groups(['event.read','team.read'])]
     private ?int $rSchoolId = null;
 
+    #[ORM\OneToMany(mappedBy: 'team', targetEntity: Event::class)]
+    private Collection $events;
+
     public function __construct(?string $code=null)
     {
         if ($code) {
             $this->setCode($code);
         }
+        $this->events = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -128,6 +133,36 @@ class Team implements RouteParametersInterface, \Stringable
     public function setRSchoolId(?int $rSchoolId): static
     {
         $this->rSchoolId = $rSchoolId;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Event>
+     */
+    public function getEvents(): Collection
+    {
+        return $this->events;
+    }
+
+    public function addEvent(Event $event): static
+    {
+        if (!$this->events->contains($event)) {
+            $this->events->add($event);
+            $event->setTeam($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEvent(Event $event): static
+    {
+        if ($this->events->removeElement($event)) {
+            // set the owning side to null (unless already changed)
+            if ($event->getTeam() === $this) {
+                $event->setTeam(null);
+            }
+        }
 
         return $this;
     }

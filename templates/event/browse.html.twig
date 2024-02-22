@@ -48,13 +48,13 @@
     </twig:block>
 
     <twig:block name="id">
-        <a target="_blank" href="https://rappahannockcountyhs.rschoolteams.com/page/{{ row.rSchoolId }}">
-            {{ row.rSchoolId }}
+        <a target="_blank" href="https://rappahannockcountyhs.rschoolteams.com/page/{{ row.team.rSchoolId }}">
+            {{ row.team.rSchoolId }}
         </a>
     </twig:block>
-    <twig:block name="submissionCount">
-        <a href="{{ path('event_slideshow', row.rp) }}">{{ row.submissionCount }}</a>
-    </twig:block>
+{#    <twig:block name="submissionCount">#}
+{#        <a href="{{ path('event_slideshow', row.rp) }}">{{ row.submissionCount }}</a>#}
+{#    </twig:block>#}
     <twig:block name="sport">
         {{ row.sport.code }}
     </twig:block>
