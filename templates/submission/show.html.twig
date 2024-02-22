@@ -17,7 +17,7 @@
         {% endif %}
     {% endfor %}
 
-    {% if is_granted('ROLE_ADMIN') %}
+    {% if (app.environment == 'dev') or is_granted('ROLE_ADMIN') %}
     <h3>S3</h3>
     {% set s3Url = vich_uploader_asset(submission) %}
     <a href="{{ s3Url }}" target="_blank">See on S3
