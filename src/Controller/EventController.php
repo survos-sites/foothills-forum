@@ -66,7 +66,7 @@ class EventController extends AbstractController
 
         // saved by session, could eventually be event or place when this is generic
         $session = $request->getSession();
-        $formVarsToSaveInSession = ['credit'];
+        $formVarsToSaveInSession = ['credit','email'];
         foreach ($formVarsToSaveInSession as $formVar) {
             $value = $session->get($formVar, '');
             $propertyAccessor->setValue($submission, $formVar, $value);

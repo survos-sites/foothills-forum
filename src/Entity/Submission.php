@@ -89,7 +89,12 @@ class Submission implements RouteParametersInterface, MarkingInterface, \Stringa
     private ?string $notes = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups('submission.read')]
     private ?string $credit = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups('submission.read')]
+    private ?string $email = null;
 
     public function getImageFile(): ?File
     {
@@ -193,5 +198,17 @@ class Submission implements RouteParametersInterface, MarkingInterface, \Stringa
     public function __toString()
     {
         return $this->getEvent()->getTitle() . '#' . $this->getId();
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(?string $email): static
+    {
+        $this->email = $email;
+
+        return $this;
     }
 }

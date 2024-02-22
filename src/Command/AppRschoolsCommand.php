@@ -6,6 +6,7 @@ use App\Entity\Event;
 use App\Entity\Location;
 use App\Entity\School;
 use App\Entity\Sport;
+use App\Entity\Submission;
 use App\Entity\Team;
 use App\Repository\EventRepository;
 use App\Repository\SchoolRepository;
@@ -156,7 +157,7 @@ final class AppRschoolsCommand extends InvokableServiceCommand
 
     private function loadExisting(bool $reset = false)
     {
-        foreach ([Event::class, Team::class,  Sport::class, School::class, Location::class, ] as $entityClass) {
+        foreach ([Submission::class, Event::class, Team::class,  Sport::class, School::class, Location::class, ] as $entityClass) {
             $repo = $this->entityManager->getRepository($entityClass);
             foreach ($repo->findAll() as $entity) {
                 if ($reset) {

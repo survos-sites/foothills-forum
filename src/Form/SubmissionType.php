@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Submission;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vich\UploaderBundle\Form\Type\VichImageType;
@@ -32,7 +33,12 @@ class SubmissionType extends AbstractType
             'required' => false,
             'help' => "e.g. Player name, action, etc."
         ]);
-        $builder->add('credit', null, [
+        $builder
+            ->add('email', EmailType::class, [
+                'required' => true
+
+            ])
+            ->add('credit', null, [
             'required' => true,
             'help' => "Your name for photo credit"
         ])

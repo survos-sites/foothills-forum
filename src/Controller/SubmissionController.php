@@ -9,6 +9,7 @@ use App\Form\SubmissionType;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Flysystem\FilesystemOperator;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
+use Liip\ImagineBundle\Service\FilterService;
 use Survos\WorkflowBundle\Controller\HandleTransitionsInterface;
 use Survos\WorkflowBundle\Traits\HandleTransitionsTrait;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -19,6 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\Part\DataPart;
+use Symfony\Component\Mime\Part\File;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Workflow\WorkflowInterface;
 use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
@@ -27,7 +29,11 @@ use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 class SubmissionController extends AbstractController implements HandleTransitionsInterface
 {
     use HandleTransitionsTrait;
-    public function __construct(private EntityManagerInterface $entityManager)
+
+    public function __construct(
+//        #[Autowire('%liip_imagine.service.filter%')]
+//        private FilterService $filterService,
+        private EntityManagerInterface $entityManager)
     {
     }
 
@@ -46,85 +52,94 @@ class SubmissionController extends AbstractController implements HandleTransitio
     }
 
     #[Route('/', name: 'submission_show', options: ['expose' => true])]
-        public function show(Submission $submission, UploaderHelper $uploaderHelper
-    , MailerInterface $mailer, CacheManager $imagineCacheManager,
-    #[Autowire('%kernel.project_dir%')] $projectDir
+    public function show(Submission                          $submission, UploaderHelper $uploaderHelper
+        , MailerInterface                                    $mailer, CacheManager $imagineCacheManager,
+                         #[Autowire('%kernel.project_dir%')] $projectDir
     ): Response
-        {
+    {
+        $filter = 'squared_thumbnail_medium';
+        $image = $submission->getImageName();
+        $forced = false;
 
-            $resolvedPath = $imagineCacheManager->getBrowserPath($submission->getImageName(), 'squared_thumbnail_medium');
-//            $path = $projectDir . '/public/media/cache/squared_thumbnail_medium/' . $submission->getImageName();
-//            assert(file_exists($path), $path);
 
+//        if ($this->filterService->warmUpCache($image, $filter, null, $forced)) {
+//
+//        } else {
+//        }
+//
+
+        $resolvedPathx = $imagineCacheManager->getBrowserPath($image, $filter);
+        $resolvedPath = $imagineCacheManager->resolve($image, $filter);
+
+        $path = $projectDir . '/public/media/cache/' . $filter . '/' . $image;
+//        dd($path, $resolvedPath, $resolvedPathx);
+//        assert(file_exists($path), $path);
 
 
         $addr = 'tacman@gmail.com';
-            $survos = 'tac@survos.com';
-            // @todo: dispatch!
-            $email = (new TemplatedEmail())
-                ->htmlTemplate('emails/submission.html.twig', ['sub'])
-                ->context([
-                    'imageUrl' => $resolvedPath,
-                    'submission' => $submission,
-                    'expiration_date' => new \DateTime('+7 days'),
-                    'username' => 'foo',
-                ])
-//                ->addPart(new DataPart($path))
-                ->from($survos)
-                ->to(...[$addr] )
-                //->cc('cc@example.com')
-                //->bcc('bcc@example.com')
-                //->replyTo('fabien@example.com')
-                ->priority(Email::PRIORITY_HIGH)
-                ->subject('Photo submitted to ' . $submission->getEvent()->getTitle())
-                // get the image contents from a PHP resource
-                // get the image contents from an existing file
-                ->html(sprintf('<p>See Twig integration for better HTML integration!
-
-%s
-</p>', $submission->getImageName()));
+        $survos = 'tac@survos.com';
+        $cidId = 'image-' . $submission->getId();
+        // @todo: dispatch!
+        $email = (new TemplatedEmail())
+            ->htmlTemplate('emails/submission.html.twig', ['sub'])
+            ->context([
+                'cidId' => $cidId,
+                'imageUrl' => $resolvedPath,
+                'submission' => $submission,
+                'expiration_date' => new \DateTime('+7 days'),
+                'username' => 'foo',
+            ])
+//            ->addPart((new DataPart(new File($path), $cidId, 'image/jpeg'))->asInline())
+//            ->addPart(new DataPart($path))
+            ->from($survos)
+            ->to(...[$addr])
+            //->cc('cc@example.com')
+            //->bcc('bcc@example.com')
+            //->replyTo('fabien@example.com')
+            ->priority(Email::PRIORITY_HIGH)
+            ->subject('Photo submitted to ' . $submission->getEvent()->getTitle());
 //            $email->attach(4)
 
         try {
-//            $mailer->send($email);
+            $mailer->send($email);
         } catch (\Exception $exception) {
             dd($exception->getMessage());
         }
 
         return $this->render('submission/show.html.twig', [
             'uploadHelper' => $uploaderHelper,
-                'submission' => $submission,
-            ]);
-        }
+            'submission' => $submission,
+        ]);
+    }
 
     #[Route('/edit', name: 'submission_edit', options: ['expose' => true])]
-        public function edit(Request $request, Submission $submission): Response
-        {
-            $form = $this->createForm(SubmissionType::class, $submission);
-            $form->handleRequest($request);
+    public function edit(Request $request, Submission $submission): Response
+    {
+        $form = $this->createForm(SubmissionType::class, $submission);
+        $form->handleRequest($request);
 
-            if ($form->isSubmitted() && $form->isValid()) {
-                $this->entityManager->flush();
-
-                return $this->redirectToRoute('submission_index');
-            }
-
-            return $this->render('submission/edit.html.twig', [
-                'submission' => $submission,
-                'form' => $form->createView(),
-            ]);
-        }
-
-    #[Route('/delete', name: 'submission_delete', methods: ['DELETE'])]
-        public function delete(Request $request, Submission $submission): Response
-        {
-            // hard-coded to getId, should be get parameter of uniqueIdentifiers()
-            if ($this->isCsrfTokenValid('delete'.$submission->getId(), $request->request->get('_token'))) {
-                $entityManager = $this->entityManager;
-                $entityManager->remove($submission);
-                $entityManager->flush();
-            }
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->entityManager->flush();
 
             return $this->redirectToRoute('submission_index');
         }
+
+        return $this->render('submission/edit.html.twig', [
+            'submission' => $submission,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/delete', name: 'submission_delete', methods: ['DELETE'])]
+    public function delete(Request $request, Submission $submission): Response
+    {
+        // hard-coded to getId, should be get parameter of uniqueIdentifiers()
+        if ($this->isCsrfTokenValid('delete' . $submission->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->entityManager;
+            $entityManager->remove($submission);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('submission_index');
+    }
 }
