@@ -8,6 +8,7 @@ use App\Entity\Event;
 use App\Entity\Submission;
 use App\Form\EventType;
 use App\Form\SubmissionType;
+use App\Message\SendPhotoForApproval;
 use Doctrine\ORM\EntityManagerInterface;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Symfony\Bridge\Twig\Attribute\Template;
@@ -17,6 +18,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\Part\DataPart;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
@@ -62,89 +64,7 @@ class EventController extends AbstractController
     }
 
 
-    #[Route('/submission/new', name: 'event_submission_new', options: ['expose' => true])]
-    public function new(Event $event, Request $request, PropertyAccessorInterface $propertyAccessor,
-                        CacheManager $imagineCacheManager,
-                        #[Autowire('%kernel.project_dir%')] $projectDir,
 
-                        MailerInterface $mailer): Response
-    {
-        $submission = new Submission();
-
-        // saved by session, could eventually be event or place when this is generic
-        $session = $request->getSession();
-        $formVarsToSaveInSession = ['credit','email'];
-        foreach ($formVarsToSaveInSession as $formVar) {
-            $value = $session->get($formVar, '');
-            $propertyAccessor->setValue($submission, $formVar, $value);
-        }
-        $event->addSubmission($submission);
-//        $submission->setEvent($event);
-        $form = $this->createForm(SubmissionType::class, $submission);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->entityManager;
-            $entityManager->persist($submission);
-            $entityManager->flush();
-
-            foreach ($formVarsToSaveInSession as $formVar) {
-                $session->set($formVar, $propertyAccessor->getValue($submission, $formVar));
-            }
-            $filter = 'squared_thumbnail_medium';
-            $image = $submission->getImageName();
-            $forced = false;
-
-
-
-            $resolvedPathx = $imagineCacheManager->getBrowserPath($image, $filter);
-            $resolvedPath = $imagineCacheManager->resolve($image, $filter);
-
-            $path = $projectDir . '/public/media/cache/' . $filter . '/' . $image;
-//        dd($path, $resolvedPath, $resolvedPathx);
-//        assert(file_exists($path), $path);
-
-
-            $addr = 'tacman@gmail.com';
-            $survos = 'tac@survos.com';
-            $cidId = 'image-' . $submission->getId();
-            // @todo: dispatch!
-            $email = (new TemplatedEmail())
-                ->htmlTemplate('emails/submission.html.twig', ['sub'])
-                ->context([
-                    'cidId' => $cidId,
-                    'imageUrl' => $resolvedPath,
-//                    'submission' => $submission,
-                'event' => $submission->getEvent(),
-                    'submissionRp' => $submission->getrp(),
-                    'expiration_date' => new \DateTime('+7 days'),
-                    'username' => 'foo',
-                ])
-//            ->addPart((new DataPart(new File($path), $cidId, 'image/jpeg'))->asInline())
-//            ->addPart(new DataPart($path))
-                ->from($survos)
-                ->to(...[$addr])
-                //->cc('cc@example.com')
-                //->bcc('bcc@example.com')
-                //->replyTo('fabien@example.com')
-                ->priority(Email::PRIORITY_HIGH)
-                ->subject('Photo submitted to ' . $submission->getEvent()->getTitle());
-//            $email->attach(4)
-
-//                $mailer->send($email);
-            try {
-            } catch (\Exception $exception) {
-                dd($exception->getMessage());
-            }
-
-
-            return $this->redirectToRoute('submission_show', $submission->getrp());
-        }
-        return $this->render('submission/new.html.twig', [
-            'submission' => $submission,
-            'form' => $form->createView(),
-        ]);
-    }
 
 
     #[Route('/edit', name: 'event_edit', options: ['expose' => true])]

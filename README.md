@@ -38,3 +38,10 @@ aws s3 ls s3://foothills-forum/
 https://rappnews.com/tncms/webservice/#operation/editorial_asset_options
 OpenAPI Schema: https://www.rappnews.com/tncms/webservice/resources/
 
+## Subscriptions
+
+Users can subcribe to submissions to a entity, e.g a Team or a Sport.  When a photo is added to one of those, an email is sent.
+
+In the case of an event, the photos are sent in batch X hours after then event.
+
+@todo: use ngrok to debug google

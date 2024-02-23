@@ -2,12 +2,29 @@ The following photo was received.
 
 {{ event.title }}
 
+{% if cidId is defined %}
 <h3>Embedded</h3>
 <img src="cid:image-{{ cidId }}" />
+{% endif %}
 
-<h3>Link to {{ imageUrl }}</h3>
-<a href="{{ imageUrl }}">
-    <img src="{{ imageUrl }}" />
+    {% set flysystemPath = submission.imageName %}
+{% set filter = 'squared_thumbnail_medium' %}
+        {% set thumbUrl = flysystemPath | imagine_filter(filter)   %}
+<div>
+    <figure class="figure">
+        <a href="{{ thumbUrl }}" target="_blank">
+            <img src="{{ thumbUrl }}" class="figure-img img-fluid rounded" alt="{{ thumbUrl }}">
+        </a>
+        <figcaption title="{{ flysystemPath }}" class="figure-caption text-end">
+            <b>
+                {#                        {{ flysystemPath }}#}
+                Credit: {{ submission.credit }}
+            </b>
+        </figcaption>
+    </figure>
+</div>
+
+<a class="btn btn-primary" href="{{ path('submission_show', submission.rp) }}">
+    Approve Or Deny
 </a>
 
-To approve or deny {{ submissionRp|json_encode }}...

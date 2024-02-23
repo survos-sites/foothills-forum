@@ -6,8 +6,11 @@ namespace App\Controller;
 
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\IriConverterInterface;
+use App\Entity\Event;
 use App\Entity\Submission;
+use App\Entity\User;
 use App\Form\SubmissionType;
+use App\Message\SendPhotoForApproval;
 use App\Repository\SubmissionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Survos\ApiGrid\Components\ApiGridComponent;
@@ -17,6 +20,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 // @todo: if Workflow Bundle active
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -73,5 +79,61 @@ class SubmissionCollectionController extends AbstractController
             'submissions' => $submissionRepository->findBy([], [], 30),
         ]);
     }
+
+    #[Route('/submission/{eventId}/new', name: 'event_submission_new', options: ['expose' => true])]
+    public function new(Event $event,
+                        Request $request,
+                        PropertyAccessorInterface $propertyAccessor,
+                        MessageBusInterface $bus
+    ): Response
+    {
+        // @todo: use MapQuery to extract the request
+        $submission = new Submission();
+        /** @var User $user */
+        $user = $this->getUser();
+
+        // saved by session, could eventually be event or place when this is generic
+        $session = $request->getSession();
+        $formVarsToSaveInSession = ['credit','email'];
+        foreach ($formVarsToSaveInSession as $formVar) {
+
+            if ($user)
+            {
+                $value = $propertyAccessor->getValue($user,
+                    $formVar=='credit' ? 'creditName' : $formVar, '');
+                $propertyAccessor->setValue($submission, $formVar, $value);
+            }
+            $value = $session->get($formVar, '');
+            if ($value) {
+                $propertyAccessor->setValue($submission, $formVar, $value);
+            }
+        }
+        $event->addSubmission($submission);
+//        $submission->setEvent($event);
+        $form = $this->createForm(SubmissionType::class, $submission);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $user->addSubmission($submission);
+            $entityManager = $this->entityManager;
+            $entityManager->persist($submission);
+            $entityManager->flush();
+
+            $this->addFlash('info', 'Thanks! Your photo is now being reviewed');
+            $bus->dispatch((new SendPhotoForApproval($submission->getId())));
+
+            foreach ($formVarsToSaveInSession as $formVar) {
+                $session->set($formVar, $propertyAccessor->getValue($submission, $formVar));
+            }
+
+            return $this->redirectToRoute('submission_show', $submission->getrp());
+        }
+        return $this->render('submission/new.html.twig', [
+            'submission' => $submission,
+            'form' => $form->createView(),
+        ]);
+    }
+
 
 }

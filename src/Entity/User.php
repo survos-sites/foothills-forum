@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Survos\AuthBundle\Traits\OAuthIdentifiersInterface;
 use Survos\AuthBundle\Traits\OAuthIdentifiersTrait;
@@ -32,6 +34,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, OAuthId
      */
     #[ORM\Column(nullable: true)]
     private ?string $password = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $creditName = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $agreeToTerms = null;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Submission::class)]
+    private Collection $submissions;
+
+    public function __construct()
+    {
+        $this->submissions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -101,5 +117,59 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, OAuthId
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getCreditName(): ?string
+    {
+        return $this->creditName;
+    }
+
+    public function setCreditName(?string $creditName): static
+    {
+        $this->creditName = $creditName;
+
+        return $this;
+    }
+
+    public function isAgreeToTerms(): ?bool
+    {
+        return $this->agreeToTerms;
+    }
+
+    public function setAgreeToTerms(?bool $agreeToTerms): static
+    {
+        $this->agreeToTerms = $agreeToTerms;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Submission>
+     */
+    public function getSubmissions(): Collection
+    {
+        return $this->submissions;
+    }
+
+    public function addSubmission(Submission $submission): static
+    {
+        if (!$this->submissions->contains($submission)) {
+            $this->submissions->add($submission);
+            $submission->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubmission(Submission $submission): static
+    {
+        if ($this->submissions->removeElement($submission)) {
+            // set the owning side to null (unless already changed)
+            if ($submission->getUser() === $this) {
+                $submission->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

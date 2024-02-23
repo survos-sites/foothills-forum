@@ -18,11 +18,15 @@ class RegistrationFormType extends AbstractType
     {
         $builder
             ->add('email')
+            ->add('creditName', null, [
+                'help' => "Your name as you'd like it to appear when crediting your photo"
+            ])
             ->add('agreeTerms', CheckboxType::class, [
-                                'mapped' => false,
+                'mapped' => false,
+                'help' => "After agreeing to the terms as a registered user, you will not need to check the agreement box for each photo.",
                 'constraints' => [
                     new IsTrue([
-                        'message' => 'You should agree to our terms.',
+                        'message' => 'We need real terms before launching!',
                     ]),
                 ],
             ])

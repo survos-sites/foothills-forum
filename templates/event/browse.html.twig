@@ -39,7 +39,6 @@
     </twig:block>
     <twig:block name="eventDate">
         <p>
-            <a class="btn btn-sm btn-outline-primary" href="{{ path('event_show', row.rp) }}" target="_blank">Flyer</a>
             <time data-controller="timeago"
                   data-timeago-add-suffix-value="true"
                   data-timeago-datetime-value="{{ row.eventDate|date('c') }}"></time>

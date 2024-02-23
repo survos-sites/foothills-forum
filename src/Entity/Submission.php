@@ -96,6 +96,9 @@ class Submission implements RouteParametersInterface, MarkingInterface, \Stringa
     #[Groups('submission.read')]
     private ?string $email = null;
 
+    #[ORM\ManyToOne(inversedBy: 'submissions')]
+    private ?User $user = null;
+
     public function getImageFile(): ?File
     {
         return $this->imageFile;
@@ -215,5 +218,17 @@ class Submission implements RouteParametersInterface, MarkingInterface, \Stringa
     public function getCode()
     {
         return sprintf("photo-%d", $this->getId());
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
     }
 }

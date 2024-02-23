@@ -47,11 +47,16 @@
     {% endfor %}
 
     {% if is_granted('ROLE_ADMIN') %}
+        <h3>Admin</h3>
     {{ include('@SurvosWorkflow/_entity_transitions.html.twig', {transition_path: 'submission_transition', entity: submission}) }}
     {% endif %}
 
     {% if submission.event %}
     <a class="btn btn-primary" href="{{ path('event_submission_new', submission.event.rp) }}">Submit Another Photo at this event</a>
     {% endif %}
+
+    <h3>Email to Admin</h3>
+
+    {{ include('emails/submission.html.twig', {event:submission.event}) }}
 
 {% endblock %}
