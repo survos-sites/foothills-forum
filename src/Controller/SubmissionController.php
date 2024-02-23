@@ -53,58 +53,14 @@ class SubmissionController extends AbstractController implements HandleTransitio
 
     #[Route('/', name: 'submission_show', options: ['expose' => true])]
     public function show(Submission                          $submission, UploaderHelper $uploaderHelper
-        , MailerInterface                                    $mailer, CacheManager $imagineCacheManager,
-                         #[Autowire('%kernel.project_dir%')] $projectDir
     ): Response
     {
-        $filter = 'squared_thumbnail_medium';
-        $image = $submission->getImageName();
-        $forced = false;
-
-
 //        if ($this->filterService->warmUpCache($image, $filter, null, $forced)) {
 //
 //        } else {
 //        }
 //
 
-        $resolvedPathx = $imagineCacheManager->getBrowserPath($image, $filter);
-        $resolvedPath = $imagineCacheManager->resolve($image, $filter);
-
-        $path = $projectDir . '/public/media/cache/' . $filter . '/' . $image;
-//        dd($path, $resolvedPath, $resolvedPathx);
-//        assert(file_exists($path), $path);
-
-
-        $addr = 'tacman@gmail.com';
-        $survos = 'tac@survos.com';
-        $cidId = 'image-' . $submission->getId();
-        // @todo: dispatch!
-        $email = (new TemplatedEmail())
-            ->htmlTemplate('emails/submission.html.twig', ['sub'])
-            ->context([
-                'cidId' => $cidId,
-                'imageUrl' => $resolvedPath,
-                'submission' => $submission,
-                'expiration_date' => new \DateTime('+7 days'),
-                'username' => 'foo',
-            ])
-//            ->addPart((new DataPart(new File($path), $cidId, 'image/jpeg'))->asInline())
-//            ->addPart(new DataPart($path))
-            ->from($survos)
-            ->to(...[$addr])
-            //->cc('cc@example.com')
-            //->bcc('bcc@example.com')
-            //->replyTo('fabien@example.com')
-            ->priority(Email::PRIORITY_HIGH)
-            ->subject('Photo submitted to ' . $submission->getEvent()->getTitle());
-//            $email->attach(4)
-
-        try {
-            $mailer->send($email);
-        } catch (\Exception $exception) {
-            dd($exception->getMessage());
-        }
 
         return $this->render('submission/show.html.twig', [
             'uploadHelper' => $uploaderHelper,

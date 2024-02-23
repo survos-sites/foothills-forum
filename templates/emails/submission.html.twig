@@ -1,6 +1,6 @@
 The following photo was received.
 
-{{ submission.event.title }}
+{{ event.title }}
 
 <h3>Embedded</h3>
 <img src="cid:image-{{ cidId }}" />
@@ -10,4 +10,4 @@ The following photo was received.
     <img src="{{ imageUrl }}" />
 </a>
 
-To approve or deny...
+To approve or deny {{ submissionRp|json_encode }}...
