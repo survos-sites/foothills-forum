@@ -11,6 +11,7 @@ use App\Entity\Submission;
 use App\Entity\User;
 use App\Form\SubmissionType;
 use App\Message\SendPhotoForApproval;
+use App\MessageHandler\SendPhotoForApprovalHandler;
 use App\Repository\SubmissionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Survos\ApiGrid\Components\ApiGridComponent;
@@ -114,20 +115,24 @@ class SubmissionCollectionController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            $user->addSubmission($submission);
+            if ($user) {
+                $user->addSubmission($submission);
+            }
             $entityManager = $this->entityManager;
             $entityManager->persist($submission);
             $entityManager->flush();
+            $entityManager->refresh($user);
 
-            $this->addFlash('info', 'Thanks! Your photo is now being reviewed');
-            $bus->dispatch((new SendPhotoForApproval($submission->getId())));
+//            $this->addFlash('info', 'Thanks! Your photo is now being reviewed');
+//            $bus->dispatch((new SendPhotoForApproval($submission->getId())));
 
             foreach ($formVarsToSaveInSession as $formVar) {
-                $session->set($formVar, $propertyAccessor->getValue($submission, $formVar));
+//                $session->set($formVar, $propertyAccessor->getValue($submission, $formVar));
             }
 
-            return $this->redirectToRoute('submission_show', $submission->getrp());
+
+            $redirect =  $this->redirectToRoute('submission_show', $submission->getrp());
+            return $redirect;
         }
         return $this->render('submission/new.html.twig', [
             'submission' => $submission,

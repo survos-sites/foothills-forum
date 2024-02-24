@@ -142,6 +142,7 @@
         }
     },
     "require-dev": {
+        "phpstan/phpstan": "^1.10",
         "phpunit/phpunit": "^9.5",
         "survos/maker-bundle": "*",
         "symfony/browser-kit": "^6.4 || ^7.0",

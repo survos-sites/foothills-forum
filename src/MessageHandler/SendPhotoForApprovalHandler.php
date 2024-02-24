@@ -10,6 +10,8 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Mime\Email;
+use Symfony\Component\Serializer\Normalizer\NormalizableInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 #[AsMessageHandler]
 final class SendPhotoForApprovalHandler
@@ -19,6 +21,7 @@ final class SendPhotoForApprovalHandler
     public function __construct(
         private SubmissionRepository $submissionRepository,
         private CacheManager         $imagineCacheManager,
+        private NormalizerInterface $normalizer,
         private MailerInterface $mailer,
         #[Autowire('%kernel.project_dir%')] private string $projectDir,
     )
@@ -30,8 +33,6 @@ final class SendPhotoForApprovalHandler
     )
     {
         $submission = $this->submissionRepository->find($message->getSubmissionId());
-
-
         $filter = 'squared_thumbnail_medium';
         $image = $submission->getImageName();
         $forced = false;
@@ -39,29 +40,25 @@ final class SendPhotoForApprovalHandler
 
 //        $resolvedPathx = $imagineCacheManager->getBrowserPath($image, $filter);
         $resolvedPath = $this->imagineCacheManager->resolve($image, $filter);
-
         $path = $this->projectDir . '/public/media/cache/' . $filter . '/' . $image;
 //        dd($path, $resolvedPath, $resolvedPathx);
 //        assert(file_exists($path), $path);
 
 
+//        $eventData = $this->normalizable->normalize($event, '');
+        $submissionData = [];
+//        $submissionData = $this->normalizer->normalize($submission, null, ['groups' => ['submission.email', 'submission.read','rp']]);
         $addr = 'tacman@gmail.com';
         $survos = 'tac@survos.com';
         $cidId = 'image-' . $submission->getId();
-        // @todo: serialize the entities
         $email = (new TemplatedEmail())
             ->htmlTemplate('emails/submission.html.twig', ['sub'])
-            ->context([
+            ->context($context = [
                 'cidId' => $cidId,
                 'imageUrl' => $resolvedPath,
 //                    'submission' => $submission,
 //                'event' => $submission->getEvent(),
-                'submission' => [
-                    'rp' => $submission->getrp(),
-                    'id' => $submission->getId(),
-                    'credit' => $submission->getCredit(),
-                    'imageName' => $submission->getImageName()
-                ],
+                'submission' =>$submissionData,
                 'expiration_date' => new \DateTime('+7 days'),
                 'username' => 'foo',
             ])
@@ -76,8 +73,8 @@ final class SendPhotoForApprovalHandler
             ->subject('Photo submitted to ' . $submission->getEvent()->getTitle());
 //            $email->attach(4)
 
-        dd($email);
-                $this->mailer->send($email);
+//        dd($context, $email);
+//                $this->mailer->send($email);
         try {
         } catch (\Exception $exception) {
             dd($exception->getMessage());
