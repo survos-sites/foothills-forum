@@ -44,4 +44,4 @@ Users can subcribe to submissions to a entity, e.g a Team or a Sport.  When a ph
 
 In the case of an event, the photos are sent in batch X hours after then event.
 
-@todo: use ngrok to debug google
+@todo: use ngrok or pinggy or localtunnel to debug google

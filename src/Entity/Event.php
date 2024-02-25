@@ -48,7 +48,7 @@ class Event implements RouteParametersInterface, \Stringable
 
     #[ORM\Id]
     #[ORM\Column]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue('SEQUENCE')]
     #[ApiProperty(identifier: false)]
     private ?int $id = null;
 

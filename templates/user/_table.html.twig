@@ -1,0 +1,44 @@
+
+
+<table class="table js-datatable">
+    <thead>
+    <tr>
+        <th>actions</th>
+                    <th>Id</th>
+                    <th>Email</th>
+                    <th>Roles</th>
+                    <th>Password</th>
+                    <th>CreditName</th>
+                    <th>AgreeToTerms</th>
+                    <th>Identifiers</th>
+            </tr>
+    </thead>
+    <tbody>
+    {% for user in users %}
+    <tr>
+        <td>
+            <a href="{{ path('user_show', user.rp) }}">
+                <span class="fas fa-eye"></span>
+                <i class="bi bi-info"></i>
+            </a>
+            <a href="{{ path('user_edit', user.rp) }}">
+                <span class="fas fa-edit"></span>
+                <i class="bi bi-pencil"></i>
+            </a>
+        </td>
+
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
+                    <td>{{ user.password }}</td>
+                    <td>{{ user.creditName }}</td>
+                    <td>{{ user.agreeToTerms ? 'Yes' : 'No' }}</td>
+                    <td>{{ user.identifiers ? user.identifiers|json_encode : '' }}</td>
+            </tr>
+    {% else %}
+    <tr>
+        <td colspan="8">no records found</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>

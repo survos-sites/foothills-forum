@@ -45,7 +45,7 @@ class Location implements RouteParametersInterface, \Stringable
     const MEILI_ROUTE='meili-locations';
 
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue('SEQUENCE')]
     #[ORM\Column]
     #[ApiProperty(identifier: false)]
     private ?int $id = null;

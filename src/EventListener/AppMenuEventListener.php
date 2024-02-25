@@ -52,7 +52,11 @@ final class AppMenuEventListener
             return;
         }
         $menu = $event->getMenu();
-        $this->authMenu($this->authorizationChecker, $this->security, $menu);
+        $authMenu = $this->authMenu($this->authorizationChecker, $this->security, $menu);
+        if ($this->isGranted('ROLE_USER')) {
+
+            $this->add($authMenu, 'user_profile');
+        }
     }
 
     public function pageMenu(KnpMenuEvent $event): void

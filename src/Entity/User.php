@@ -8,6 +8,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Survos\AuthBundle\Traits\OAuthIdentifiersInterface;
 use Survos\AuthBundle\Traits\OAuthIdentifiersTrait;
+use Survos\CoreBundle\Entity\RouteParametersInterface;
+use Survos\CoreBundle\Entity\RouteParametersTrait;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -15,11 +17,12 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: 'users')]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
-class User implements UserInterface, PasswordAuthenticatedUserInterface, OAuthIdentifiersInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface, OAuthIdentifiersInterface, \Stringable, RouteParametersInterface
 {
     use OAuthIdentifiersTrait;
+    use RouteParametersTrait;
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue('SEQUENCE')]
     #[ORM\Column]
     private ?int $id = null;
 
@@ -41,7 +44,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, OAuthId
     #[ORM\Column(nullable: true)]
     private ?bool $agreeToTerms = null;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Submission::class)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Submission::class, cascade: ['persist','remove'])]
     private Collection $submissions;
 
     public function __construct()
@@ -171,5 +174,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, OAuthId
         }
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->getEmail();
     }
 }

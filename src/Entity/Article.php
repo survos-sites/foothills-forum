@@ -112,7 +112,7 @@ class Article implements RouteParametersInterface
 {
     use RouteParametersTrait;
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue('SEQUENCE')]
     #[ORM\Column]
     private ?int $id = null;
 

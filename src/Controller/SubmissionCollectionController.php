@@ -82,6 +82,7 @@ class SubmissionCollectionController extends AbstractController
     }
 
     #[Route('/submission/{eventId}/new', name: 'event_submission_new', options: ['expose' => true])]
+    #[IsGranted('IS_AUTHENTICATED')]
     public function new(Event $event,
                         Request $request,
                         PropertyAccessorInterface $propertyAccessor,
@@ -123,8 +124,8 @@ class SubmissionCollectionController extends AbstractController
             $entityManager->flush();
             $entityManager->refresh($user);
 
-//            $this->addFlash('info', 'Thanks! Your photo is now being reviewed');
-//            $bus->dispatch((new SendPhotoForApproval($submission->getId())));
+            $this->addFlash('info', 'Thanks! Your photo is now being reviewed');
+            $bus->dispatch((new SendPhotoForApproval($submission->getId())));
 
             foreach ($formVarsToSaveInSession as $formVar) {
 //                $session->set($formVar, $propertyAccessor->getValue($submission, $formVar));

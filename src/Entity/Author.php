@@ -53,7 +53,7 @@ class Author implements RouteParametersInterface
 {
     use RouteParametersTrait;
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue('SEQUENCE')]
     #[ORM\Column]
     #[Groups(['article.read', 'author.read'])]
     private ?int $id = null;

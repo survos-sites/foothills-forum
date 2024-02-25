@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use ApiPlatform\Doctrine\Orm\State\CollectionProvider;
 use App\Entity\Article;
+use KnpU\OAuth2ClientBundle\Client\Provider\GithubClient;
 use Survos\ApiGrid\Components\ApiGridComponent;
 use Survos\ApiGrid\State\MeiliSearchStateProvider;
 use Survos\InspectionBundle\Services\InspectionService;
@@ -13,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Archetype\Facades\PHPFile;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class AppController extends AbstractController
 {
@@ -75,6 +77,18 @@ class AppController extends AbstractController
 
         return $this->render('app/index.html.twig', [
             'class' => Article::class,
+        ]);
+    }
+
+    #[Route('/profile', name: 'user_profile')]
+    #[IsGranted('IS_AUTHENTICATED')]
+    public function userProfile(GithubClient $client): Response
+    {
+
+//        $authorizations = $client->api('authorizations')->all();
+        $user = $this->getUser();
+        return $this->render('app/profile.html.twig', [
+            'user' => $user
         ]);
     }
 }

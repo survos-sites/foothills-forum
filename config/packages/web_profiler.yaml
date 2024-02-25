@@ -1,3 +1,13 @@
+web_profiler:
+    toolbar: true
+    intercept_redirects: true
+
+framework:
+    profiler:
+        only_exceptions: false
+        collect_serializer_data: true
+
+
 when@dev:
     web_profiler:
         toolbar: true

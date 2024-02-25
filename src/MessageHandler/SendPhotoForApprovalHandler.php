@@ -47,7 +47,7 @@ final class SendPhotoForApprovalHandler
 
 //        $eventData = $this->normalizable->normalize($event, '');
         $submissionData = [];
-//        $submissionData = $this->normalizer->normalize($submission, null, ['groups' => ['submission.email', 'submission.read','rp']]);
+        $submissionData = $this->normalizer->normalize($submission, null, ['groups' => ['submission.email', 'submission.read','rp']]);
         $addr = 'tacman@gmail.com';
         $survos = 'tac@survos.com';
         $cidId = 'image-' . $submission->getId();
@@ -74,7 +74,7 @@ final class SendPhotoForApprovalHandler
 //            $email->attach(4)
 
 //        dd($context, $email);
-//                $this->mailer->send($email);
+                $this->mailer->send($email);
         try {
         } catch (\Exception $exception) {
             dd($exception->getMessage());

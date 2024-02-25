@@ -60,7 +60,7 @@ class Submission implements RouteParametersInterface, MarkingInterface, \Stringa
     use RouteParametersTrait;
     use MarkingTrait;
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue('SEQUENCE')]
     #[ORM\Column]
     #[Groups('submission.read')]
     private ?int $id = null;

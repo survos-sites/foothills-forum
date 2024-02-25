@@ -17,7 +17,7 @@ class Sport implements RouteParametersInterface, \Stringable
 {
     use RouteParametersTrait;
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue('SEQUENCE')]
     #[ORM\Column]
     private ?int $id = null;
 

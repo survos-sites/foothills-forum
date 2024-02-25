@@ -9,9 +9,11 @@
 
     {{ form_start(registrationForm) }}
         {{ form_row(registrationForm.email) }}
+    {% if registrationForm.plainPassword|default(false) %}
         {{ form_row(registrationForm.plainPassword, {
             label: 'Password'
         }) }}
+    {% endif %}
         {{ form_row(registrationForm.agreeTerms) }}
         {{ form_rest(registrationForm) }}
 

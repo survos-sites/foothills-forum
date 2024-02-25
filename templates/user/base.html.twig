@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}BASE User{% endblock %}
+
+{% block page_title %}{{ user }}{% endblock %}
+{% block page_subtitle %}{{ app.request.get('_route') }}{% endblock %}
+
+{% block body %}
+
+If we have a User entity, we should display it here.
+
+{% endblock %}

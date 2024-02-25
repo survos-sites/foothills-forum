@@ -8,6 +8,7 @@ use App\Entity\Article;
 use App\Entity\Event;
 use App\Entity\Location;
 use App\Entity\Submission;
+use App\Entity\User;
 use App\Repository\EventRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,6 +25,11 @@ class ParamConverter implements ValueResolverInterface
         // get the argument type (e.g. BookingId)
         $argumentType = $argument->getType();
         switch ($argumentType) {
+            case User::class:
+                $value = $request->attributes->get('userId');
+                $repository = $this->entityManager->getRepository($argumentType);
+                $entity = $repository->findOneBy(['id' => $value]);
+                return [$entity];
             case Event::class:
                 $value = $request->attributes->get('eventId');
                 $repository = $this->entityManager->getRepository($argumentType);
