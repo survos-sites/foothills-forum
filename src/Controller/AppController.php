@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use ApiPlatform\Doctrine\Orm\State\CollectionProvider;
 use App\Entity\Article;
+use App\Form\UserType;
 use KnpU\OAuth2ClientBundle\Client\Provider\GithubClient;
 use Survos\ApiGrid\Components\ApiGridComponent;
 use Survos\ApiGrid\State\MeiliSearchStateProvider;
@@ -80,15 +81,26 @@ class AppController extends AbstractController
         ]);
     }
 
-    #[Route('/profile', name: 'user_profile')]
+    #[Route('/profile', name: 'app_profile')]
     #[IsGranted('IS_AUTHENTICATED')]
     public function userProfile(GithubClient $client): Response
     {
 
 //        $authorizations = $client->api('authorizations')->all();
         $user = $this->getUser();
+        $form = $this->createForm(UserType::class, $user, ['attr' => ['readonly' => true, 'disabled' => true]]);
+
         return $this->render('app/profile.html.twig', [
-            'user' => $user
+            'user' => $user,
+            'form' => $form,
         ]);
     }
+
+    #[Route('/terms', name: 'app_terms')]
+    #[Template('app/terms.html.twig')]
+    public function terms(): array
+    {
+        return [];
+    }
+
 }

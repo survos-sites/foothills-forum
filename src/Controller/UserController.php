@@ -52,7 +52,7 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->entityManager->flush();
             if ($loggedInUser == $user) {
-                return $this->redirectToRoute('user_profile');
+                return $this->redirectToRoute('app_profile');
             } else {
                 return $this->redirectToRoute('user_show', $user->getrp());
             }

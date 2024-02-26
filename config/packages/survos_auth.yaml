@@ -1,3 +1,3 @@
 survos_auth:
   #  auth_menu: true
-  new_user_redirect_route: app_register
+  new_user_redirect_route: app_profile

@@ -38,4 +38,6 @@ return [
     League\FlysystemBundle\FlysystemBundle::class => ['all' => true],
     Aws\Symfony\AwsBundle::class => ['all' => true],
     Knp\Bundle\TimeBundle\KnpTimeBundle::class => ['all' => true],
+    Symfony\UX\LiveComponent\LiveComponentBundle::class => ['all' => true],
+    Symfony\UX\TogglePassword\TogglePasswordBundle::class => ['all' => true],
 ];

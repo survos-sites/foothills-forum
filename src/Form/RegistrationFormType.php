@@ -16,8 +16,12 @@ class RegistrationFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+
+
         /** @var User $user */
         $user = $options['data'];
+
+        $termsUrl = $options['termsUrl']; // or even set it here.
         $builder
             ->add('email')
             ->add('creditName', null, [
@@ -25,10 +29,12 @@ class RegistrationFormType extends AbstractType
             ])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
-                'help' => "After agreeing to the terms as a registered user, you will not need to check the agreement box for each photo.",
+                'help_html' => true,
+                    'help' =>
+                    sprintf("I agree to the <a href='%s'>Terms and Conditions</a>", $termsUrl),
                 'constraints' => [
                     new IsTrue([
-                        'message' => 'We need real terms before launching!',
+                        'message' => 'You must agree to the terms before registration',
                     ]),
                 ],
             ]);
@@ -59,6 +65,7 @@ class RegistrationFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'termsUrl' => null, // hmm, could set it here, too.
         ]);
     }
 }

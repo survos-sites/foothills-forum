@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Generator\UrlGenerator;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
@@ -28,6 +30,7 @@ class RegistrationController extends AbstractController
                              UserPasswordHasherInterface $userPasswordHasher,
                              UserAuthenticatorInterface $userAuthenticator,
                              AppAuthenticator $authenticator,
+                             UrlGeneratorInterface $urlGenerator,
                              EntityManagerInterface $entityManager
     ): Response
     {
@@ -44,7 +47,7 @@ class RegistrationController extends AbstractController
             }
         }
 //        $user->setEmail($request->get('email'));
-        $form = $this->createForm(RegistrationFormType::class, $user);
+        $form = $this->createForm(RegistrationFormType::class, $user, ['termsUrl' => $urlGenerator->generate('app_terms')]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

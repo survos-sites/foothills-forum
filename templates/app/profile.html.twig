@@ -2,7 +2,44 @@
 
 {% block body %}
 
-User profile
+    <h3>User profile</h3>
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+        <a class="btn btn-primary" href="{{ path('user_edit', user.rp)  }}">
+            Edit
+        </a>
+
+
+    <twig:InlineEditProfile :user="user">
+
+    </twig:InlineEditProfile>
+
+{#    {% if not user.password %}#}
+    {% if true %}
+        Create a password so that you can log in with simply your email (as well as via social media).
+
+        // ...
+
+<div class="toggle-password-container"> // Add "toggle-password-container" or a class that applies position: relative to this container.
+    <label for="password">Password</label>
+    <input
+        id="password"
+        name="password"
+        type="password"
+        {{ stimulus_controller('symfony/ux-toggle-password/toggle-password', {
+                buttonClasses: ['toggle-password-button'],
+        }) }}
+    >
+</div>
+        {# visibleLabel: 'Show password', // If you want to modify this label. #}
+        {# visibleIcon: 'Some svg icon', // If you want to modify this icon. #}
+        {# hiddenLabel: 'Hide password', // If you want to modify this label. #}
+        {# hiddenIcon: 'Some svg icon', // If you want to modify this icon. #}
+
+// ...
+
+    {% endif %}
 
     {{ user.email }}
     {{ user.creditName }}

@@ -55,7 +55,7 @@ final class AppMenuEventListener
         $authMenu = $this->authMenu($this->authorizationChecker, $this->security, $menu);
         if ($this->isGranted('ROLE_USER')) {
 
-            $this->add($authMenu, 'user_profile');
+            $this->add($authMenu, 'app_profile');
         }
     }
 
@@ -121,7 +121,8 @@ final class AppMenuEventListener
             return;
         }
         $menu = $event->getMenu();
-
+        $submenu = $this->addSubmenu($menu, 'About Us');
+        $this->add($submenu, 'app_terms');
 //        $this->add($menu, 'app_articles_with_doctrine')
         $submenu = $this->addSubmenu($menu, 'Articles');
 //        $this->add($submenu, 'article_browse');
