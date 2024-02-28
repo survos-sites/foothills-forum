@@ -13,6 +13,9 @@
         :columns="columns"
 >
 
+    <twig:block name="name">
+        <a href="{{ path('location_show', row.rp) }}">{{ row.name }}</a>
+    </twig:block>
     <twig:block name="id">
         <a class="btn btn-outline-primary" href="{{ path('location_submission_new', row.rp) }}">
             +PHOTO

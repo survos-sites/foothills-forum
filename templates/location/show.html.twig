@@ -1,7 +1,14 @@
 {% extends "location/base.html.twig" %}
 
 {% block body %}
-    <h1>Location</h1>
+    <h1>{{ location.name }}</h1>
+
+    {% set url = absolute_url(path('location_submission_new', location.rp)) %}
+    <div class="align-content-center">
+        <a href="{{ url }}">
+            <img src="{{ qr_code_url(url) }}"  alt="{{ url }}"/>
+        </a>
+    </div>
 
     <table class="table">
         <tbody>
@@ -12,10 +19,6 @@
             <tr>
                 <th>Code</th>
                 <td>{{ location.code }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ location.name }}</td>
             </tr>
         </tbody>
     </table>
