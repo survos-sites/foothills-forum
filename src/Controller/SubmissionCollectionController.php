@@ -112,7 +112,7 @@ class SubmissionCollectionController extends AbstractController
         }
         $event->addSubmission($submission);
 //        $submission->setEvent($event);
-        $form = $this->createForm(SubmissionType::class, $submission);
+        $form = $this->createForm(SubmissionType::class, $submission, ['user' => $user]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

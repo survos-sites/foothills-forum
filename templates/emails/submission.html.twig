@@ -1,17 +1,17 @@
 The following photo was received.
 
 {% set event = submission.event %}
-
-{{ event.title }}
+{% set flysystemPath = submission.imageName %}
 
 {% if cidId is defined %}
-<h3>Embedded</h3>
-<img src="cid:image-{{ cidId }}" />
+    <h3>
+        {{ event.title }}
+    </h3>
+    <img src="cid:image-{{ cidId }}" alt="{{ flysystemPath }}"/>
 {% endif %}
 
-    {% set flysystemPath = submission.imageName %}
 {% set filter = 'squared_thumbnail_medium' %}
-        {% set thumbUrl = flysystemPath | imagine_filter(filter)   %}
+{% set thumbUrl = flysystemPath | imagine_filter(filter) %}
 <div>
     <figure class="figure">
         <a href="{{ thumbUrl }}" target="_blank">
@@ -19,8 +19,8 @@ The following photo was received.
         </a>
         <figcaption title="{{ flysystemPath }}" class="figure-caption text-end">
             <b>
-                {#                        {{ flysystemPath }}#}
-                Credit: {{ submission.credit }}
+                {#                        {{ flysystemPath }} #}
+                Credit: {{ submission.credit }} ({{ submission.email }})
             </b>
         </figcaption>
     </figure>
@@ -29,4 +29,5 @@ The following photo was received.
 <a class="btn btn-primary" href="{{ absolute_url(path('submission_show', submission.rp)) }}">
     Approve Or Deny
 </a>
+
 

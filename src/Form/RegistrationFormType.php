@@ -25,13 +25,16 @@ class RegistrationFormType extends AbstractType
         $builder
             ->add('email')
             ->add('creditName', null, [
-                'help' => "Your name as you'd like it to appear when crediting your photo"
+                'help' => "Your name as you'd like it to appear when your photo appears somewhere"
             ])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
+                'label' => "Agree to License",
                 'help_html' => true,
                     'help' =>
-                    sprintf("I agree to the <a href='%s'>Terms and Conditions</a>", $termsUrl),
+                    sprintf("
+I grant to Rappahannock Media and to Foothills Forum a perpetual, worldwide, non-exclusive, irrevocable license. See the complete 
+<a href='%s' target='_blank'>Terms and Conditions</a>", $termsUrl),
                 'constraints' => [
                     new IsTrue([
                         'message' => 'You must agree to the terms before registration',
@@ -44,6 +47,7 @@ class RegistrationFormType extends AbstractType
                     // instead of being set onto the object directly,
                     // this is read and encoded in the controller
                     'mapped' => false,
+                    'label' => 'Password',
                     'attr' => ['autocomplete' => 'new-password'],
                     'constraints' => [
                         new NotBlank([

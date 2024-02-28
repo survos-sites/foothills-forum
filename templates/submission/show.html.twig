@@ -55,8 +55,10 @@
     <a class="btn btn-primary" href="{{ path('event_submission_new', submission.event.rp) }}">Submit Another Photo at this event</a>
     {% endif %}
 
-    <h3>Email to Admin</h3>
+    <a class="btn btn-success" href="{{ path('app_homepage') }}">See Event List</a>
 
-    {{ include('emails/submission.html.twig', {event:submission.event}) }}
+
+{#    <h3>Email to Admin</h3>#}
+{#    {{ include('emails/submission.html.twig', {event:submission.event}) }}#}
 
 {% endblock %}

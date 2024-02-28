@@ -9,22 +9,24 @@
 
     {{ form_start(registrationForm) }}
         {{ form_row(registrationForm.email) }}
+        {{ form_row(registrationForm.creditName) }}
     {% if registrationForm.plainPassword|default(false) %}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
     {% endif %}
+        {{ form_row(registrationForm.plainPassword, {
+            label: 'Password',
+            help: "At least 6 characters"
+        }) }}
 
         {{ form_row(registrationForm.agreeTerms) }}
 
-    <dialog id="modal">
-        <h1>Terms and Conditions</h1>
-        <p>Use at your own risk!  </p>
-        <form method="dialog">
-            <button>Close</button>
-        </form>
-    </dialog>
-    <button onclick="modal.show()">Show Terms and Conditions</button>
+{#    <dialog id="modal">#}
+{#        <h1>Terms and Conditions</h1>#}
+{#        <p>Use at your own risk!  </p>#}
+{#        <form method="dialog">#}
+{#            <button>Close</button>#}
+{#        </form>#}
+{#    </dialog>#}
+{#    <button onclick="modal.show()">Show Terms and Conditions</button>#}
 
         {{ form_rest(registrationForm) }}
 

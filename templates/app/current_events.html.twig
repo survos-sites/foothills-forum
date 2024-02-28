@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'articles'|trans|title }}{% endblock %}
+{% block description %}{{ 'foothill_forum_archive'|trans|title }}{% endblock %}
+
+
+{% block body %}
+
+    <ul>
+        {% for e in events %}
+            <li>
+                <a href="{{ path('event_submission_new', e.rp) }}" class="btn btn-primary">
+                    Take/Submit Photo
+                </a>
+                <b>{{ e.team.name }} v {{ e.opponent}} </b>
+                {{ e.eventDate|date }}
+                {{ e.eventDate|ago }}
+                {{ e.type }}
+                at {{ e.location.name }}
+            </li>
+        {% endfor %}
+
+    </ul>
+
+{% endblock %}

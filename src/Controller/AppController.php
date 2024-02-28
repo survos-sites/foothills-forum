@@ -5,6 +5,7 @@ namespace App\Controller;
 use ApiPlatform\Doctrine\Orm\State\CollectionProvider;
 use App\Entity\Article;
 use App\Form\UserType;
+use App\Repository\EventRepository;
 use KnpU\OAuth2ClientBundle\Client\Provider\GithubClient;
 use Survos\ApiGrid\Components\ApiGridComponent;
 use Survos\ApiGrid\State\MeiliSearchStateProvider;
@@ -16,13 +17,27 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Archetype\Facades\PHPFile;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use function Symfony\Component\Clock\now;
 
 class AppController extends AbstractController
 {
     #[Route('/', name: 'app_homepage')]
-    #[Template("app/index.html.twig")]
-    public function index(Request $request): array|Response
+    #[Template("app/current_events.html.twig")]
+    public function index(Request $request, EventRepository $eventRepository): array|Response
     {
+        // get all current and recent events
+        $query = $eventRepository->createQueryBuilder('e')
+            ->andWhere('e.eventDate >= :ago')
+            ->setParameter('ago', date_modify(new \DateTime(), '+3 days'))
+//            ->andWhere('e.eventDate <= :now')
+//            ->setParameter('now', date_modify(new \DateTime(), '+1 days'))
+                ->orderBy('e.eventDate', 'ASC')
+            ->setMaxResults(30);
+
+        $currentEvents = $query->getQuery()->getResult();
+
+        return ['events' => $currentEvents];
+
         return $this->redirectToRoute('event_index');
         return [
         'apiRoute' => $request->get('doctrine', false) ? 'doctrine-articles' : 'meili-articles',
