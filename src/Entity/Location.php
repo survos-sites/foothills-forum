@@ -56,13 +56,14 @@ class Location implements RouteParametersInterface, \Stringable
     private ?string $code = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups('location.read')]
+    #[Groups(['location.read', 'submission.read'])]
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'location', targetEntity: Event::class, orphanRemoval: true)]
     private Collection $events;
 
     #[ORM\ManyToOne(inversedBy: 'locations')]
+    #[ORM\JoinColumn(nullable: true)]
     private ?School $school = null;
 
     #[ORM\OneToMany(mappedBy: 'location', targetEntity: Submission::class)]

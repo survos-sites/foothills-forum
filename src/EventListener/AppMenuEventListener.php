@@ -160,6 +160,7 @@ final class AppMenuEventListener
         $this->add($submenu, 'event_new');
         $this->add($submenu, 'event_index');
         $this->add($submenu, 'location_index');
+        $this->add($submenu, 'location_new');
 
         $this->add($submenu, 'submission_index');
 

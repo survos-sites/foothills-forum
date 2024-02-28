@@ -75,7 +75,10 @@ final class SendPhotoForApprovalHandler
             //->bcc('bcc@example.com')
             //->replyTo('fabien@example.com')
             ->priority(Email::PRIORITY_HIGH)
-            ->subject(sprintf('Photo #%d: %s', $submission->getId(), $submission->getEvent()->getTitle()))
+            ->subject(sprintf('Photo #%d: %s %s', $submission->getId(),
+                $submission->getEvent()?->getTitle(),
+                $submission->getLocation()?->getName())
+            )
         ;
 //            $email->attach(4)
 

@@ -83,6 +83,7 @@ class Submission implements RouteParametersInterface, MarkingInterface, \Stringa
 
     #[ORM\ManyToOne(inversedBy: 'submissions')]
     #[ORM\JoinColumn(nullable: true)]
+    #[Groups('submission.read')]
     private ?Location $location = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -201,7 +202,7 @@ class Submission implements RouteParametersInterface, MarkingInterface, \Stringa
 
     public function __toString()
     {
-        return $this->getEvent()->getTitle() . '#' . $this->getId();
+        return $this->getEvent()?->getTitle() . '#' . $this->getId();
     }
 
     public function getEmail(): ?string

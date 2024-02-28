@@ -7,6 +7,7 @@ namespace App\Controller;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\IriConverterInterface;
 use App\Entity\Event;
+use App\Entity\Location;
 use App\Entity\Submission;
 use App\Entity\User;
 use App\Form\SubmissionType;
@@ -81,28 +82,36 @@ class SubmissionCollectionController extends AbstractController
         ]);
     }
 
-    #[Route('/submission/{eventId}/new', name: 'event_submission_new', options: ['expose' => true])]
+    #[Route('/event/submission/{eventId}/new', name: 'event_submission_new', options: ['expose' => true])]
+    #[Route('/location/submission/{locationId}/new', name: 'location_submission_new', options: ['expose' => true])]
     #[IsGranted('IS_AUTHENTICATED')]
-    public function new(Event $event,
-                        Request $request,
-                        PropertyAccessorInterface $propertyAccessor,
-                        MessageBusInterface $bus
+    public function new(
+        Request                   $request,
+        PropertyAccessorInterface $propertyAccessor,
+        MessageBusInterface       $bus,
+        ?Event                     $event=null,
+        ?Location $location = null
     ): Response
     {
         // @todo: use MapQuery to extract the request
         $submission = new Submission();
+        if ($event) {
+            $submission->setEvent($event);
+        }
+        if ($location) {
+            $submission->setLocation($location);
+        }
         /** @var User $user */
         $user = $this->getUser();
 
         // saved by session, could eventually be event or place when this is generic
         $session = $request->getSession();
-        $formVarsToSaveInSession = ['credit','email'];
+        $formVarsToSaveInSession = ['credit', 'email'];
         foreach ($formVarsToSaveInSession as $formVar) {
 
-            if ($user)
-            {
+            if ($user) {
                 $value = $propertyAccessor->getValue($user,
-                    $formVar=='credit' ? 'creditName' : $formVar, '');
+                    $formVar == 'credit' ? 'creditName' : $formVar, '');
                 $propertyAccessor->setValue($submission, $formVar, $value);
             }
             $value = $session->get($formVar, '');
@@ -110,8 +119,6 @@ class SubmissionCollectionController extends AbstractController
                 $propertyAccessor->setValue($submission, $formVar, $value);
             }
         }
-        $event->addSubmission($submission);
-//        $submission->setEvent($event);
         $form = $this->createForm(SubmissionType::class, $submission, ['user' => $user]);
         $form->handleRequest($request);
 
@@ -132,7 +139,7 @@ class SubmissionCollectionController extends AbstractController
             }
 
 
-            $redirect =  $this->redirectToRoute('submission_show', $submission->getrp());
+            $redirect = $this->redirectToRoute('submission_show', $submission->getrp());
             return $redirect;
         }
         return $this->render('submission/new.html.twig', [

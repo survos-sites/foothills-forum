@@ -4,7 +4,8 @@ The following photo was received.
 {% set flysystemPath = submission.imageName %}
 
 <h3>
-    {{ event.title }}
+    {{ event ? event.title }}
+    {{ submission.location ? submission.location.name }}
 </h3>
 {% if cidId is defined %}
 {#    only if we want to embed the image#}

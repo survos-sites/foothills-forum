@@ -20,6 +20,12 @@
         </tbody>
     </table>
 
+    {% set newPhotoUrl = path('location_submission_new', location.rp) %}
+    <a href="{{ newPhotoUrl }}">{{ newPhotoUrl }}</a>
+
+    {% if is_granted('ROLE_ADMIN') %}
+
     <a class="btn btn-primary" href="{{ path('location_edit', location.rp) }}">edit</a>
     {{ include('location/_delete_form.html.twig') }}
+    {% endif %}
 {% endblock %}
