@@ -102,7 +102,7 @@ class Event implements RouteParametersInterface, \Stringable
     private ?string $code = null;
 
     #[ORM\ManyToOne(inversedBy: 'events')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Sport $sport = null;
 
     #[ORM\Column(length: 255)]
@@ -116,7 +116,7 @@ class Event implements RouteParametersInterface, \Stringable
     private ?int $submissionCount = 0;
 
     #[ORM\ManyToOne(inversedBy: 'events')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     #[Groups('event.read')]
     private ?Location $location = null;
 

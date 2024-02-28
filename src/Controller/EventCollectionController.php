@@ -15,19 +15,22 @@ use Survos\WorkflowBundle\Traits\HandleTransitionsTrait;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+
 // @todo: if Workflow Bundle active
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/event')]
+#[Route('/events')]
 class EventCollectionController extends AbstractController
 {
     use HandleTransitionsTrait;
 
     public function __construct(
-private EntityManagerInterface $entityManager,
-private ApiGridComponent $apiGridComponent,
-private ?IriConverterInterface $iriConverter = null
-) {
+        private EntityManagerInterface $entityManager,
+        private EventRepository        $eventRepository,
+        private ApiGridComponent       $apiGridComponent,
+        private ?IriConverterInterface $iriConverter = null
+    )
+    {
     }
 
     #[Route(path: '/browse/', name: 'event_browse', methods: ['GET'])]
@@ -39,10 +42,9 @@ private ?IriConverterInterface $iriConverter = null
         $useMeili = 'app_browse' == $request->get('_route');
         // this should be from inspection bundle!
         $apiCall = $useMeili
-        ? '/api/meili/'.$shortClass
-        : $this->iriConverter->getIriFromResource($class, operation: new GetCollection(),
-            context: $context ?? [])
-        ;
+            ? '/api/meili/' . $shortClass
+            : $this->iriConverter->getIriFromResource($class, operation: new GetCollection(),
+                context: $context ?? []);
 
         $this->apiGridComponent->setClass($class);
         $c = $this->apiGridComponent->getDefaultColumns();
@@ -50,33 +52,35 @@ private ?IriConverterInterface $iriConverter = null
         $useMeili = 'event_browse' == $request->get('_route');
         // this should be from inspection bundle!
         $apiCall = $useMeili
-        ? '/api/meili/'.$shortClass
-        : $this->iriConverter->getIriFromResource($class, operation: new GetCollection(),
-            context: $context ?? [])
-        ;
+            ? '/api/meili/' . $shortClass
+            : $this->iriConverter->getIriFromResource($class, operation: new GetCollection(),
+                context: $context ?? []);
 
 
         return $this->render('event/browse.html.twig', [
-        'class' => $class,
-        'useMeili' => $useMeili,
-        'apiCall' => $apiCall,
-        'columns' => $columns,
-        'filter' => [],
+            'class' => $class,
+            'useMeili' => $useMeili,
+            'apiCall' => $apiCall,
+            'columns' => $columns,
+            'filter' => [],
         ]);
     }
 
     #[Route('/symfony_crud_index', name: 'event_symfony_crud_index')]
-        public function symfony_crud_index(EventRepository $eventRepository): Response
-        {
-            return $this->render('event/index.html.twig', [
-                'events' => $eventRepository->findBy([], [], 30),
-            ]);
-        }
+    public function symfony_crud_index(EventRepository $eventRepository): Response
+    {
+        return $this->render('event/index.html.twig', [
+            'events' => $eventRepository->findBy([], [], 30),
+        ]);
+    }
 
-    #[Route('event/new', name: 'event_new')]
-        public function new(Request $request): Response
-        {
-            $event = new Event();
+    #[Route('/new', name: 'event_new')]
+    public function new(Request $request): Response
+    {
+        $id = 10_000_000 + $this->eventRepository->count([]);
+            $event = (new Event('e_' . $id))->setId($id);
+            $event->setEventDate(new \DateTime());
+
             $form = $this->createForm(EventType::class, $event);
             $form->handleRequest($request);
 
@@ -85,7 +89,7 @@ private ?IriConverterInterface $iriConverter = null
                 $entityManager->persist($event);
                 $entityManager->flush();
 
-                return $this->redirectToRoute('event_index');
+                return $this->redirectToRoute('event_show', $event->getrp());
             }
 
             return $this->render('event/new.html.twig', [

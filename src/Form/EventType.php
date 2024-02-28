@@ -12,15 +12,13 @@ class EventType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('id')
+            ->add('id', null, [
+                'disabled' => true
+            ])
+            ->add('name')
             ->add('eventDate')
             ->add('type')
-            ->add('opponent')
-            ->add('location')
-            ->add('score')
             ->add('summary')
-            ->add('sport')
-            ->add('section')
         ;
     }
 

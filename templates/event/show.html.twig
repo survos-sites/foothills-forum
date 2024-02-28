@@ -1,7 +1,8 @@
 {% extends "event/base.html.twig" %}
 
 {% block body %}
-    <h1>{{ event }}</h1>
+    <h1>{{ event.name }}</h1>
+    <h4 class="text-muted">{{ event }}</h4>
 
     <h3>Become a citizen photographer!</h3>
     <p>
@@ -36,20 +37,26 @@
                 <th>Type</th>
                 <td>{{ event.type }}</td>
             </tr>
+            {% if event.opponent %}
             <tr>
                 <th>Opponent</th>
                 <td>{{ event.opponent }}</td>
             </tr>
+            {% endif %}
+            {% if event.location %}
             <tr>
                 <th>Where</th>
                 <td>{{ event.location }} / {{ event.location.name }}</td>
             </tr>
+            {% endif %}
+            {% if event.sport %}
             <tr>
                 <th>Sport</th>
                 <td>{{ event.sport }}
                     {{ event.section }}
                 </td>
             </tr>
+        {% endif %}
         </tbody>
     </table>
 

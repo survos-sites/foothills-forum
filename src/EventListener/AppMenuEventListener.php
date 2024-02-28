@@ -157,6 +157,7 @@ final class AppMenuEventListener
         }
 
         $submenu = $this->addSubmenu($menu, 'School Sports');
+        $this->add($submenu, 'event_new');
         $this->add($submenu, 'event_index');
         $this->add($submenu, 'location_index');
 
