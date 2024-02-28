@@ -50,7 +50,6 @@ final class SendPhotoForApprovalHandler
 //        $eventData = $this->normalizable->normalize($event, '');
         $submissionData = [];
         $submissionData = $this->normalizer->normalize($submission, null, ['groups' => ['submission.email', 'submission.read','rp']]);
-        $addr = 'tacman@gmail.com';
         $survos = 'tac@survos.com';
         $addresses = [];
         foreach ($this->reviewers as $reviewer) {
@@ -76,7 +75,8 @@ final class SendPhotoForApprovalHandler
             //->bcc('bcc@example.com')
             //->replyTo('fabien@example.com')
             ->priority(Email::PRIORITY_HIGH)
-            ->subject('Photo submitted to ' . $submission->getEvent()->getTitle());
+            ->subject(sprintf('Photo #%d: %s', $submission->getId(), $submission->getEvent()->getTitle()))
+        ;
 //            $email->attach(4)
 
 //        dd($context, $email);
