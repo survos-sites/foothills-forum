@@ -15,10 +15,6 @@ class FlysystemController extends AbstractController
     public function default(FilesystemOperator $defaultStorage, UploaderHelper $uploaderHelper): Response
     {
         $images = $defaultStorage->listContents('/', deep: false);
-        foreach ($images as $image) {
-            $path = $uploaderHelper->asset($image);
-            dd($path, $image);
-        }
         return $this->render('flysystem/index.html.twig', [
             'images' => $images,
             'controller_name' => 'FlysystemController',
