@@ -33,7 +33,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
     ]
 )]
 // keywords and sections are arrays, so fail with getCounts() if doctrine, okay if meili
-#[ApiFilter(FacetsFieldSearchFilter::class, properties: ['marking'])] // ,'sections','keywords'])]
+#[ApiFilter(FacetsFieldSearchFilter::class, properties: ['marking','email','credit'])] // ,'sections','keywords'])]
 //#[ApiFilter(FacetsFieldSearchFilter::class, properties: ['section', 'byline'])] // ,'sections','keywords'])]
 //#[ApiFilter(MultiFieldSearchFilter::class, properties: ['headline', 'subheadline'])]
 #[ApiFilter(OrderFilter::class, properties: ['id',
@@ -86,6 +86,7 @@ class Submission implements RouteParametersInterface, MarkingInterface, \Stringa
     private ?Location $location = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups('submission.read')]
     private ?string $notes = null;
 
     #[ORM\Column(length: 255, nullable: true)]

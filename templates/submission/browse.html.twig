@@ -6,8 +6,12 @@
 <h1>{{ class }} {{ _self }}</h1>
 
     {% set columns = [
+        'id',
         'marking',
+        'credit',
         'imageName',
+        'notes',
+        'email',
         'event',
     ] %}
 <twig:api_grid

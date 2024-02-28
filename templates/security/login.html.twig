@@ -39,7 +39,7 @@
 
     <hr />
 
-    {% if is_granted('ROLE_ADMIN') %}
+    {% if (app.environment=='dev') or is_granted('ROLE_ADMIN') %}
     <twig:OAuth>
 
     </twig:OAuth>
