@@ -3,11 +3,12 @@ The following photo was received.
 {% set event = submission.event %}
 {% set flysystemPath = submission.imageName %}
 
+<h3>
+    {{ event.title }}
+</h3>
 {% if cidId is defined %}
-    <h3>
-        {{ event.title }}
-    </h3>
-    <img src="cid:image-{{ cidId }}" alt="{{ flysystemPath }}"/>
+{#    only if we want to embed the image#}
+{#    <img src="cid:image-{{ cidId }}" alt="{{ flysystemPath }}"/>#}
 {% endif %}
 
 {% set filter = 'squared_thumbnail_medium' %}

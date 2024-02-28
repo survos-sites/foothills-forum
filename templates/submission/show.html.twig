@@ -3,8 +3,6 @@
 {% block body %}
     <h1>Submission {{ submission.id }}</h1>
 
-    Thanks for submitting! Your photo is being reviewed.
-
     {% for property in ['event','location'] %}
         {% set prop = attribute(submission, property) %}
         {% if prop %}

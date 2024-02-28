@@ -34,12 +34,15 @@
 
 </form>
 
+    Not yet a user?
+    <a href="{{ path('app_register') }}">Register here</a>
+
     <hr />
 
+    {% if is_granted('ROLE_ADMIN') %}
     <twig:OAuth>
 
     </twig:OAuth>
-    {% if is_granted('ROLE_ADMIN') %}
     {% endif %}
 
 {% endblock %}

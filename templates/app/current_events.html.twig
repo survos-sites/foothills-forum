@@ -10,9 +10,9 @@
         {% for e in events %}
             <li>
                 <a href="{{ path('event_submission_new', e.rp) }}" class="btn btn-primary">
-                    Take/Submit Photo
+                    <i class="bi bi-camera"></i>
+                    <b>{{ e.team.name }} v {{ e.opponent}} </b>
                 </a>
-                <b>{{ e.team.name }} v {{ e.opponent}} </b>
                 {{ e.eventDate|date }}
                 {{ e.eventDate|ago }}
                 {{ e.type }}
