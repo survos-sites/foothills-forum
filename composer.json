@@ -49,7 +49,7 @@
         "symfony/amazon-mailer": "^7.0",
         "symfony/amqp-messenger": "^6.4 || ^7.0",
         "symfony/asset": "^6.4 || ^7.0",
-        "symfony/asset-mapper": "^6.4 || ^7.0",
+        "symfony/asset-mapper": "^6.4 || 7.0.3",
         "symfony/brevo-mailer": "^7.0",
         "symfony/console": "^6.4 || ^7.0",
         "symfony/css-selector": "^6.4 || ^7.0",
