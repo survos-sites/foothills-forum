@@ -12,6 +12,7 @@ use Survos\ApiGrid\State\MeiliSearchStateProvider;
 use Survos\InspectionBundle\Services\InspectionService;
 use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -21,6 +22,11 @@ use function Symfony\Component\Clock\now;
 
 class AppController extends AbstractController
 {
+
+    public function __construct(private ParameterBagInterface $bag)
+    {
+    }
+
     #[Route('/', name: 'app_homepage')]
     #[Template("app/current_events.html.twig")]
     public function index(Request $request, EventRepository $eventRepository): array|Response
@@ -115,6 +121,8 @@ class AppController extends AbstractController
     #[Template('app/terms.html.twig')]
     public function terms(): array
     {
+        $reviewers = $this->bag->get('photo_reviewers');
+        dd($reviewers);
         return [];
     }
 

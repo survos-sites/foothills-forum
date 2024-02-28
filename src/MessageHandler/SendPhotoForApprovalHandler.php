@@ -9,6 +9,7 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Serializer\Normalizer\NormalizableInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -23,6 +24,7 @@ final class SendPhotoForApprovalHandler
         private CacheManager         $imagineCacheManager,
         private NormalizerInterface $normalizer,
         private MailerInterface $mailer,
+        #[Autowire('%env(json:PHOTO_REVIEWERS)%')] private array $reviewers,
         #[Autowire('%kernel.project_dir%')] private string $projectDir,
     )
     {
@@ -50,6 +52,10 @@ final class SendPhotoForApprovalHandler
         $submissionData = $this->normalizer->normalize($submission, null, ['groups' => ['submission.email', 'submission.read','rp']]);
         $addr = 'tacman@gmail.com';
         $survos = 'tac@survos.com';
+        $addresses = [];
+        foreach ($this->reviewers as $reviewer) {
+            $addresses[] = new Address($reviewer['email'], $reviewer['name']);
+        }
         $cidId = 'image-' . $submission->getId();
         $email = (new TemplatedEmail())
             ->htmlTemplate('emails/submission.html.twig', ['sub'])
@@ -65,7 +71,7 @@ final class SendPhotoForApprovalHandler
 //            ->addPart((new DataPart(new File($path), $cidId, 'image/jpeg'))->asInline())
 //            ->addPart(new DataPart($path))
             ->from($survos)
-            ->to(...[$addr])
+            ->to(...$addresses)
             //->cc('cc@example.com')
             //->bcc('bcc@example.com')
             //->replyTo('fabien@example.com')
