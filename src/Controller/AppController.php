@@ -122,8 +122,7 @@ class AppController extends AbstractController
     public function terms(): array
     {
         $reviewers = $this->bag->get('photo_reviewers');
-        dd($reviewers);
-        return [];
+        return ['reviewers' =>$reviewers];
     }
 
 }

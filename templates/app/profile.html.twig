@@ -46,8 +46,8 @@
 
     https://github.com/settings/connections/applications/bbaa617f98c5e456c210
 
-    {% for key, x in user.identifiers %}
-        {{ dump(key, x) }}
+    {% for provider, details in user.identifiers %}
+        <h1>{{ provider }}</h1>
     {% endfor %}
 
 
