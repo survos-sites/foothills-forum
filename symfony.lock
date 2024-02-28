@@ -573,6 +573,9 @@
     "symfonycasts/verify-email-bundle": {
         "version": "v1.15.0"
     },
+    "tacman/oauth2-client-bundle": {
+        "version": "v2.18.1"
+    },
     "twig/extra-bundle": {
         "version": "v3.8.0"
     },
