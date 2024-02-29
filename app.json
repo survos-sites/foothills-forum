@@ -5,6 +5,7 @@
         "php",
         "symfony"
     ],
+
     "repository": "https:\/\/github.com\/survos-sites\/ff",
     "scripts": {
         "dokku": {
@@ -12,6 +13,17 @@
             "postdeploy": ""
         }
     },
+  "cron": [
+    {
+      "command": "bin/console mailer:test tacman@gmail.com --subject=cron --from=tac@survos.com",
+      "schedule": "@hourly"
+    },
+    {
+      "command": "bin/console mess:consume async --time-limit 300",
+      "schedule": "*/5 * * * *"
+    }
+
+  ],
     "env": {
         "SECRET_TOKEN": {
             "description": "A secret key for verifying the integrity of signed cookies.",
