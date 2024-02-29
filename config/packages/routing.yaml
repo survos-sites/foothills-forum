@@ -2,7 +2,7 @@ framework:
     router:
         utf8: true
         # for email, but also affects for-js-routing
-        default_uri: 'https://%env(BASE_HOST)%'
+        default_uri: '%env(BASE_HOST)%'
         # Configure how to generate URLs in non-HTTP contexts, such as CLI commands.
         # See https://symfony.com/doc/current/routing.html#generating-urls-in-commands
         #default_uri: http://localhost
