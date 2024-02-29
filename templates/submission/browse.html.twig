@@ -23,9 +23,11 @@
 >
 
     <twig:block name="event">
+        {% if row.event %}
         <a href="{{ path('event_slideshow', row.event.rp) }}">
             {{ row.event.title }}
         </a>
+        {% endif %}
     </twig:block>
     <twig:block name="imageName">
         <a href="{{ path('submission_show', row.rp) }}" title="{{ row.imageName }}">

@@ -15,10 +15,6 @@
     },
   "cron": [
     {
-      "command": "bin/console mailer:test tacman@gmail.com --subject=cron --from=tac@survos.com",
-      "schedule": "@hourly"
-    },
-    {
       "command": "bin/console mess:consume async --time-limit 300",
       "schedule": "*/5 * * * *"
     }

@@ -24,6 +24,9 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\Part\DataPart;
 use Symfony\Component\Mime\Part\File;
+use Symfony\Component\Notifier\Bridge\Slack\SlackOptions;
+use Symfony\Component\Notifier\ChatterInterface;
+use Symfony\Component\Notifier\Message\ChatMessage;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Workflow\WorkflowInterface;
@@ -39,6 +42,7 @@ class SubmissionController extends AbstractController implements HandleTransitio
 //        #[Autowire('%liip_imagine.service.filter%')]
 //        private FilterService $filterService,
         private MessageBusInterface $bus,
+        private ChatterInterface $chatter,
         private EntityManagerInterface $entityManager)
    {
     }
@@ -68,7 +72,6 @@ class SubmissionController extends AbstractController implements HandleTransitio
 //
 
 //        $this->bus->dispatch(new SendPhotoForApproval($submission->getId()));
-
         return $this->render('submission/show.html.twig', [
             'uploadHelper' => $uploaderHelper,
             'submission' => $submission,

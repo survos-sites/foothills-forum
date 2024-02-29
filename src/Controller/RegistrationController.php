@@ -10,6 +10,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
+use Symfony\Component\Notifier\ChatterInterface;
+use Symfony\Component\Notifier\Message\ChatMessage;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGenerator;
@@ -19,23 +21,26 @@ use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
 class RegistrationController extends AbstractController
 {
-    public function __construct(private UserProviderInterface $userProvider)
+    public function __construct(private UserProviderInterface $userProvider,
+                                private ChatterInterface      $chatter,
+    )
     {
 
     }
+
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request,
-                             #[MapQueryParameter] string $clientKey=null,
-                             #[MapQueryParameter] string $userId=null,
+    public function register(Request                     $request,
+                             #[MapQueryParameter] string $clientKey = null,
+                             #[MapQueryParameter] string $userId = null,
                              UserPasswordHasherInterface $userPasswordHasher,
-                             UserAuthenticatorInterface $userAuthenticator,
-                             AppAuthenticator $authenticator,
-                             UrlGeneratorInterface $urlGenerator,
-                             EntityManagerInterface $entityManager
+                             UserAuthenticatorInterface  $userAuthenticator,
+                             AppAuthenticator            $authenticator,
+                             UrlGeneratorInterface       $urlGenerator,
+                             EntityManagerInterface      $entityManager
     ): Response
     {
         $identifier = $request->get('userId');
-        $user = $identifier ? $this->userProvider->loadUserByIdentifier($identifier): new User();
+        $user = $identifier ? $this->userProvider->loadUserByIdentifier($identifier) : new User();
         if ($clientKey) {
             $clientData = $user->getIdentifierData($clientKey);
             foreach ($clientData['data'] as $key => $value) {
@@ -52,8 +57,7 @@ class RegistrationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
-            if ($form->has('plainPassword'))
-            {
+            if ($form->has('plainPassword')) {
                 $user->setPassword(
                     $userPasswordHasher->hashPassword(
                         $user,
@@ -65,6 +69,11 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
             // do anything else you need here, like send an email
+
+            $message = (new ChatMessage(sprintf($user->getUserIdentifier() . ' just registered!')))
+                ->transport('slack');
+            $sentMessage = $this->chatter->send($message);
+
 
             return $userAuthenticator->authenticateUser(
                 $user,

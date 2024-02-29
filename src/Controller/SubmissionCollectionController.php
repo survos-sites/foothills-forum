@@ -4,6 +4,7 @@
 
 namespace App\Controller;
 
+use ApiPlatform\Api\UrlGeneratorInterface;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\IriConverterInterface;
 use App\Entity\Event;
@@ -24,9 +25,12 @@ use Symfony\Component\HttpFoundation\Response;
 // @todo: if Workflow Bundle active
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Notifier\ChatterInterface;
+use Symfony\Component\Notifier\Message\ChatMessage;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
 #[Route('/submissions')]
 class SubmissionCollectionController extends AbstractController
@@ -36,6 +40,8 @@ class SubmissionCollectionController extends AbstractController
     public function __construct(
         private EntityManagerInterface $entityManager,
         private ApiGridComponent       $apiGridComponent,
+        private UploaderHelper $uploaderHelper,
+        private ChatterInterface $chatter,
         private ?IriConverterInterface $iriConverter = null
     )
     {
@@ -130,6 +136,18 @@ class SubmissionCollectionController extends AbstractController
             $entityManager->persist($submission);
             $entityManager->flush();
             $entityManager->refresh($user);
+
+            $s3Url = $this->uploaderHelper->asset($submission);
+            $url = $this->generateUrl('submission_show', $submission->getrp(), UrlGeneratorInterface::ABS_URL);
+            $message = (new ChatMessage(sprintf('Photo %d %s
+            %s
+            
+            %s
+            ', $submission->getId(), $s3Url, $url, $submission->getNotes())))
+                ->transport('slack');
+            $sentMessage = $this->chatter->send($message);
+
+
 
             $this->addFlash('info', 'Thanks! Your photo is now being reviewed');
             $bus->dispatch((new SendPhotoForApproval($submission->getId())));

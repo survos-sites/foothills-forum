@@ -69,7 +69,7 @@ final class SendPhotoForApprovalHandler
             ])
 //            ->addPart((new DataPart(new File($path), $cidId, 'image/jpeg'))->asInline())
 //            ->addPart(new DataPart($path))
-            ->from($survos)
+            ->from(new Address($survos, 'Tac/Foothills Forum Photos'))
             ->to(...$addresses)
             //->cc('cc@example.com')
             //->bcc('bcc@example.com')

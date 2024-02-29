@@ -38,5 +38,6 @@ when@dev:
         storages:
             default.storage:
                 adapter: 'local'
+                visibility: public # Make the uploaded file publicly accessible in S3
                 options:
                     directory: '%kernel.project_dir%/public/images'
