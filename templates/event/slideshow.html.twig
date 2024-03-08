@@ -1,32 +1,43 @@
-{% extends "event/base.html.twig" %}
+{% extends "base.html.twig" %}
 
 {% block body %}
-    <h1>{{ event }}</h1>
-
-
-    <h3>Existing Photos</h3>
     {% set filter = 'squared_thumbnail_medium' %}
-    {% for submission in event.submissions %}
-        {% set flysystemPath = submission.imageName %}
-        {% set thumbUrl = flysystemPath | imagine_filter(filter) %}
-        <div class="col-md-4 col-sm-6">
-            <figure class="figure">
-                <a href="{{ path('submission_show', submission.rp) }}">
-                    <img src="{{ thumbUrl }}" class="figure-img img-fluid rounded" title="{{ filter }}"
-                         alt="{{ thumbUrl }}">
-                </a>
-                <figcaption class="figure-caption text-end">
-                    <b class="text-small">
-                        Credit: {{ submission.credit }} ({{ submission.email }})
-                    </b>
-                    <code>{{ submission.marking }}</code>
-                </figcaption>
-            </figure>
+    <h1>{{ event }} {{ event.submissions|length }} Photos</h1>
+    {% set _sc = 'slideshow' %}
+    <div {{ stimulus_controller(_sc) }}>
+            <section {{ stimulus_target(_sc, 'slideshow') }}
+                    class="splide" aria-label="Splide Basic HTML Example">
+                <div class="splide__track">
+                    <ul class="splide__list">
+                        {% for submission in event.submissions %}
+                            {% set flysystemPath = submission.imageName %}
+                            {% set thumbUrl = flysystemPath | imagine_filter(filter) %}
+                            <div class="splide__slide col-md-4 col-sm-6">
+                                <figure class="figure">
+                                    <a href="{{ path('submission_show', submission.rp) }}">
+                                        <img src="{{ thumbUrl }}" class="figure-img img-fluid rounded" title="{{ filter }}"
+                                             alt="{{ thumbUrl }}">
+                                    </a>
+                                    <figcaption class="figure-caption text-end">
+                                        <p>
+                                            {{ submission.notes }}
+                                        </p>
+                                        <b class="text-small">
+                                            Credit: {{ submission.credit }} ({{ submission.email }})
+                                        </b>
+                                        <code>{{ submission.marking }}</code>
+                                    </figcaption>
+                                </figure>
 
-        </div>
+                            </div>
 
 
-    {% endfor %}
+                        {% endfor %}
+
+                    </ul>
+                </div>
+            </section>
+    </div>
 
 
 {% endblock %}

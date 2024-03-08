@@ -5,27 +5,33 @@
 
 
 {% block body %}
-
-    <table>
+    <table class="table">
         {% for e in events %}
             <tr>
                 <td>
-                    <a href="{{ path('event_show', e.rp) }}" class="btn btn-primary">
-                        <i class="bi bi-qr-code"></i>
-                    </a>
-                </td>
-                <td>
-
-                <a href="{{ path('event_submission_new', e.rp) }}" class="btn btn-primary">
-                    <i class="bi bi-camera"></i>
-                </a>
+                    <div class="vstack gap-1">
+                        <a href="{{ path('event_submission_new', e.rp) }}" class="btn btn-success">
+                            <i class="bi bi-camera"></i>
+                        </a>
+                        {% if e.submissions.count %}
+                        <a href="{{ path('event_slideshow', e.rp) }}" class="btn btn-primary">
+                            <i class="bi bi-file-slides"></i>
+                        </a>
+                        {% endif %}
+                        <a href="{{ path('event_show', e.rp) }}" class="btn btn-secondary">
+                            <i class="bi bi-qr-code"></i>
+                        </a>
+                    </div>
                 </td>
                 <td>
                 <b>{{ e.team.name }} v {{ e.opponent}} </b><br />
                     {{ e.eventDate|date }}
                     <span class="fs-6">{{ e.eventDate|ago }}</span>
-                    {{ e.type }}
-                    at {{ e.location.name }}
+                    <div>
+                        {{ e.type }}
+                        at {{ e.location.name }}
+
+                    </div>
                 </td>
 
             </tr>

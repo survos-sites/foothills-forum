@@ -1,8 +1,10 @@
 import { startStimulusApp } from '@symfony/stimulus-bundle';
-import Timeago from 'stimulus-timeago'
+import Timeago from 'stimulus-timeago';
+
+console.log('starting stimulus...');
 
 const app = startStimulusApp();
-// register any custom, 3rd party controllers here
-// app.register('some_controller_name', SomeImportedController);
-app.debug = false;
+app.debug = true;
 app.register('timeago', Timeago)
+
+

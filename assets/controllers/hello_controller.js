@@ -1,4 +1,6 @@
 import { Controller } from '@hotwired/stimulus';
+console.log('hello?')
+
 
 /*
  * This is an example Stimulus controller!

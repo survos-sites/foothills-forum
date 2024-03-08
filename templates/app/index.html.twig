@@ -15,6 +15,8 @@
 
 {% block body %}
 
+    <div {{ stimulus_controller('hello') }}></div>
+
     {% set columns =
         [
             {name: 'headline'},
