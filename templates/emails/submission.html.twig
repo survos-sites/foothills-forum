@@ -1,12 +1,18 @@
 The following photo was received.
 
-{% set event = submission.event %}
 {% set flysystemPath = submission.imageName %}
 
+{% set event = submission.event %}
 <h3>
     {{ event ? event.title }}
     {{ submission.location ? submission.location.name }}
 </h3>
+
+{% if event %}
+<a href="{{ absolute_url(path('event_slideshow', event.rp)) }}">
+    See Photos
+</a>
+{% endif %}
 {% if cidId is defined %}
 {#    only if we want to embed the image#}
 {#    <img src="cid:image-{{ cidId }}" alt="{{ flysystemPath }}"/>#}
