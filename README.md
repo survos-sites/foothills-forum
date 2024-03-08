@@ -45,3 +45,7 @@ Users can subcribe to submissions to a entity, e.g a Team or a Sport.  When a ph
 In the case of an event, the photos are sent in batch X hours after then event.
 
 @todo: use ngrok or pinggy or localtunnel to debug google
+
+# Load via API
+
+curl -X 'GET'   'https://jardin.wip/api/export-locations'   -H 'accept: text/csv' -x 127.0.0.1:7080  > src/DataFixtures/locations.csv

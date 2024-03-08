@@ -146,7 +146,7 @@ final class AppMenuEventListener
 
         $menu = $event->getMenu();
 
-        if (true || $this->isGranted('ROLE_SUPER_ADMIN')) {
+        if ( $this->isGranted('ROLE_ADMIN')) {
             $workflowMenu = $this->addSubmenu($menu, 'Workflows', icon: 'fas fa-diagram-project');
             $this->add($workflowMenu, route: 'survos_workflows', label: "All");
             foreach ($this->workflowHelperService->getWorkflowsIndexedByName() as $workflowCode => $workflow) {

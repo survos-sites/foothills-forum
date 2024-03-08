@@ -53,7 +53,13 @@
     {% endif %}
 
     {% if submission.event %}
+        <a href="#">Share Event QR Code</a>
     <a class="btn btn-primary" href="{{ path('event_submission_new', submission.event.rp) }}">Submit Another Photo at this event</a>
+        <a href="{{ path('event_slideshow', submission.event.rp) }}"?>Slideshow of this Event</a>
+    {% endif %}
+
+    {% if submission.location %}
+        <a class="btn btn-primary" href="{{ path('location_submission_new', submission.location.rp) }}">Submit Another Photo at this location</a>
     {% endif %}
 
     <a class="btn btn-success" href="{{ path('app_homepage') }}">See Event List</a>

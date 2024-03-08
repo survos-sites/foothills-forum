@@ -36,7 +36,7 @@ class AppController extends AbstractController
             ->andWhere('e.eventDate >= :ago')
             ->setParameter('ago', date_modify(new \DateTime(), '+3 days'))
 //            ->andWhere('e.eventDate <= :now')
-//            ->setParameter('now', date_modify(new \DateTime(), '+1 days'))
+//            ->setParameter('now', date_modify(new \DateTime(), '-2 days'))
                 ->orderBy('e.eventDate', 'ASC')
             ->setMaxResults(30);
 

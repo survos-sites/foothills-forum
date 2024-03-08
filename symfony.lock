@@ -244,6 +244,9 @@
     "survos/scraper-bundle": {
         "version": "1.5.101"
     },
+    "survos/seo-bundle": {
+        "version": "1.5.167"
+    },
     "survos/workflow-helper-bundle": {
         "version": "1.5.115"
     },

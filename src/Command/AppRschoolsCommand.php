@@ -119,9 +119,9 @@ final class AppRschoolsCommand extends InvokableServiceCommand
                 $dt = new \DateTime($row['Date']);
             }
 
-            $current_date = new \DateTime('yesterday');
+            $current_date = new \DateTime('-2 days ago');
 
-            if ($dt < $current_date)
+            if ($dt <= $current_date)
             {
                 continue;
             }

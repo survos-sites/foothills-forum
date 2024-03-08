@@ -20,16 +20,3 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
-# config/services.yaml
-    App\DataCollector\SeoCollector:
-        tags:
-            -
-                name: data_collector
-                # must match the value returned by the getName() method
-                id: 'App\DataCollector\SeoCollector'
-                # optional template (it has more priority than the value returned by getTemplate())
-                template: 'data_collector/seo_collector.html.twig'
-                # optional priority (positive or negative integer; default = 0)
-                # priority: 300

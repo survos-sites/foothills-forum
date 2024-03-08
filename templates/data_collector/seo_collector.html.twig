@@ -9,7 +9,7 @@
 
     {% set text %}
         <div class="sf-toolbar-info-piece">
-            <b>Title length ({{ constant('App\\Twig\\Extension\\SeoExtension::MIN_TITLE_LENGTH') }} > {{ constant('App\\Twig\\Extension\\SeoExtension::MAX_TITLE_LENGTH') }})</b>
+            <b>Title length ({{ seo_config('minTitleLength')) }}-{{ seo_config('maxTitleLength'))  }})</b>
             {% set status = collector.title['status'] is defined ? collector.title['status'] : 'red' %}
             <span class="sf-toolbar-status sf-toolbar-status-{{ status }}">
                 {% if collector.title is not empty %}
@@ -28,7 +28,8 @@
         {% endif %}
 
         <div class="sf-toolbar-info-piece">
-            <b>Description length ({{ constant('App\\Twig\\Extension\\SeoExtension::MIN_DESCRITION_LENGTH') }} > {{ constant('App\\Twig\\Extension\\SeoExtension::MAX_DESCRITION_LENGTH') }})</b>
+            <b>Description length ({{ seo_config('minDescriptionLength')) }}-
+                {{ seo_config('maxDescriptionLength'))  }})</b>
             {% set status = collector.description['status'] is defined ? collector.description['status'] : 'red' %}
             <span class="sf-toolbar-status sf-toolbar-status-{{ status }}">
                 {% if collector.description is not empty %}
