@@ -1,5 +1,23 @@
 {
     "controllers": {
+        "@spomky-labs/pwa-bundle": {
+            "connection-status": {
+                "enabled": true,
+                "fetch": "eager"
+            },
+            "backgroundsync-form": {
+                "enabled": true,
+                "fetch": "eager"
+            },
+            "sync-broadcast": {
+                "enabled": true,
+                "fetch": "eager"
+            },
+            "prefetch-on-demand": {
+                "enabled": true,
+                "fetch": "eager"
+            }
+        },
         "@survos/api-grid-bundle": {
             "api_grid": {
                 "enabled": true,
@@ -26,6 +44,23 @@
                     "datatables.net-searchbuilder-bs5/css/searchBuilder.bootstrap5.min.css": true,
                     "datatables.net-select-bs5/css/select.bootstrap5.min.css": true
                 }
+            }
+        },
+        "@survos/pwa-extra-bundle": {
+            "detector": {
+                "enabled": true,
+                "fetch": "lazy",
+                "autoimport": []
+            },
+            "toggle_online": {
+                "enabled": true,
+                "fetch": "lazy",
+                "autoimport": []
+            },
+            "install": {
+                "enabled": true,
+                "fetch": "lazy",
+                "autoimport": []
             }
         },
         "@survos/workflow-helper-bundle": {

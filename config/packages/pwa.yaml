@@ -1,0 +1,51 @@
+pwa:
+    image_processor: 'pwa.image_processor.imagick'
+    manifest:
+        enabled: true
+        background_color: "#c026d3"
+        theme_color: "#c026d3"
+        name: 'Foothills Forum Photo collection'
+        short_name: 'ff-photos'
+        description: 'Foothills Forum Photo collection allows users to submit photos of local high school sporting events in Rappahannock'
+        orientation: "any"
+        display: "standalone"
+        scope: "/"
+        display_override: ['fullscreen', 'minimal-ui', 'window-controls-overlay']
+        id: "/"
+        start_url: "/"
+        icons:
+#            - https://www.svgrepo.com/svg/522368/camera
+            - src: "images/camera-svgrepo-com.svg"
+              sizes: any
+#            - src: "images/space-planet-icon.svg"
+#              sizes: any
+
+        screenshots:
+            - src: screenshots/screenshot-1200x1100.png
+              width: 1200
+              height: 1100
+              format: image/png
+
+        categories: []
+        shortcuts: []
+        edge_side_panel:
+            preferred_width: 280
+        widgets: []
+    serviceworker:
+        enabled: true
+        src: "sw.js"
+        skip_waiting: true
+        workbox:
+            page_caches:
+                - cache_name: page
+                  strategy: staleWhileRevalidate
+                  regex: 'what-should-this-becopose'
+                  urls:
+    #                    - {path: "app_planet_show", params: {id: 5}}
+                        - 'app_homepage'
+                        - 'app_terms'
+            offline_fallback:
+                page: 'app_homepage'
+#                page: 'app_offline_page'
+#                    image: 'images/offline.svg'
+#                        font: 'fonts/normal.ttf'
