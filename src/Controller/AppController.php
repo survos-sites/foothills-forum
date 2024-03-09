@@ -34,9 +34,10 @@ class AppController extends AbstractController
         // get all current and recent events
         $query = $eventRepository->createQueryBuilder('e')
             ->andWhere('e.eventDate >= :ago')
-            ->setParameter('ago', date_modify(new \DateTime(), '+3 days'))
+            ->setParameter('ago', date_modify(new \DateTime(), '-1 days'))
 //            ->andWhere('e.eventDate <= :now')
 //            ->setParameter('now', date_modify(new \DateTime(), '-2 days'))
+//                ->orderBy('e.id', 'ASC')
                 ->orderBy('e.eventDate', 'ASC')
             ->setMaxResults(30);
 

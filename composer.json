@@ -1,7 +1,7 @@
 {
     "type": "project",
     "license": "proprietary",
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
         "php": ">=8.2",
@@ -38,12 +38,14 @@
         "phpdocumentor/reflection-docblock": "^5.3",
         "phpstan/phpdoc-parser": "^1.24",
         "sentry/sentry-symfony": "dev-master",
+        "spomky-labs/pwa-bundle": "1.1.x",
         "survos/api-grid-bundle": "^1.5",
         "survos/auth-bundle": "^1.5",
         "survos/bootstrap-bundle": "^1.5",
         "survos/command-bundle": "^1.5",
         "survos/crawler-bundle": "^1.5",
         "survos/deployment-bundle": "^1.5",
+        "survos/pwa-extra-bundle": "^1.5",
         "survos/scraper-bundle": "^1.5",
         "survos/seo-bundle": "^1.5",
         "survos/workflow-helper-bundle": "^1.5",
@@ -150,12 +152,14 @@
         }
     },
     "require-dev": {
+        "dbrekelmans/bdi": "^1.3",
         "phpstan/phpstan": "^1.10",
         "phpunit/phpunit": "^9.5",
         "survos/maker-bundle": "*",
         "symfony/browser-kit": "^6.4 || ^7.0",
         "symfony/debug-bundle": "^6.4 || ^7.0",
         "symfony/maker-bundle": "^1.0",
+        "symfony/panther": "^2.1",
         "symfony/phpunit-bridge": "^6.4 || ^7.0",
         "symfony/stopwatch": "^6.4 || ^7.0",
         "symfony/web-profiler-bundle": "^6.4 || ^7.0"

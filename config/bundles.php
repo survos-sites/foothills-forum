@@ -41,4 +41,6 @@ return [
     Symfony\UX\LiveComponent\LiveComponentBundle::class => ['all' => true],
     Symfony\UX\TogglePassword\TogglePasswordBundle::class => ['all' => true],
     Survos\SeoBundle\SurvosSeoBundle::class => ['all' => true],
+    SpomkyLabs\PwaBundle\SpomkyLabsPwaBundle::class => ['all' => true],
+    Survos\PwaExtraBundle\SurvosPwaExtraBundle::class => ['all' => true],
 ];
