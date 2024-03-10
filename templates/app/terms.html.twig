@@ -2,16 +2,21 @@
 
 {% block body %}
 
-{% apply markdown_to_html %}
-By submitting photos and answers to questions (the “Content”) through this app, you grant to Rappahannock Media and to Foothills Forum a perpetual, worldwide, non-exclusive, irrevocable license to, without limitation, change, revise, add to, reproduce, publish, distribute, display, create derivative works from, and to otherwise exploit such Content, in any and all media now known or hereafter devised, and to sub-license or assign the licensed rights in such Content to third parties, without compensation to you.
+    <div>
 
-For clarity, you will retain ownership of the copyright in the Content.  You also represent that the Content you are submitting has not been created by Artificial Intelligence (AI) and that you have not manipulated the content of any photo and that your answers to the questions are truthful.
-{% endapply %}
+        {% apply markdown_to_html %}
+            By submitting photos and answers to questions (the “Content”) through this app, you grant to Rappahannock Media and to Foothills Forum a perpetual, worldwide, non-exclusive, irrevocable license to, without limitation, change, revise, add to, reproduce, publish, distribute, display, create derivative works from, and to otherwise exploit such Content, in any and all media now known or hereafter devised, and to sub-license or assign the licensed rights in such Content to third parties, without compensation to you.
 
-<h3>Photo Reviewers</h3>
+            For clarity, you will retain ownership of the copyright in the Content.  You also represent that the Content you are submitting has not been created by Artificial Intelligence (AI) and that you have not manipulated the content of any photo and that your answers to the questions are truthful.
+        {% endapply %}
 
-{% for reviewer in reviewers %}
-    <li>{{ reviewer.name }}</li>
-{% endfor %}
+        <h3>Photo Reviewers</h3>
+
+        {% for reviewer in reviewers %}
+            <li>{{ reviewer.name }}</li>
+        {% endfor %}
+    </div>
 
 {% endblock %}
+
+

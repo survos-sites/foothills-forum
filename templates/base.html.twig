@@ -1,10 +1,17 @@
-{% extends "@SurvosBootstrap/%s/base.html.twig"|format(theme_option('theme')) %}
+{% extends "layout.html.twig" %}
 
-        {% block stylesheets %}
-            {{ parent() }}
-        {% endblock %}
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-            {{ pwa() }}
-        {% endblock %}
+
+    {% block footer_menu %}
+        <div class="hstack gap-2">
+            {% for icon in ['bi bi-magic', 'bi bi-instagram', 'bi bi-qr-code'] %}
+                <div class="bg-light border ms-auto">
+                    <h1>
+                        {{ icon|icon }}
+                        {{ icon }}
+
+                    </h1>
+                </div>
+            {% endfor %}
+        </div>
+    {% endblock %}

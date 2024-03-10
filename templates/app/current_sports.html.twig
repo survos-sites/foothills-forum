@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Sports'|trans|title }}{% endblock %}
+{% block description %}{{ 'foothill_forum_archive'|trans|title }}{% endblock %}
+
+
+{% block body %}
+
+    <table class="table">
+        {% for sport in sports %}
+            <tr>
+                <td>
+                        <a href="{{ path('app_sports', sport.rp) }}">
+                        {{ sport.name }} v
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}

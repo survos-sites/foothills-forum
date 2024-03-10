@@ -4,8 +4,11 @@ namespace App\Controller;
 
 use ApiPlatform\Doctrine\Orm\State\CollectionProvider;
 use App\Entity\Article;
+use App\Entity\Event;
+use App\Entity\Sport;
 use App\Form\UserType;
 use App\Repository\EventRepository;
+use App\Repository\SportRepository;
 use KnpU\OAuth2ClientBundle\Client\Provider\GithubClient;
 use Survos\ApiGrid\Components\ApiGridComponent;
 use Survos\ApiGrid\State\MeiliSearchStateProvider;
@@ -28,8 +31,8 @@ class AppController extends AbstractController
     }
 
     #[Route('/', name: 'app_homepage')]
-    #[Template("app/current_events.html.twig")]
-    public function index(Request $request, EventRepository $eventRepository): array|Response
+    #[Template("app/current_sports.html.twig")]
+    public function index(Request $request, SportRepository $sportRepository, EventRepository $eventRepository): array|Response
     {
         // get all current and recent events
         $query = $eventRepository->createQueryBuilder('e')
@@ -42,24 +45,48 @@ class AppController extends AbstractController
             ->setMaxResults(30);
 
         $currentEvents = $query->getQuery()->getResult();
+        // hack!
+        $currentSports  = [];
+        /* @var $event Event */
+        foreach ($currentEvents as $event) {
+            $sportId = $event->getSport()->getId();
+            $currentSports[$sportId] = true;
+        }
 
-        return ['events' => $currentEvents];
+        return [
+            'sports' => $sportRepository->findBy([
+                'id' => array_keys($currentSports)
+
+            ]), // @todo: filter by current
+            'events' => $currentEvents];
 
         return $this->redirectToRoute('event_index');
-        return [
-        'apiRoute' => $request->get('doctrine', false) ? 'doctrine-articles' : 'meili-articles',
-        'class' => Article::class];
-
-        $class = Article::class;
-        $map = $inspectionService->getAllUrlsForResource($class);
-//        dd($map);
-
-        return $this->render('app/index.html.twig', [
-            'class' => Article::class,
-            'apiRoute' => $apiRoute,
-            'apiCall' => null
-        ]);
     }
+    #[Route('/sport/{sportId}', name: 'app_sports')]
+    #[Template("app/current_events.html.twig")]
+    public function eventsBySport(Request $request, Sport $sport, EventRepository $eventRepository): array|Response
+    {
+        // get all current and recent events
+        $query = $eventRepository->createQueryBuilder('e')
+            ->andWhere('e.sport = :sport')
+            ->setParameter('sport', $sport)
+            ->andWhere('e.eventDate >= :ago')
+            ->setParameter('ago', date_modify(new \DateTime(), '-1 days'))
+//            ->andWhere('e.eventDate <= :now')
+//            ->setParameter('now', date_modify(new \DateTime(), '-2 days'))
+//                ->orderBy('e.id', 'ASC')
+            ->orderBy('e.eventDate', 'ASC')
+            ->setMaxResults(30);
+
+        $currentEvents = $query->getQuery()->getResult();
+
+        return [
+            'events' => $currentEvents
+        ];
+
+        return $this->redirectToRoute('event_index');
+    }
+
     #[Route('/doctrine', name: 'article_browse')]
     public function articles(
         ApiGridComponent $apiGridComponent,
@@ -121,6 +148,14 @@ class AppController extends AbstractController
     #[Route('/terms', name: 'app_terms')]
     #[Template('app/terms.html.twig')]
     public function terms(): array
+    {
+        $reviewers = $this->bag->get('photo_reviewers');
+        return ['reviewers' =>$reviewers];
+    }
+
+    #[Route('/mmenu', name: 'app_mmenu')]
+    #[Template('app/mmenu-test.html.twig')]
+    public function mmenu(): array
     {
         $reviewers = $this->bag->get('photo_reviewers');
         return ['reviewers' =>$reviewers];

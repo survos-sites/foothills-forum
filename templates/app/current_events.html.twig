@@ -3,8 +3,8 @@
 {% block title %}{{ 'events'|trans|title }}{% endblock %}
 {% block description %}{{ 'foothill_forum_archive'|trans|title }}{% endblock %}
 
-
 {% block body %}
+    {{ events|length }} Events
     <table class="table">
         {% for e in events %}
             <tr>
@@ -24,14 +24,19 @@
                     </div>
                 </td>
                 <td>
-                <b>{{ e.team.name }} v {{ e.opponent}} </b><br />
+                <b>
+                    <a href="{{ path('team_show', e.team.rp) }}">
+                        {{ e.team.name }} v
+
+                    </a>
+                    {{ e.opponent}} </b><br />
                     {{ e.eventDate|date }}
                     <span class="fs-6">{{ e.eventDate|ago }}</span>
                     <div>
                         {{ e.type }}
                         at {{ e.location.name }}
-
                     </div>
+
                 </td>
 
             </tr>

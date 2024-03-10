@@ -1,0 +1,27 @@
+{% extends "team/base.html.twig" %}
+
+{% block title %}{{  class }}{% endblock %}
+
+{% block body %}
+<h1>{{ class }} {{ _self }}</h1>
+
+<twig:api_grid
+        facets="false"
+        :class="class"
+        :apiGetCollectionUrl="apiCall"
+        :caller="_self"
+        :columns="columns"
+>
+
+    <twig:block name="id">
+        <a href="{{ path('team_show', row.rp) }}">
+            ID: {{ row.id }}
+        </a>
+    </twig:block>
+    <twig:block name="sport">
+{#        <a href="{{ path('sport_show', row.rp) }}">#}
+{#        </a>#}
+        {{ row.sport.name }}
+    </twig:block>
+</twig:api_grid>
+{% endblock %}

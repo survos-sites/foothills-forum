@@ -54,8 +54,8 @@ final class AppMenuEventListener
         $menu = $event->getMenu();
         $authMenu = $this->authMenu($this->authorizationChecker, $this->security, $menu);
         if ($this->isGranted('ROLE_USER')) {
-
-            $this->add($authMenu, 'app_profile');
+            // @todo: move this to the dropdown!
+//            $this->add($authMenu, 'app_profile');
         }
     }
 

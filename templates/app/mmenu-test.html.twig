@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <a href="#menu">Open the menu</a>
+    <div id="page">
+        <div id="header">
+            <nav id="menu">
+                <ul>
+                    <li class="Selected"><a href="/">Home</a></li>
+                    <li><span>About us</span>
+                        <ul>
+                            <li><a href="/about/history/">History</a></li>
+                            <li><a href="/about/team/">The team</a></li>
+                            <li><a href="/about/address/">Our address</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="/contact/">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div id="content">
+            <h1>The title</h1>
+            <p>Some content.</p>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="module">
+
+        import MmenuLight from 'mmenu-light';
+
+        console.log('starting mmenuLight');
+        const menu = new MmenuLight(
+            document.querySelector("#menu"),
+            "(max-width: 600px)"
+        );
+
+        const navigator = menu.navigation();
+        const drawer = menu.offcanvas();
+
+        document.querySelector("a[href='#menu']")
+            .addEventListener("click", (evnt) => {
+                evnt.preventDefault();
+                drawer.open();
+            });
+    </script>
+{% endblock %}

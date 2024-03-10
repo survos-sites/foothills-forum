@@ -173,10 +173,11 @@ final class AppRschoolsCommand extends InvokableServiceCommand
     {
         $code = $code ?: $this->asciiSlugger->slug($text)->lower()->toString();
         if (!$entity = $this->existing[$entityClass][$code]??null) {
-            $entity = (new $entityClass($code))->setName($text);
-            $this->existing[$entityClass][$code] = $entity;
+            $entity = (new $entityClass($code));
             $this->entityManager->persist($entity);
+            $this->existing[$entityClass][$code] = $entity;
         }
+        $entity->setName($text);
         return $entity;
     }
 

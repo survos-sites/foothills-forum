@@ -1,0 +1,41 @@
+{% extends "team/base.html.twig" %}
+
+{% block body %}
+    <h1>Team {{ team.name }}</h1>
+
+    {{ dump(team) }}
+    <i>{{ team.eventCount }}</i>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Name</th>
+                <td></td>
+            </tr>
+            <tr>
+                <th>Code</th>
+                <td>{{ team.code }}</td>
+            </tr>
+            <tr>
+                <th>Section</th>
+                <td>{{ team.section }}</td>
+            </tr>
+            <tr>
+                <th>RSchoolId</th>
+                <td>{{ team.rSchoolId }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+{#    also see https://www.stimulus-components.com/docs/stimulus-content-loader#}
+{#    https://htmx.org/docs/#special-events#}
+    {% set _tableUrl = path('_team_events', team.rp) %}
+    <div hx-get="{{ _tableUrl }}" hx-trigger="load"></div>
+
+    <button class="btn btn-outline-primary" hx-put="{{ _tableUrl }}">
+        Fetch Now
+    </button>
+
+{#    {{ include('event/_table.html.twig', {events: team.events}) }}#}
+
+{% endblock %}

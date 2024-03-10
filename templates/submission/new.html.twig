@@ -3,7 +3,8 @@
 {% block title %}New Submission{% endblock %}
 
 {% block body %}
-    <h1>Submit A {{ submission.event ? submission.event.title }} Photo</h1>
+    <h1>{{ submission.event ? submission.event.title }}</h1>
+    <h2>{{ submission.location ? submission.location.name }}</h2>
 
     {{ include('submission/_form.html.twig') }}
 

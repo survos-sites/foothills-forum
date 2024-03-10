@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}BASE Team{% endblock %}
+
+{% block page_title %}{{ team }}{% endblock %}
+{% block page_subtitle %}{{ app.request.get('_route') }}{% endblock %}
+
+{% block body %}
+
+If we have a Team entity, we should display it here.
+
+{% endblock %}

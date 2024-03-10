@@ -2,8 +2,10 @@
 
 namespace App\Form;
 
+use App\Entity\Event;
 use App\Entity\Submission;
 use App\Entity\User;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -24,9 +26,11 @@ class SubmissionType extends AbstractType
                 'label' => "Your photo",
                 'help' => "photo must be less than " . ini_get("upload_max_filesize")
             ]);
-        if ($submission->getEvent()) {
+        if (!$submission->getEvent()) {
             $builder
-                ->add('event', null, ['disabled' => true]);
+                ->add('event', EntityType::class, [
+                    'class' => Event::class,
+                    'disabled' => true]);
         }
         if ($submission->getLocation()) {
             $builder

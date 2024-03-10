@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Survos\CoreBundle\Entity\RouteParametersInterface;
 use Survos\CoreBundle\Entity\RouteParametersTrait;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: SportRepository::class)]
 #[ApiResource]
@@ -22,6 +23,7 @@ class Sport implements RouteParametersInterface, \Stringable
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['team.read','sport.read'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]

@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Team index{% endblock %}
+
+
+{% block body %}
+    <h1>Team index</h1>
+
+    {% include "team/_table.html.twig" %}
+
+    <a class="btn btn-primary" href="{{ path('team_new') }}"><span class="fas fa-plus"></span>New  Team</a>
+{% endblock %}

@@ -23,10 +23,12 @@
                 <span class="fas fa-eye"></span>
                 <i class="bi bi-info"></i>
             </a>
+            {% if is_granted('ROLE_ADMIN') %}
             <a href="{{ path('event_edit', event.rp) }}">
                 <span class="fas fa-edit"></span>
                 <i class="bi bi-pencil"></i>
             </a>
+            {% endif %}
         </td>
 
                     <td>{{ event.id }}</td>

@@ -1,0 +1,40 @@
+
+
+<table class="table js-datatable">
+    <thead>
+    <tr>
+        <th>actions</th>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Code</th>
+                    <th>Section</th>
+                    <th>RSchoolId</th>
+            </tr>
+    </thead>
+    <tbody>
+    {% for team in teams %}
+    <tr>
+        <td>
+            <a href="{{ path('team_show', team.rp) }}">
+                <span class="fas fa-eye"></span>
+                <i class="bi bi-info"></i>
+            </a>
+            <a href="{{ path('team_edit', team.rp) }}">
+                <span class="fas fa-edit"></span>
+                <i class="bi bi-pencil"></i>
+            </a>
+        </td>
+
+                    <td>{{ team.id }}</td>
+                    <td>{{ team.name }}</td>
+                    <td>{{ team.code }}</td>
+                    <td>{{ team.section }}</td>
+                    <td>{{ team.rSchoolId }}</td>
+            </tr>
+    {% else %}
+    <tr>
+        <td colspan="6">no records found</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
