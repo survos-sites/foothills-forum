@@ -205,4 +205,26 @@ return [
         'version' => '4.1.4',
         'type' => 'css',
     ],
+    'htmx.org' => [
+        'version' => '1.9.10',
+    ],
+    'htmx.org/dist/ext/preload.js' => [
+        'version' => '1.9.10',
+    ],
+    'mmenu-light' => [
+        'version' => '3.2.2',
+    ],
+    'mmenu-light/dist/mmenu-light.css' => [
+        'version' => '3.2.2',
+        'type' => 'css',
+    ],
+    'stimulus-dropdown' => [
+        'version' => '2.1.0',
+    ],
+    'stimulus-use' => [
+        'version' => '0.51.3',
+    ],
+    'hotkeys-js' => [
+        'version' => '3.13.7',
+    ],
 ];
