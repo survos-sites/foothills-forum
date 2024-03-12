@@ -25,10 +25,11 @@
                 </td>
                 <td>
                 <b>
+                    {% if e.team %}
                     <a href="{{ path('team_show', e.team.rp) }}">
                         {{ e.team.name }} v
-
                     </a>
+                    {% endif %}
                     {{ e.opponent}} </b><br />
                     {{ e.eventDate|date }}
                     <span class="fs-6">{{ e.eventDate|ago }}</span>

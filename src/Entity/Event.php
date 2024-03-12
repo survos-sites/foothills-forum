@@ -325,7 +325,8 @@ class Event implements RouteParametersInterface, \Stringable
     #[Groups('submission.read')]
     public function getTitle()
     {
-        return sprintf("%s %s %s", $this->getSection(), u($this->getSport())->title(), $this->getEventDate()->format('D M d, Y h:iA'));
+        return sprintf("%s %s %s", $this->getSection(),
+            u($this->getSport())->title(), $this->getEventDate()->format('D M d, Y h:iA'));
 
     }
 

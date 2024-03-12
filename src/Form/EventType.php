@@ -16,6 +16,9 @@ class EventType extends AbstractType
                 'disabled' => true
             ])
             ->add('name')
+            ->add('section', null, [
+                'help' => ""
+            ])
             ->add('eventDate')
             ->add('type')
             ->add('summary')

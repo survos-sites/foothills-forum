@@ -55,9 +55,31 @@ final class AppRschoolsCommand extends InvokableServiceCommand
         #[Option(description: 'reset the database')] bool $reset = false,
 ): void {
         $this->loadExisting($reset);
+
+        $stonewallAbbey = $this->getEntity(Location::class, 'Stonewall Abbey');
+        // total hack
+        $school = $this->getEntity(School::class,  'rapp');
+        foreach (['foothills','rappathome'] as $code) {
+            $sport = $this->getEntity(Sport::class, $code, $code);
+            $school->addSport($sport);
+            switch ($code) {
+                case 'rappathome':
+                    foreach (['fall_prevention'] as $eventCode) {
+                        $event = $this->getEntity(Event::class, $eventCode, $eventCode);
+                        $event->setEventDate(new \DateTimeImmutable());
+                        $event->setLocation($stonewallAbbey);
+                        $sport->addEvent($event);
+                    }
+            }
+        }
+        $this->entityManager->flush();
+        $io->success("rapp community events loaded");
+        return;
+
         $school = $this->getEntity(School::class,  'rappahannockcountyhs');
         $html = $this->scraperService->fetchUrl(self::BASE_URL)['content'];
         $crawler = new Crawler($html, self::BASE_URL);
+
 
         // highest level is the sports dropdown under 'Athletics'
         $crawler->filter('.section_subitem a')->each(fn(Crawler $node) =>
