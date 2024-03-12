@@ -29,6 +29,9 @@
                     <a href="{{ path('team_show', e.team.rp) }}">
                         {{ e.team.name }} v
                     </a>
+                    {% else %}
+                        {{ e.name }} /
+                        {{ e.location }}
                     {% endif %}
                     {{ e.opponent}} </b><br />
                     {{ e.eventDate|date }}

@@ -57,19 +57,35 @@ final class AppRschoolsCommand extends InvokableServiceCommand
         $this->loadExisting($reset);
 
         $stonewallAbbey = $this->getEntity(Location::class, 'Stonewall Abbey');
+        foreach (['home','office','outside','other'] as $locationCode) {
+            $locations[$locationCode] = $this->getEntity(Location::class, 'Somewhere in RappLand');
+        }
         // total hack
         $school = $this->getEntity(School::class,  'rapp');
         foreach (['foothills','rappathome'] as $code) {
             $sport = $this->getEntity(Sport::class, $code, $code);
+            $sport->setName($code);
             $school->addSport($sport);
             switch ($code) {
+                case 'foothills':
+                    foreach ($locations as $locationCode => $location) {
+                        $event = $this->getEntity(Event::class, $locationCode, $locationCode);
+                        $event
+                            ->setSection($locationCode)
+                            ->setName("Generic Event: " . $locationCode)
+                            ->setEventDate(new \DateTimeImmutable());
+                        $event->setLocation($location);
+                        $sport->addEvent($event);
+                    }
+                    break;
                 case 'rappathome':
-                    foreach (['fall_prevention'] as $eventCode) {
+                    foreach (['fall_prevention','test_1','test_2'] as $eventCode) {
                         $event = $this->getEntity(Event::class, $eventCode, $eventCode);
                         $event->setEventDate(new \DateTimeImmutable());
                         $event->setLocation($stonewallAbbey);
                         $sport->addEvent($event);
                     }
+                    break;
             }
         }
         $this->entityManager->flush();
